@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% block page_title %}Book Appointment{% endblock %}
+{% block page_subtitle %}Schedule visits with verified clinicians and R&D labs.{% endblock %}
+
+{% block content %}
+<style>
+    /* Inherited Dashboard Architecture */
+    .panel { background-color: var(--ink-800); border: 1px solid var(--line); border-radius: 14px; }
+    
+    .input-field {
+        width: 100%; background-color: var(--ink-900); border: 1px solid var(--line); 
+        border-radius: 10px; padding: 0.75rem 1rem; color: var(--fog-100); 
+        font-size: 13px; font-family: 'IBM Plex Sans', sans-serif;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .input-field:focus { outline: none; border-color: var(--fog-500); box-shadow: 0 0 0 2px rgba(255,255,255,0.05); }
+    .input-field::placeholder { color: var(--fog-500); }
+    
+    .input-label { display: block; font-size: 11px; font-weight: 600; color: var(--fog-300); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    .btn-primary {
+        width: 100%; display: flex; align-items: center; justify-content: center;
+        background-color: var(--fog-100); color: var(--ink-900); font-weight: 600; 
+        font-size: 13px; padding: 0.85rem; border-radius: 10px; border: none;
+        transition: opacity 0.2s ease; cursor: pointer;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+
+    /* Custom Radio Cards */
+    .radio-input { display: none; }
+    .radio-card {
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem;
+        background-color: var(--ink-900); border: 1px solid var(--line); border-radius: 10px; 
+        padding: 1.25rem 1rem; cursor: pointer; transition: all 0.2s ease; text-align: center; height: 100%;
+    }
+    .radio-card:hover { border-color: var(--fog-500); }
+    .radio-input:checked + .radio-card {
+        border-color: var(--accent-text);
+        background-color: rgba(143, 170, 196, 0.08); /* Faint accent wash */
+    }
+    .radio-card .card-icon { color: var(--fog-500); transition: color 0.2s ease; }
+    .radio-input:checked + .radio-card .card-icon { color: var(--accent-text); }
+    
+    .radio-card .card-title { font-size: 13px; font-weight: 600; color: var(--fog-100); }
+    .radio-card .card-desc { font-size: 11px; color: var(--fog-500); margin-top: 2px; }
+
+    /* Sync Toggles */
+    .sync-row { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line-soft); }
+    .sync-row:last-child { border-bottom: none; padding-bottom: 0; }
+    
+    .toggle-checkbox { display: none; }
+    .toggle-label {
+        position: relative; display: inline-block; width: 36px; height: 20px;
+        background-color: var(--ink-700); border-radius: 20px; cursor: pointer;
+        transition: background-color 0.2s ease; flex-shrink: 0; margin-top: 2px;
+    }
+    .toggle-label::after {
+        content: ''; position: absolute; top: 2px; left: 2px;
+        width: 16px; height: 16px; background-color: var(--fog-300);
+        border-radius: 50%; transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+    .toggle-checkbox:checked + .toggle-label { background-color: var(--accent-soft); }
+    .toggle-checkbox:checked + .toggle-label::after { transform: translateX(16px); background-color: var(--accent-text); }
+</style>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto w-full">
+    
+    <!-- Left Column: Booking Form -->
+    <div class="panel p-6 md:p-8 lg:col-span-2 flex flex-col">
+        <div class="mb-8">
+            <h3 class="font-display text-xl font-medium" style="color: var(--fog-100);">Scheduling Protocol</h3>
+            <p class="text-[12px] mt-1" style="color: var(--fog-500);">Select a specialist and time window for your consultation.</p>
+        </div>
+
+        <form id="appointment-form" method="post" class="space-y-7 flex-1">
+            {% csrf_token %}
+            
+            <!-- Clinician Selection -->
+            <div>
+                <label class="input-label">Select Clinician or Lab</label>
+                <div class="relative">
+                    <select name="clinician" class="input-field appearance-none cursor-pointer">
+                        <option value="" disabled selected>Browse verified network...</option>
+                        {% for doc in clinicians %}
+                        <option value="{{ doc.id }}">{{ doc.name }} &bull; {{ doc.specialty }}</option>
+                        {% empty %}
+                        <option value="1">Dr. Aris Thorne &bull; Cognitive Neurology</option>
+                        <option value="2">Dr. Elena Rostova &bull; Neuro-Diagnostics</option>
+                        <option value="3">Basel Neuro-Institute &bull; VR/AR Treatment</option>
+                        {% endfor %}
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4" style="color: var(--fog-500);">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date & Time Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="input-label">Date</label>
+                    <input name="date" type="date" class="input-field cursor-pointer">
+                </div>
+                <div>
+                    <label class="input-label">Time</label>
+                    <div class="relative">
+                        <input name="time" type="time" class="input-field cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointment Modality -->
+            <div>
+                <label class="input-label mb-3">Consultation Modality</label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    
+                    <label>
+                        <input type="radio" name="appt_type" value="telemedicine" class="radio-input" checked>
+                        <div class="radio-card">
+                            <svg class="w-6 h-6 card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <div>
+                                <div class="card-title">Telemedicine Node</div>
+                                <div class="card-desc">Secure WebRTC Stream</div>
+                            </div>
+                        </div>
+                    </label>
+
+                    <label>
+                        <input type="radio" name="appt_type" value="in_person" class="radio-input">
+                        <div class="radio-card">
+                            <svg class="w-6 h-6 card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            <div>
+                                <div class="card-title">In-Person Visit</div>
+                                <div class="card-desc">Physical Facility Check-in</div>
+                            </div>
+                        </div>
+                    </label>
+                    
+                </div>
+            </div>
+            
+            <!-- Notes -->
+            <div>
+                <label class="input-label">Chief Complaint / Notes (Optional)</label>
+                <textarea name="notes" class="input-field resize-none" rows="3" placeholder="Briefly describe the reason for your visit..."></textarea>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Right Column: Context Sync & Confirmation -->
+    <div class="flex flex-col gap-6">
+        
+        <!-- Cognitive Context Sync Panel -->
+        <div class="panel p-6 md:p-8 flex-1">
+            <div class="flex items-center mb-6">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3" style="background-color: var(--ink-700); border: 1px solid var(--line); color: var(--accent-text);">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                </div>
+                <div>
+                    <h3 class="font-display text-base font-medium" style="color: var(--fog-100);">Context Sync</h3>
+                    <p class="text-[11px]" style="color: var(--fog-500);">Provision e-MR data to provider</p>
+                </div>
+            </div>
+
+            <p class="text-[12px] leading-relaxed mb-4" style="color: var(--fog-300);">
+                Use smart contracts to temporarily grant the clinician access to your specific neural metrics for the duration of this appointment.
+            </p>
+
+            <div class="space-y-1 mb-6">
+                
+                <!-- Sync Option 1 -->
+                <div class="sync-row">
+                    <input type="checkbox" id="sync_baseline" class="toggle-checkbox" checked>
+                    <label for="sync_baseline" class="toggle-label"></label>
+                    <div class="flex-1">
+                        <label for="sync_baseline" class="text-[12px] font-semibold block cursor-pointer" style="color: var(--fog-100);">30-Day Cognitive Baseline</label>
+                        <p class="text-[11px] mt-0.5" style="color: var(--fog-500);">Includes focus retention and stress telemetry charts.</p>
+                    </div>
+                </div>
+
+                <!-- Sync Option 2 -->
+                <div class="sync-row">
+                    <input type="checkbox" id="sync_emr" class="toggle-checkbox" checked>
+                    <label for="sync_emr" class="toggle-label"></label>
+                    <div class="flex-1">
+                        <label for="sync_emr" class="text-[12px] font-semibold block cursor-pointer" style="color: var(--fog-100);">Recent Diagnostics (e-MR)</label>
+                        <p class="text-[11px] mt-0.5" style="color: var(--fog-500);">Grants access to any lab results or MRI scans from the last 6 months.</p>
+                    </div>
+                </div>
+
+                <!-- Sync Option 3 -->
+                <div class="sync-row">
+                    <input type="checkbox" id="sync_pharm" class="toggle-checkbox">
+                    <label for="sync_pharm" class="toggle-label"></label>
+                    <div class="flex-1">
+                        <label for="sync_pharm" class="text-[12px] font-semibold block cursor-pointer" style="color: var(--fog-100);">Active Pharmacy Ledger</label>
+                        <p class="text-[11px] mt-0.5" style="color: var(--fog-500);">Share your current medication dosages and refill history.</p>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="pt-5 border-t" style="border-color: var(--line);">
+                <div class="flex justify-between items-center mb-5">
+                    <span class="text-[11px] font-semibold uppercase tracking-wider" style="color: var(--fog-500);">Booking Fee</span>
+                    <span class="font-mono text-sm" style="color: var(--fog-100);">0.00 <span style="color: var(--fog-500);">NST</span></span>
+                </div>
+                
+                <button type="submit" form="appointment-form" class="btn-primary w-full">
+                    Confirm & Provision Data
+                </button>
+                <p class="text-[10px] text-center mt-3" style="color: var(--fog-500);">Access revokes automatically post-appointment.</p>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

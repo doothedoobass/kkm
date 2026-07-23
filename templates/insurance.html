@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block page_title %}Neurohealth Coverage{% endblock %}
+{% block page_subtitle %}Explore dynamic coverage options and decentralized health protocols.{% endblock %}
+
+{% block content %}
+<style>
+    /* Inherited Dashboard Architecture */
+    .panel { background-color: var(--ink-800); border: 1px solid var(--line); border-radius: 14px; }
+    
+    .btn-primary {
+        width: 100%; display: inline-flex; align-items: center; justify-content: center;
+        background-color: var(--fog-100); color: var(--ink-900); font-weight: 600; 
+        font-size: 13px; padding: 0.85rem; border-radius: 10px; border: none;
+        transition: opacity 0.2s ease; cursor: pointer;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+
+    .btn-secondary {
+        width: 100%; display: inline-flex; align-items: center; justify-content: center;
+        background-color: var(--ink-700); color: var(--fog-100); font-weight: 600; 
+        font-size: 13px; padding: 0.85rem; border-radius: 10px; border: 1px solid var(--line);
+        transition: border-color 0.2s ease; cursor: pointer;
+    }
+    .btn-secondary:hover { border-color: var(--fog-500); }
+
+    /* Pricing Card Specifics */
+    .plan-card {
+        background-color: var(--ink-800);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+        position: relative;
+    }
+    .plan-card:hover { border-color: var(--fog-500); }
+    
+    .plan-card.highlighted {
+        background: linear-gradient(180deg, var(--ink-800) 0%, rgba(20, 26, 33, 0.4) 100%);
+        border-color: var(--accent-text);
+        box-shadow: 0 10px 30px -10px rgba(79, 107, 138, 0.15);
+        z-index: 10;
+    }
+    
+    /* Desktop lift for highlighted card */
+    @media (min-width: 768px) {
+        .plan-card.highlighted { transform: translateY(-12px); }
+    }
+
+    .badge-recommended {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: var(--accent-text);
+        color: var(--ink-900);
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 4px 12px;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(143, 170, 196, 0.3);
+    }
+
+    .oracle-banner {
+        background: linear-gradient(90deg, rgba(16, 185, 129, 0.05) 0%, var(--ink-800) 100%);
+        border: 1px solid var(--line);
+        border-left: 3px solid #10b981;
+    }
+</style>
+
+<div class="max-w-6xl mx-auto w-full">
+
+    <!-- Smart Underwriting Oracle (The "Something Interesting") -->
+    <div class="oracle-banner rounded-xl p-5 mb-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-start sm:items-center gap-4">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background-color: rgba(16, 185, 129, 0.1); color: #10b981;">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            </div>
+            <div>
+                {% if user_subscription %}
+                <h4 class="text-[13px] font-bold" style="color: var(--fog-100);">Smart Underwriting Active</h4>
+                <p class="text-[12px] mt-0.5" style="color: var(--fog-300);">Your telemetry underwriting score: <span class="font-bold text-[#10b981]">{{ user_subscription.underwriting_score|default:'N/A' }}</span> — current discount: <span class="font-bold text-[#10b981]">{{ user_subscription.discount_pct }}%</span></p>
+                {% else %}
+                <h4 class="text-[13px] font-bold" style="color: var(--fog-100);">Smart Underwriting</h4>
+                <p class="text-[12px] mt-0.5" style="color: var(--fog-300);">Underwriting inactive — initialize a plan to enable telemetry underwriting and dynamic discounts.</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="flex-shrink-0">
+            {% if user_subscription and user_subscription.last_synced %}
+            <span class="text-[10px] font-mono px-2.5 py-1 rounded" style="background-color: var(--ink-900); border: 1px solid var(--line); color: var(--fog-500);">SYNCED: {{ user_subscription.last_synced|timesince }} ago</span>
+            {% else %}
+            <span class="text-[10px] font-mono px-2.5 py-1 rounded" style="background-color: var(--ink-900); border: 1px solid var(--line); color: var(--fog-500);">SYNCED: N/A</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Pricing Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-center">
+        {% for plan in plans %}
+        <div class="plan-card {% if forloop.counter == 2 %}highlighted{% endif %}">
+            
+            {% if forloop.counter == 2 %}
+            <div class="badge-recommended">Optimal Fit</div>
+            {% endif %}
+
+            <div class="mb-5">
+                <h3 class="font-display text-xl font-medium" style="color: var(--fog-100);">{{ plan.name }}</h3>
+                <div class="mt-4 flex items-baseline">
+                    <span class="text-[28px] font-semibold tracking-tight" style="color: var(--fog-100);">${{ plan.monthly_premium }}</span>
+                    <span class="text-[12px] ml-1" style="color: var(--fog-500);">/ mo</span>
+                </div>
+                {% if forloop.counter == 2 %}
+                <p class="text-[10px] mt-1 font-medium" style="color: #10b981;">Includes 14% Telemetry Discount</p>
+                {% endif %}
+            </div>
+
+            <div class="w-full h-px mb-6" style="background-color: var(--line);"></div>
+
+            <!-- Features List -->
+            <div class="flex-1 mb-8">
+                <p class="text-[13px] leading-relaxed whitespace-pre-line" style="color: var(--fog-300);">{{ plan.coverage_details }}</p>
+            </div>
+
+            <form method="post" action="{% url 'insurance_subscribe' %}">
+                {% csrf_token %}
+                <input type="hidden" name="plan_id" value="{{ plan.id }}">
+                <button type="submit" class="{% if forloop.counter == 2 %}btn-primary{% else %}btn-secondary{% endif %}">Initialize Contract</button>
+            </form>
+            
+        </div>
+        {% empty %}
+        <div class="col-span-3 text-center py-16">No insurance plans available at this time.</div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

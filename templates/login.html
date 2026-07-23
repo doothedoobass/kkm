@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Welcome back{% endblock %}
+{% block page_subtitle %}
+Sign in to continue to NeuralSpace.
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-lg mx-auto py-8 md:py-14">
+
+    <div class="overflow-hidden rounded-3xl border border-slate-800 bg-[#131922] shadow-2xl">
+
+        <!-- Header -->
+
+        <div class="border-b border-slate-800 px-8 py-8">
+
+            <span class="text-[11px] uppercase tracking-[0.22em] text-slate-500">
+                NeuralSpace
+            </span>
+
+            <h2 class="mt-3 font-display text-3xl text-white">
+                Log in to your account
+            </h2>
+
+            <p class="mt-2 text-sm leading-relaxed text-slate-400">
+                Access your health records, secure messages, appointments,
+                and the rest of your NeuralSpace workspace.
+            </p>
+
+        </div>
+
+        <!-- Alerts -->
+
+        {% if messages %}
+
+        <div class="px-8 pt-6">
+
+            {% for m in messages %}
+
+            <div class="mb-3 rounded-2xl border border-red-900/40 bg-red-950/20 px-4 py-3">
+
+                <p class="text-sm text-red-300">
+                    {{ m }}
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+
+        <!-- Form -->
+
+        <form method="post" class="space-y-6 px-8 py-8">
+
+            {% csrf_token %}
+
+            <!-- Username -->
+
+            <div>
+
+                <label class="mb-2 block text-sm font-medium text-slate-300">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter your username"
+                    autocomplete="username"
+                    class="
+                        w-full
+                        rounded-2xl
+                        border
+                        border-slate-700
+                        bg-[#0d1218]
+                        px-4
+                        py-3
+                        text-slate-100
+                        placeholder:text-slate-500
+                        outline-none
+                        transition
+                        focus:border-slate-500
+                    "
+                />
+
+            </div>
+
+            <!-- Password -->
+
+            <div>
+
+                <div class="mb-2 flex items-center justify-between">
+
+                    <label class="text-sm font-medium text-slate-300">
+                        Password
+                    </label>
+
+                    <a
+                        href="#"
+                        class="text-xs text-slate-500 transition hover:text-slate-300"
+                    >
+                        Forgot password?
+                    </a>
+
+                </div>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    class="
+                        w-full
+                        rounded-2xl
+                        border
+                        border-slate-700
+                        bg-[#0d1218]
+                        px-4
+                        py-3
+                        text-slate-100
+                        placeholder:text-slate-500
+                        outline-none
+                        transition
+                        focus:border-slate-500
+                    "
+                />
+
+            </div>
+
+            <!-- Remember me -->
+
+            <label class="flex items-center gap-3 text-sm text-slate-400">
+
+                <input
+                    type="checkbox"
+                    class="
+                        h-4
+                        w-4
+                        rounded
+                        border-slate-700
+                        bg-[#0d1218]
+                    "
+                />
+
+                Keep me signed in
+
+            </label>
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="
+                    w-full
+                    rounded-2xl
+                    bg-slate-100
+                    py-3.5
+                    text-sm
+                    font-semibold
+                    text-slate-900
+                    transition
+                    hover:opacity-90
+                "
+            >
+                Log in
+            </button>
+
+        </form>
+
+        <!-- Footer -->
+
+        <div class="border-t border-slate-800 px-8 py-5 text-center">
+
+            <p class="text-sm text-slate-500">
+
+                Don't have an account?
+
+                <a
+                    href="{% url 'signup' %}"
+                    class="ml-1 text-slate-300 transition hover:text-white"
+                >
+                    Create one
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

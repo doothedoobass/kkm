@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% block page_title %}Medical Tourism & Travel{% endblock %}
+{% block page_subtitle %}Plan your global neuro-health journey with integrated travel itineraries.{% endblock %}
+
+{% block content %}
+<style>
+    /* Inherited Dashboard Architecture */
+    .panel { background-color: var(--ink-800); border: 1px solid var(--line); border-radius: 14px; }
+    
+    .input-field {
+        width: 100%; background-color: var(--ink-900); border: 1px solid var(--line); 
+        border-radius: 10px; padding: 0.75rem 1rem; color: var(--fog-100); 
+        font-size: 13px; font-family: 'IBM Plex Sans', sans-serif;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .input-field:focus { outline: none; border-color: var(--fog-500); box-shadow: 0 0 0 2px rgba(255,255,255,0.05); }
+    .input-field::placeholder { color: var(--fog-500); }
+    
+    .input-label { display: block; font-size: 11px; font-weight: 600; color: var(--fog-300); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    .btn-primary {
+        width: 100%; display: flex; align-items: center; justify-content: center;
+        background-color: var(--fog-100); color: var(--ink-900); font-weight: 600; 
+        font-size: 13px; padding: 0.85rem; border-radius: 10px; border: none;
+        transition: opacity 0.2s ease; cursor: pointer;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+
+    .quiet-btn {
+        display: inline-flex; align-items: center; font-size: 11px; font-weight: 500;
+        color: var(--fog-300); background-color: var(--ink-700); border: 1px solid var(--line);
+        padding: 0.4rem 0.75rem; border-radius: 8px; transition: all 0.15s ease; cursor: pointer;
+    }
+    .quiet-btn:hover, .quiet-btn.active { color: var(--fog-100); border-color: var(--fog-500); background-color: var(--ink-600); }
+
+    .check-row {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0.75rem; background-color: var(--ink-900); border: 1px solid var(--line-soft); 
+        border-radius: 8px; margin-bottom: 0.5rem;
+    }
+
+    /* Map Specific Overrides */
+    #tourismMap { border-radius: 0 0 14px 14px; background: #0a0f1c; z-index: 0; }
+    .leaflet-popup-content-wrapper { 
+        background-color: var(--ink-900) !important; 
+        border: 1px solid var(--line) !important; 
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+        border-radius: 10px !important;
+    }
+    .leaflet-popup-tip { background-color: var(--ink-900) !important; }
+    .leaflet-popup-close-button { color: var(--fog-500) !important; }
+    .leaflet-popup-close-button:hover { color: var(--fog-100) !important; }
+    .leaflet-container { font-family: 'IBM Plex Sans', sans-serif !important; }
+</style>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    
+    <!-- Map Section -->
+    <div class="panel lg:col-span-2 flex flex-col overflow-hidden h-[600px]">
+        <div class="p-6 border-b flex justify-between items-center z-10" style="border-color: var(--line); background-color: var(--ink-800);">
+            <div>
+                <h3 class="font-display text-lg font-medium" style="color: var(--fog-100);">Global Neural Hubs</h3>
+                <p class="text-xs mt-1" style="color: var(--fog-500);">Locate verified neuroscience research centers and treatment facilities.</p>
+            </div>
+            <div class="flex gap-2">
+                <button class="quiet-btn active">Map View</button>
+                <button class="quiet-btn">Directory</button>
+            </div>
+        </div>
+        <div id="tourismMap" class="flex-1 w-full relative"></div>
+    </div>
+    
+    <!-- Right Column: Itinerary & Logistics -->
+    <div class="flex flex-col gap-6">
+        
+        <!-- Itinerary Planner Form -->
+        <div class="panel p-6">
+            <div class="flex items-center mb-6">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3" style="background-color: var(--ink-700); border: 1px solid var(--line); color: var(--accent-text);">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div>
+                    <h3 class="font-display text-base font-medium" style="color: var(--fog-100);">Logistics Planner</h3>
+                    <p class="text-[11px]" style="color: var(--fog-500);">Smart contract itinerary generation</p>
+                </div>
+            </div>
+            
+            <form class="space-y-4" method="post" action="{% url 'medical_itinerary_create' %}">
+                {% csrf_token %}
+                <div>
+                    <label class="input-label">Destination Facility</label>
+                    <div class="relative">
+                        <select name="facility" class="input-field appearance-none cursor-pointer">
+                            <option value="" disabled selected>Select an approved center...</option>
+                            {% for facility in facilities %}
+                            <option value="{{ facility.id }}">{{ facility.name }} ({{ facility.country }})</option>
+                            {% empty %}
+                            <option value="" disabled>No facilities available</option>
+                            {% endfor %}
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4" style="color: var(--fog-500);">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="input-label">Travel Date</label>
+                        <input name="date" type="date" class="input-field cursor-pointer">
+                    </div>
+                    <div>
+                        <label class="input-label">Duration (Days)</label>
+                        <input name="duration" type="number" placeholder="0" min="1" class="input-field">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="input-label">Special Requirements</label>
+                    <textarea name="notes" class="input-field resize-none" rows="3" placeholder="Dietary needs, flight accessibility, local transit..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary mt-2">
+                    Generate Smart Itinerary
+                </button>
+            </form>
+        </div>
+
+        <!-- Current Itineraries -->
+        <div class="panel p-4">
+            <h4 class="font-medium" style="color: var(--fog-100);">Your Itineraries</h4>
+            <div class="mt-3 space-y-2">
+                {% for itin in itineraries %}
+                <div class="check-row">
+                    <div>
+                        <div class="text-sm font-medium" style="color: var(--fog-100);">{{ itin.destination_facility.name }} — {{ itin.destination_facility.country }}</div>
+                        <div class="text-[11px]" style="color: var(--fog-500);">{{ itin.scheduled_date }} • {{ itin.duration_days|default:'N/A' }} days</div>
+                    </div>
+                    <div class="text-[11px] font-semibold" style="color: var(--fog-300);">{{ itin.status }}</div>
+                </div>
+                {% empty %}
+                <div class="text-[13px] text-center" style="color: var(--fog-500); padding: 1rem;">No itineraries yet.</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Aero-Medical Clearance (The "Something Interesting") -->
+        <div class="panel p-6 flex-1">
+            <h3 class="font-display text-sm font-medium mb-1" style="color: var(--fog-100);">Aero-Medical Clearance</h3>
+            <p class="text-[11px] mb-4" style="color: var(--fog-500);">Auto-assessed via your recent NeuralSpace data.</p>
+            
+            <div class="space-y-2">
+                <div class="check-row">
+                    <span class="text-xs font-medium" style="color: var(--fog-300);">Baseline Stress Tolerance</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded" style="background-color: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2);">OPTIMAL</span>
+                </div>
+                <div class="check-row">
+                    <span class="text-xs font-medium" style="color: var(--fog-300);">Circadian Shift Risk</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded" style="background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2);">MODERATE</span>
+                </div>
+                <div class="check-row">
+                    <span class="text-xs font-medium" style="color: var(--fog-300);">Cabin Pressure Adherence</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded" style="background-color: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2);">CLEARED</span>
+                </div>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t flex justify-between items-center" style="border-color: var(--line);">
+                <span class="text-xs" style="color: var(--fog-500);">Flight Status:</span>
+                <span class="text-xs font-bold" style="color: var(--fog-100); display: flex; align-items: center;">
+                    <span class="w-1.5 h-1.5 rounded-full mr-1.5" style="background-color: #10b981; box-shadow: 0 0 6px #10b981;"></span> Safe to Travel
+                </span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const tMap = L.map('tourismMap', { zoomControl: false }).setView([25, 10], 2);
+        L.control.zoom({ position: 'topleft' }).addTo(tMap);
+        
+        // High-end dark tiles to match dashboard mapping
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://carto.com/attributions" style="color: var(--fog-500);">CARTO</a>'
+        }).addTo(tMap);
+
+        let facData = [];
+        try {
+            facData = {{ facilities_json|default:"[]"|safe }};
+        } catch(e) { facData = []; }
+        
+        // Custom glowing marker
+        const hospitalIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div style="background-color:var(--accent-text); color:var(--ink-900); width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow: 0 0 12px var(--accent-text);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>`,
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+
+        function setDestinationById(id) {
+            try {
+                const sel = document.querySelector('select[name="facility"]');
+                if (sel) { sel.value = id; sel.scrollIntoView({behavior: 'smooth', block: 'center'}); sel.focus(); }
+            } catch(e) {}
+        }
+
+        facData.forEach(f => {
+            L.marker([f.lat, f.lng], {icon: hospitalIcon}).addTo(tMap).bindPopup(`
+                <div style="min-width: 160px; padding: 2px;">
+                    <h4 style="font-weight: 600; margin: 0 0 4px 0; font-size: 13px; color: var(--fog-100);">${f.name}</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 11px; color: var(--accent-text); font-weight: 500;">${f.type}</p>
+                    <p style="margin: 0 0 14px 0; font-size: 11px; color: var(--fog-300);">${f.city}, ${f.country}</p>
+                    <button onclick="setDestinationById(${f.id || 'null'})" style="width: 100%; background-color: var(--ink-700); color: var(--fog-100); border: 1px solid var(--line); padding: 6px; border-radius: 6px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--fog-500)'" onmouseout="this.style.borderColor='var(--line)'">
+                        Set as Destination
+                    </button>
+                </div>
+            `);
+        });
+    });
+</script>
+{% endblock %}

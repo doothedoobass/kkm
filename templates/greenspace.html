@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block page_title %}GreenSpace{% endblock %}
+{% block page_subtitle %}Environmental action for cognitive preservation.{% endblock %}
+{% block content %}
+<div class="bg-[url('https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center rounded-2xl border border-emerald-800 shadow-2xl overflow-hidden relative mb-8">
+    <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"></div>
+    <div class="relative z-10 p-10 text-center max-w-2xl mx-auto">
+        <div class="w-16 h-16 mx-auto bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mb-6 border border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <h2 class="text-3xl font-black text-white mb-4">The GreenSpace Initiative</h2>
+        <p class="text-slate-300 text-sm leading-relaxed mb-8">Neurohealth is inextricably linked to environmental health. Participate in local GreenSpace DAOs, offset carbon footprints, and directly influence the NBHDI Environmental Impact Score in your region.</p>
+        <form method="post" action="{% url 'greenspace_join' %}">
+            {% csrf_token %}
+            <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg">Join the Nourish DAO</button>
+        </form>
+        {% if membership %}
+        <p class="mt-4 text-slate-300 text-sm">Status: <span class="font-semibold text-emerald-300">{{ membership.status }}</span> since {{ membership.joined_at|date:'F j, Y' }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,467 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Welcome to NeuralSpace{% endblock %}
+{% block page_subtitle %}
+Clinical care, diagnostics, research, and health intelligence.
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+
+<section class="relative overflow-hidden rounded-[32px] border border-slate-800 bg-[#131922]">
+
+    <!-- Background -->
+
+    <div class="absolute inset-0">
+
+        <div class="absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-blue-500/5 blur-3xl"></div>
+
+        <div class="absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-slate-600/10 blur-3xl"></div>
+
+        <div class="absolute inset-0 opacity-[0.03]"
+             style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 32px 32px;">
+        </div>
+
+    </div>
+
+    <div class="relative px-6 py-16 md:px-12 lg:px-16 lg:py-24">
+
+        <!-- Badge -->
+
+        <div class="mb-8 flex justify-center">
+
+            <span class="rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-[11px] uppercase tracking-[0.25em] text-slate-400">
+
+                NeuralVillage Ecosystem
+
+            </span>
+
+        </div>
+
+        <!-- Hero content -->
+
+        <div class="mx-auto max-w-5xl text-center">
+
+            <h1 class="font-display text-5xl leading-tight text-white md:text-7xl">
+
+                Healthcare built around
+                people, intelligence,
+                and care.
+
+            </h1>
+
+            <p class="mx-auto mt-8 max-w-3xl text-lg leading-relaxed text-slate-400">
+
+                NeuralSpace connects patients, clinicians, diagnostics,
+                telemedicine, insurance, and research into a single,
+                secure ecosystem.
+
+            </p>
+
+        </div>
+
+        <!-- Buttons -->
+
+        <div class="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+
+            {% if request.user.is_authenticated %}
+
+                <a href="{% url 'dashboard' %}"
+                   class="rounded-2xl bg-white px-8 py-4 text-sm font-semibold text-slate-900 transition hover:scale-[1.02]">
+
+                    Open Dashboard
+
+                </a>
+
+            {% else %}
+
+                <a href="{% url 'signup' %}"
+                   class="rounded-2xl bg-white px-8 py-4 text-sm font-semibold text-slate-900 transition hover:scale-[1.02]">
+
+                    Get Started
+
+                </a>
+
+                <a href="{% url 'login' %}"
+                   class="rounded-2xl border border-slate-700 bg-slate-900/50 px-8 py-4 text-sm font-semibold text-slate-200 transition hover:bg-slate-800">
+
+                    Sign In
+
+                </a>
+
+            {% endif %}
+
+        </div>
+
+        <!-- Stats -->
+
+        <div class="mt-20 grid gap-4 md:grid-cols-4">
+
+            <div class="rounded-3xl border border-slate-800 bg-[#0f141c] p-6">
+
+                <p class="text-3xl font-semibold text-white">
+                    24/7
+                </p>
+
+                <p class="mt-2 text-sm text-slate-500">
+                    Telemedicine access
+                </p>
+
+            </div>
+
+            <div class="rounded-3xl border border-slate-800 bg-[#0f141c] p-6">
+
+                <p class="text-3xl font-semibold text-white">
+                    AI
+                </p>
+
+                <p class="mt-2 text-sm text-slate-500">
+                    Clinical intelligence
+                </p>
+
+            </div>
+
+            <div class="rounded-3xl border border-slate-800 bg-[#0f141c] p-6">
+
+                <p class="text-3xl font-semibold text-white">
+                    Secure
+                </p>
+
+                <p class="mt-2 text-sm text-slate-500">
+                    End-to-end encryption
+                </p>
+
+            </div>
+
+            <div class="rounded-3xl border border-slate-800 bg-[#0f141c] p-6">
+
+                <p class="text-3xl font-semibold text-white">
+                    Global
+                </p>
+
+                <p class="mt-2 text-sm text-slate-500">
+                    Healthcare network
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- FEATURES -->
+
+<section class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+
+    <div class="rounded-3xl border border-slate-800 bg-[#131922] p-7">
+
+        <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900">
+
+            🩺
+
+        </div>
+
+        <h3 class="text-xl font-medium text-white">
+            Clinical Care
+        </h3>
+
+        <p class="mt-3 text-sm leading-relaxed text-slate-500">
+
+            Book appointments, consult specialists, and manage treatment plans.
+
+        </p>
+
+    </div>
+
+    <div class="rounded-3xl border border-slate-800 bg-[#131922] p-7">
+
+        <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900">
+
+            🌍
+
+        </div>
+
+        <h3 class="text-xl font-medium text-white">
+            Telemedicine
+        </h3>
+
+        <p class="mt-3 text-sm leading-relaxed text-slate-500">
+
+            Access healthcare professionals remotely from anywhere.
+
+        </p>
+
+    </div>
+
+    <div class="rounded-3xl border border-slate-800 bg-[#131922] p-7">
+
+        <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900">
+
+            🧠
+
+        </div>
+
+        <h3 class="text-xl font-medium text-white">
+            Neuro Diagnostics
+        </h3>
+
+        <p class="mt-3 text-sm leading-relaxed text-slate-500">
+
+            Brain-health assessments, testing, and intelligent insights.
+
+        </p>
+
+    </div>
+
+    <div class="rounded-3xl border border-slate-800 bg-[#131922] p-7">
+
+        <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900">
+
+            📄
+
+        </div>
+
+        <h3 class="text-xl font-medium text-white">
+            Medical Records
+        </h3>
+
+        <p class="mt-3 text-sm leading-relaxed text-slate-500">
+
+            Store reports, prescriptions, and health history securely.
+
+        </p>
+
+    </div>
+
+</section>
+
+<!-- ECOSYSTEM -->
+
+<section class="mt-10 rounded-[32px] border border-slate-800 bg-[#131922] p-8 md:p-12">
+
+    <div class="max-w-3xl">
+
+        <p class="text-xs uppercase tracking-[0.2em] text-slate-500">
+
+            Ecosystem
+
+        </p>
+
+        <h2 class="mt-4 font-display text-4xl text-white">
+
+            One platform for healthcare,
+            research, and wellness.
+
+        </h2>
+
+        <p class="mt-6 text-slate-400 leading-relaxed">
+
+            NeuralSpace combines clinical services, insurance,
+            diagnostics, medical tourism, health wallets, and
+            intelligent care systems into one connected experience.
+
+        </p>
+
+    </div>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-3">
+
+        <div class="rounded-2xl border border-slate-800 bg-[#0f141c] p-6">
+
+            <h4 class="text-white font-medium">
+
+                Insurance
+
+            </h4>
+
+            <p class="mt-2 text-sm text-slate-500">
+
+                Coverage plans and healthcare financing.
+
+            </p>
+
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-[#0f141c] p-6">
+
+            <h4 class="text-white font-medium">
+
+                HealthWallet
+
+            </h4>
+
+            <p class="mt-2 text-sm text-slate-500">
+
+                Manage healthcare payments and records.
+
+            </p>
+
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-[#0f141c] p-6">
+
+            <h4 class="text-white font-medium">
+
+                Research
+
+            </h4>
+
+            <p class="mt-2 text-sm text-slate-500">
+
+                Participate in studies and medical innovation.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- CTA -->
+
+<section class="mt-10 rounded-[32px] border border-slate-800 bg-gradient-to-b from-[#131922] to-[#0d1218] p-10 text-center">
+
+    <h2 class="font-display text-4xl text-white">
+
+        Begin your journey with NeuralSpace
+
+    </h2>
+
+    <p class="mx-auto mt-5 max-w-2xl text-slate-400">
+
+        Create an account to access clinicians, diagnostics,
+        medical records, and intelligent healthcare services.
+
+    </p>
+
+    {% if not request.user.is_authenticated %}
+
+        <div class="mt-8">
+
+            <a href="{% url 'signup' %}"
+               class="inline-flex rounded-2xl bg-white px-8 py-4 text-sm font-semibold text-slate-900">
+
+                Create Account
+
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+<!-- FOOTER -->
+
+<footer class="mt-16 border-t border-slate-800 pt-12 pb-8">
+
+    <div class="grid gap-10 md:grid-cols-4">
+
+        <div>
+
+            <h3 class="font-display text-2xl text-white">
+
+                NeuralSpace
+
+            </h3>
+
+            <p class="mt-4 text-sm leading-relaxed text-slate-500">
+
+                A healthcare ecosystem connecting patients,
+                clinicians, diagnostics, and intelligent care.
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <h4 class="mb-4 text-sm font-medium text-slate-300">
+
+                Care
+
+            </h4>
+
+            <ul class="space-y-3 text-sm text-slate-500">
+
+                <li>Clinical Care</li>
+
+                <li>Telemedicine</li>
+
+                <li>Appointments</li>
+
+                <li>Medical Tourism</li>
+
+            </ul>
+
+        </div>
+
+        <div>
+
+            <h4 class="mb-4 text-sm font-medium text-slate-300">
+
+                Platform
+
+            </h4>
+
+            <ul class="space-y-3 text-sm text-slate-500">
+
+                <li>Insurance</li>
+
+                <li>HealthWallet</li>
+
+                <li>Messages</li>
+
+                <li>Medical Records</li>
+
+            </ul>
+
+        </div>
+
+        <div>
+
+            <h4 class="mb-4 text-sm font-medium text-slate-300">
+
+                Security
+
+            </h4>
+
+            <ul class="space-y-3 text-sm text-slate-500">
+
+                <li>End-to-end encryption</li>
+
+                <li>Secure storage</li>
+
+                <li>User consent</li>
+
+                <li>Privacy controls</li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    <div class="mt-12 flex flex-col gap-4 border-t border-slate-800 pt-8 text-xs text-slate-600 md:flex-row md:justify-between">
+
+        <p>
+
+            © 2026 NeuralSpace · NeuralVillage Ecosystem.
+
+        </p>
+
+        <p>
+
+            Clinical Care · Diagnostics · Wellness · Research
+
+        </p>
+
+    </div>
+
+</footer>
+
+{% endblock %}

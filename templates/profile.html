@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block page_title %}User Profile{% endblock %}
+{% block page_subtitle %}Sovereign Identity and Account Settings{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    {% if profile %}
+    <div class="bg-slate-800 rounded-2xl border border-slate-700 shadow-xl overflow-hidden">
+        <div class="h-32 bg-gradient-to-r from-blue-900 to-indigo-900 relative">
+            <div class="absolute -bottom-10 left-8">
+                <div class="w-20 h-20 rounded-xl bg-slate-800 border-4 border-slate-900 flex items-center justify-center text-3xl font-black text-white shadow-lg">{{ profile.full_name|make_list|first }}</div>
+            </div>
+            <div class="absolute top-4 right-4">
+                <span class="bg-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full border border-emerald-500/50">Verified</span>
+            </div>
+        </div>
+        
+        <div class="pt-14 px-8 pb-8">
+            <h2 class="text-2xl font-bold text-white">{{ profile.full_name }}</h2>
+            <p class="text-blue-400 text-sm font-semibold mt-1">{{ profile.pathway }}</p>
+            <p class="text-slate-400 text-xs font-mono mt-2 bg-slate-900 inline-block px-2 py-1 rounded">{{ profile.web3_wallet }}</p>
+            
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-2 border-b border-slate-700 pb-2">Neuro-Profile Data</h3>
+                    <div>
+                        <p class="text-[10px] text-slate-500 uppercase font-semibold">Primary Cognitive Goal</p>
+                        <p class="text-sm text-white">{{ profile.cognitive_goal }}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-500 uppercase font-semibold">BCI Experience Level</p>
+                        <p class="text-sm text-white">{{ profile.bci_familiarity }}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-500 uppercase font-semibold">Environmental Context</p>
+                        <p class="text-sm text-white">{{ profile.environment }}</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-2 border-b border-slate-700 pb-2">Subscription & Settings</h3>
+                    <div>
+                        <p class="text-[10px] text-slate-500 uppercase font-semibold">Active Plan</p>
+                        <p class="text-sm text-amber-400 font-bold">{{ profile.subscription_tier }}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-500 uppercase font-semibold">Data Sovereignity</p>
+                        <p class="text-sm text-emerald-400 flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg> Fully Encrypted & Consented</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-500 uppercase font-semibold">Account Creation</p>
+                        <p class="text-sm text-white">{{ profile.created_at|date:"F j, Y" }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-slate-700 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <a href="{% url 'onboarding' %}" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-lg transition text-sm">Recalibrate Profile</a>
+                <form method="post" action="{% url 'profile_lock' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-900/30 border border-red-800 text-red-400 hover:bg-red-900/50 font-semibold py-2 px-6 rounded-lg transition text-sm">Lock Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="bg-slate-800 p-12 rounded-2xl border border-slate-700 text-center shadow-xl">
+        <div class="w-16 h-16 mx-auto bg-slate-900 text-slate-500 rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">No Profile Found</h3>
+        <p class="text-sm text-slate-400 mb-6">You need to run the onboarding wizard to calibrate your NeuralSpace.</p>
+        <a href="{% url 'onboarding' %}" class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg text-sm">Start Calibration</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

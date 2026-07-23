@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% block page_title %}NeuralSpace Onboarding{% endblock %}
+{% block page_subtitle %}Calibrate your neuro-profile to personalize your ecosystem experience.{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto rounded-3xl border border-slate-800 bg-[#131922] overflow-hidden">
+
+    <!-- Header -->
+
+    <div class="px-8 py-8 border-b border-slate-800">
+
+        <span class="text-xs uppercase tracking-[0.2em] text-slate-500">
+            Secure Setup
+        </span>
+
+        <h2 class="text-2xl font-medium text-white mt-3">
+            Welcome to NeuralSpace
+        </h2>
+
+        <p class="text-sm text-slate-400 mt-2 max-w-xl leading-relaxed">
+            Complete your profile so we can personalize your healthcare,
+            learning, and wellness experience.
+        </p>
+
+    </div>
+
+    <form method="POST" action="{% url 'onboarding' %}">
+
+        {% csrf_token %}
+
+        <div class="p-8 space-y-10">
+
+            <!-- Personal -->
+
+            <section>
+
+                <h3 class="text-white font-medium mb-5">
+                    Personal Information
+                </h3>
+
+                <div>
+
+                    <label class="block text-sm text-slate-400 mb-2">
+                        Full name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="full_name"
+                        class="w-full bg-[#0f141c] border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-slate-500"
+                    >
+
+                </div>
+
+            </section>
+
+            <!-- Usage -->
+
+            <section>
+
+                <h3 class="text-white font-medium mb-5">
+                    How will you use NeuralSpace?
+                </h3>
+
+                <select
+                    name="pathway"
+                    class="w-full bg-[#0f141c] border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-slate-500"
+                >
+
+                    <option>Personal Health</option>
+
+                    <option>Clinical Care</option>
+
+                    <option>Research & Innovation</option>
+
+                    <option>Learning & Training</option>
+
+                </select>
+
+            </section>
+
+            <!-- Preferences -->
+
+            <section>
+
+                <h3 class="text-white font-medium mb-5">
+                    Health & Wellness Preferences
+                </h3>
+
+                <div class="grid md:grid-cols-2 gap-5">
+
+                    <div>
+
+                        <label class="block text-sm text-slate-400 mb-2">
+                            Primary goal
+                        </label>
+
+                        <select
+                            name="cognitive_goal"
+                            class="w-full bg-[#0f141c] border border-slate-700 rounded-xl px-4 py-3 text-slate-200"
+                        >
+
+                            <option>Improve focus</option>
+
+                            <option>Reduce stress</option>
+
+                            <option>Recovery support</option>
+
+                            <option>General wellness</option>
+
+                        </select>
+
+                    </div>
+
+                    <div>
+
+                        <label class="block text-sm text-slate-400 mb-2">
+                            Familiarity level
+                        </label>
+
+                        <select
+                            name="bci_familiarity"
+                            class="w-full bg-[#0f141c] border border-slate-700 rounded-xl px-4 py-3 text-slate-200"
+                        >
+
+                            <option>Beginner</option>
+
+                            <option>Intermediate</option>
+
+                            <option>Advanced</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- Privacy -->
+
+            <section class="rounded-2xl border border-slate-800 bg-slate-900/40 p-5">
+
+                <label class="flex gap-3">
+
+                    <input
+                        type="checkbox"
+                        name="consent"
+                        required
+                        class="mt-1"
+                    >
+
+                    <div>
+
+                        <p class="text-sm text-slate-200">
+                            I agree to secure data processing.
+                        </p>
+
+                        <p class="text-xs text-slate-500 mt-1">
+                            Your information remains encrypted and protected.
+                        </p>
+
+                    </div>
+                    <div>
+                        <label class="block text-sm text-slate-400 mb-2 mt-4">
+                            Wallet Address
+                        </label>
+                        <input
+                            type="text"
+                            name="web3_wallet"
+                            class="w-full bg-[#0f141c] border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-slate-500"
+                        >
+                    </div>                </label>
+
+            </section>
+
+        </div>
+
+        <div class="border-t border-slate-800 p-8">
+
+            <button
+                type="submit"
+                class="w-full rounded-xl bg-slate-100 text-slate-900 py-4 font-medium hover:opacity-90 transition"
+            >
+
+                Complete Setup
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+{% endblock %}

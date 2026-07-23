@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block page_title %}HealthWallet{% endblock %}
+{% block page_subtitle %}Manage Web3 rewards, research grants, and DAO metrics.{% endblock %}
+
+{% block content %}
+<style>
+    /* Inherited Dashboard Architecture */
+    .panel { background-color: var(--ink-800); border: 1px solid var(--line); border-radius: 14px; }
+    
+    .btn-primary {
+        display: inline-flex; align-items: center; justify-content: center;
+        background-color: var(--mark); color: var(--ink-900); font-weight: 600; 
+        font-size: 13px; padding: 0.75rem 1.25rem; border-radius: 10px; border: none;
+        transition: opacity 0.2s ease; cursor: pointer;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+
+    .btn-secondary {
+        display: inline-flex; align-items: center; justify-content: center;
+        background-color: var(--ink-700); color: var(--fog-100); font-weight: 600; 
+        font-size: 13px; padding: 0.75rem 1.25rem; border-radius: 10px; border: 1px solid var(--line);
+        transition: border-color 0.2s ease; cursor: pointer;
+    }
+    .btn-secondary:hover { border-color: var(--fog-500); }
+
+    /* Table styling */
+    .data-table th { font-size: 10px; font-weight: 600; color: var(--fog-500); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--line); padding: 1rem; }
+    .data-table td { padding: 1rem; border-bottom: 1px solid var(--line-soft); transition: background-color 0.15s ease; }
+    .data-table tr:hover td { background-color: var(--ink-700); }
+    .data-table tr:last-child td { border-bottom: none; }
+
+    .pulse-dot {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(1.2); }
+    }
+    
+    .wallet-pill {
+        display: inline-flex; align-items: center; background-color: var(--ink-900);
+        border: 1px solid var(--line); border-radius: 8px; padding: 0.4rem 0.75rem;
+        font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--fog-300);
+    }
+</style>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 max-w-7xl mx-auto w-full">
+    
+    <!-- Main Wallet Balance -->
+    <div class="panel p-8 lg:col-span-2 flex flex-col justify-between relative overflow-hidden" style="background: linear-gradient(135deg, var(--ink-800) 0%, #151816 100%); border-color: rgba(169, 138, 91, 0.3);">
+        <!-- Ambient glow element -->
+        <div class="absolute -top-32 -right-24 w-80 h-80 rounded-full blur-3xl pointer-events-none" style="background-color: rgba(169, 138, 91, 0.08);"></div>
+        
+        <div class="relative z-10">
+            <p class="text-[11px] font-semibold uppercase tracking-wider mb-2" style="color: var(--mark);">Available Neural Capital</p>
+                <div class="flex items-baseline mb-4">
+                <h2 class="font-display text-[42px] font-medium tracking-tight leading-none" style="color: var(--fog-100);">{{ wallet_balance|floatformat:2 }}</h2>
+                <span class="text-lg font-bold ml-3" style="color: var(--mark);">NST</span>
+            </div>
+            
+            <div class="flex items-center space-x-3 mb-8">
+                <span class="text-[11px] font-medium" style="color: var(--fog-500);">Connected Node:</span>
+                    <div class="wallet-pill">
+                    <div class="w-1.5 h-1.5 rounded-full mr-2" style="background-color: #10b981;"></div>
+                    {{ profile.web3_wallet|default:"" }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="relative z-10 flex flex-col sm:flex-row gap-3">
+            <button class="btn-primary flex-1 sm:flex-none">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h8a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Withdraw to L1
+            </button>
+            <button class="btn-secondary flex-1 sm:flex-none">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                Stake to Research Fund
+            </button>
+        </div>
+    </div>
+
+    <!-- Zero-Knowledge Telemetry Yield Tracker (The "Something Interesting") -->
+    <div class="panel p-6 flex flex-col justify-between">
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-display text-base font-medium" style="color: var(--fog-100);">Telemetry Yield</h3>
+                <span class="flex items-center text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded" style="background-color: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2);">
+                    <span class="pulse-dot w-1.5 h-1.5 rounded-full mr-1.5" style="background-color: #10b981;"></span> Streaming
+                </span>
+            </div>
+            <p class="text-[12px] leading-relaxed mb-5" style="color: var(--fog-300);">
+                Your wearable e-MR data is being securely anonymized (zk-SNARKs) and contributed to the global NBHDI index, generating continuous passive yield.
+            </p>
+            
+            <div class="space-y-3">
+                <div class="flex justify-between items-center pb-3" style="border-bottom: 1px solid var(--line-soft);">
+                    <span class="text-[11px] font-semibold text-slate-400">Current Yield Rate</span>
+                    <span class="text-[13px] font-bold" style="color: var(--mark);">N/A</span>
+                </div>
+                <div class="flex justify-between items-center pb-3" style="border-bottom: 1px solid var(--line-soft);">
+                    <span class="text-[11px] font-semibold text-slate-400">Data Blocks Mined</span>
+                    <span class="text-[13px] font-medium text-slate-200">N/A</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[11px] font-semibold text-slate-400">Privacy Protocol</span>
+                    <span class="text-[13px] font-mono text-slate-200">N/A</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Transaction Ledger Table -->
+<div class="panel overflow-hidden max-w-7xl mx-auto w-full">
+    <div class="p-6 border-b flex justify-between items-center" style="border-color: var(--line); background-color: var(--ink-800);">
+        <div>
+            <h4 class="font-display text-base font-medium" style="color: var(--fog-100);">Smart Contract Ledger</h4>
+            <p class="text-[11px]" style="color: var(--fog-500);">Verified on-chain transactions</p>
+        </div>
+        <button class="btn-secondary text-[11px] py-1.5 px-3">
+            <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
+            Export CSV
+        </button>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full text-left data-table">
+            <thead style="background-color: var(--ink-900);">
+                <tr>
+                    <th>TxID Hash</th>
+                    <th>Timestamp</th>
+                    <th>Protocol / Description</th>
+                    <th class="text-right">Amount (NST)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tx in transactions %}
+                <tr>
+                    <td class="font-mono text-[11px]" style="color: var(--fog-500);">{{ tx.transaction_id }}</td>
+                    <td class="text-[12px]" style="color: var(--fog-300);">{{ tx.date|date:"M d, Y H:i" }}</td>
+                    <td class="text-[13px] font-medium" style="color: var(--fog-100);">{{ tx.description }}</td>
+                    <td class="text-right text-[13px] font-bold {% if tx.amount > 0 %}text-[#10b981]{% else %}text-[#ef4444]{% endif %}">
+                        {% if tx.amount > 0 %}+{% endif %}{{ tx.amount }}
+                    </td>
+                </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-8">No transactions found.</td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

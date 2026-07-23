@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Create Account{% endblock %}
+{% block page_subtitle %}
+Set up your NeuralSpace account and begin your journey.
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-lg mx-auto py-8 md:py-14">
+
+    <div class="rounded-3xl border border-slate-800 bg-[#131922] overflow-hidden shadow-2xl">
+
+        <!-- Header -->
+
+        <div class="px-8 py-8 border-b border-slate-800">
+
+            <span class="text-[11px] uppercase tracking-[0.2em] text-slate-500">
+                NeuralSpace
+            </span>
+
+            <h2 class="mt-3 text-3xl font-display text-white">
+                Create your account
+            </h2>
+
+            <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+                Access healthcare services, secure communication,
+                and personalized experiences across the NeuralSpace ecosystem.
+            </p>
+
+        </div>
+
+        <!-- Errors -->
+
+        {% if messages %}
+
+        <div class="px-8 pt-6">
+
+            {% for m in messages %}
+
+            <div class="mb-3 rounded-2xl border border-red-900/40 bg-red-950/20 px-4 py-3">
+
+                <p class="text-sm text-red-300">
+                    {{ m }}
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+
+        <!-- Form -->
+
+        <form method="post" class="px-8 py-8 space-y-6">
+
+            {% csrf_token %}
+
+            <!-- Username -->
+
+            <div>
+
+                <label class="block mb-2 text-sm font-medium text-slate-300">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Choose a username"
+                    class="
+                        w-full
+                        rounded-2xl
+                        border
+                        border-slate-700
+                        bg-[#0d1218]
+                        px-4
+                        py-3
+                        text-slate-100
+                        placeholder:text-slate-500
+                        focus:outline-none
+                        focus:border-slate-500
+                        transition
+                    "
+                >
+
+            </div>
+
+            <!-- Email -->
+
+            <div>
+
+                <label class="block mb-2 text-sm font-medium text-slate-300">
+                    Email address
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    class="
+                        w-full
+                        rounded-2xl
+                        border
+                        border-slate-700
+                        bg-[#0d1218]
+                        px-4
+                        py-3
+                        text-slate-100
+                        placeholder:text-slate-500
+                        focus:outline-none
+                        focus:border-slate-500
+                        transition
+                    "
+                >
+
+            </div>
+
+            <!-- Password -->
+
+            <div>
+
+                <label class="block mb-2 text-sm font-medium text-slate-300">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Create a secure password"
+                    class="
+                        w-full
+                        rounded-2xl
+                        border
+                        border-slate-700
+                        bg-[#0d1218]
+                        px-4
+                        py-3
+                        text-slate-100
+                        placeholder:text-slate-500
+                        focus:outline-none
+                        focus:border-slate-500
+                        transition
+                    "
+                >
+
+                <p class="mt-2 text-xs text-slate-500">
+                    Use at least 8 characters.
+                </p>
+
+            </div>
+
+            <!-- Button -->
+
+            <button
+                type="submit"
+                class="
+                    w-full
+                    rounded-2xl
+                    bg-slate-100
+                    py-3.5
+                    text-sm
+                    font-semibold
+                    text-slate-900
+                    transition
+                    hover:opacity-90
+                "
+            >
+
+                Create Account
+
+            </button>
+
+        </form>
+
+        <!-- Footer -->
+
+        <div class="border-t border-slate-800 px-8 py-5 text-center">
+
+            <p class="text-sm text-slate-500">
+
+                Already have an account?
+
+                <a
+                    href="{% url 'login' %}"
+                    class="ml-1 text-slate-300 hover:text-white transition"
+                >
+                    Sign in
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

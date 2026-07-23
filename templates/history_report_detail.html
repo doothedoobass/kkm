@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block page_title %}Medical Record Detail{% endblock %}
+{% block page_subtitle %}Review the encrypted report and manage sharing or export.{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-6">
+    <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow">
+        <h3 class="font-semibold text-white text-2xl">{{ report.title }}</h3>
+        <p class="text-sm text-slate-400 mt-2">{{ report.document_type }}</p>
+        <div class="border-t border-slate-700 mt-4 pt-4 text-sm text-slate-300 space-y-3">
+            <div><span class="font-semibold text-slate-200">Uploaded:</span> {{ report.uploaded_at|date:'M d, Y H:i' }}</div>
+            <div><span class="font-semibold text-slate-200">Encrypted Hash:</span> {{ report.encrypted_hash }}</div>
+            <div><span class="font-semibold text-slate-200">Owner:</span> {{ report.user.username }}</div>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-3">
+            <form method="post" action="{% url 'history_share_report' report.id %}">
+                {% csrf_token %}
+                <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-500 transition">Share Report</button>
+            </form>
+            <form method="post" action="{% url 'history_download_report' report.id %}">
+                {% csrf_token %}
+                <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-700 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-600 transition">Download Export</button>
+            </form>
+            <a href="{% url 'history' %}" class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800 transition">Back to History</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,397 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Messages{% endblock %}
+{% block page_subtitle %}
+Private communication across the NeuralSpace network.
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .messages-shell {
+        height: calc(100vh - 170px);
+        min-height: 620px;
+    }
+
+    @media (max-width: 768px) {
+        .messages-shell {
+            height: calc(100vh - 90px);
+            min-height: auto;
+        }
+    }
+</style>
+
+<div class="messages-shell overflow-hidden rounded-3xl border border-slate-800 bg-[#131922]">
+
+    <div class="flex h-full">
+
+        <!-- ========================= -->
+        <!-- Conversation list -->
+        <!-- ========================= -->
+
+        <aside
+            id="conversationList"
+            class="
+                w-full
+                md:w-[340px]
+                lg:w-[380px]
+                shrink-0
+                border-r
+                border-slate-800
+                flex
+                flex-col
+                bg-[#11161e]
+            "
+        >
+
+            <!-- Header -->
+
+            <div class="px-5 py-5 border-b border-slate-800">
+
+                <h2 class="text-white text-xl font-medium">
+                    Messages
+                </h2>
+
+                <p class="text-xs text-slate-500 mt-1">
+                    End-to-end encrypted communication.
+                </p>
+
+                <div class="mt-4">
+
+                    <input
+                        type="text"
+                        placeholder="Search conversations"
+                        class="
+                            w-full
+                            px-4
+                            py-3
+                            rounded-2xl
+                            bg-[#0d1218]
+                            border
+                            border-slate-700
+                            text-sm
+                            text-slate-200
+                            placeholder:text-slate-500
+                            focus:outline-none
+                            focus:border-slate-500
+                        "
+                    >
+
+                </div>
+
+            </div>
+
+            <!-- Conversations -->
+
+            <div class="flex-1 overflow-y-auto">
+
+                {% for conv in conversations %}
+
+                <a href="{% url 'messages' %}?c={{ conv.id }}" class="w-full block">
+                <div
+                    class="
+                        w-full
+                        px-5
+                        py-4
+                        text-left
+                        transition
+                        hover:bg-slate-900/60
+                        border-b
+                        border-slate-800
+                    "
+                >
+
+                    <div class="flex items-center gap-4">
+
+                        <div class="
+                            w-12
+                            h-12
+                            rounded-full
+                            shrink-0
+                            bg-slate-700
+                            flex
+                            items-center
+                            justify-center
+                            text-sm
+                            font-semibold
+                            text-slate-200
+                        ">
+                            {{ conv|slice:":1" }}
+                        </div>
+
+                        <div class="min-w-0 flex-1">
+
+                            <div class="flex justify-between items-start gap-3">
+
+                                <h3 class="font-medium text-slate-200 truncate">
+                                    {{ conv }}
+                                </h3>
+
+                                <span class="text-[11px] text-slate-500 shrink-0">
+                                    {{ conv.last_activity|time:"H:i" }}
+                                </span>
+
+                            </div>
+
+                            <p class="text-sm text-slate-500 truncate mt-1">
+                                {% with last=conv.messages.last %}{% if last %}{{ last.content }}{% else %}No messages{% endif %}{% endwith %}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                </a>
+
+                {% empty %}
+
+                <div class="h-full flex items-center justify-center p-8">
+
+                    <div class="text-center">
+
+                        <div class="text-slate-400 text-lg">
+                            No conversations
+                        </div>
+
+                        <p class="text-sm text-slate-500 mt-2">
+                            Messages will appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </aside>
+
+        <!-- ========================= -->
+        <!-- Chat panel -->
+        <!-- ========================= -->
+
+        <section
+            id="chatPanel"
+            class="
+                hidden
+                md:flex
+                flex-1
+                flex-col
+                bg-[#131922]
+            "
+        >
+
+            <!-- Top bar -->
+
+            <div class="
+                px-6
+                py-4
+                border-b
+                border-slate-800
+                flex
+                items-center
+                gap-4
+            ">
+
+                <!-- Back -->
+
+                <button
+                    onclick="closeConversation()"
+                    class="
+                        md:hidden
+                        w-10
+                        h-10
+                        rounded-full
+                        bg-slate-800
+                        text-slate-300
+                    "
+                >
+
+                    ←
+
+                </button>
+
+                <div class="
+                    w-11
+                    h-11
+                    rounded-full
+                    bg-slate-700
+                    flex
+                    items-center
+                    justify-center
+                    text-slate-200
+                    font-semibold
+                ">
+                    N
+                </div>
+
+                <div class="flex-1">
+
+                    <h3 class="text-white font-medium">
+                        NeuralSpace
+                    </h3>
+
+                    <p class="text-xs text-slate-500">
+                        Secure session
+                    </p>
+
+                </div>
+
+                <div class="
+                    hidden
+                    md:flex
+                    items-center
+                    gap-2
+                    text-xs
+                    text-emerald-400
+                ">
+
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+
+                    Protected
+
+                </div>
+
+            </div>
+
+            {% if active_conversation %}
+            <div class="flex-1 overflow-y-auto p-6 space-y-4">
+                {% for m in active_conversation.messages.all %}
+                <div class="flex {% if m.sender_user == request.user %}justify-end{% else %}justify-start{% endif %}">
+                    <div class="max-w-[70%] p-3 rounded-xl" style="background-color: {% if m.sender_user == request.user %}#0b1220{% else %}#0d1218{% endif %}; border:1px solid var(--line);">
+                        <div class="text-sm text-slate-200">{{ m.content }}</div>
+                        <div class="text-[11px] text-slate-500 mt-2 text-right">{{ m.timestamp|time:"H:i" }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="border-t border-slate-800 p-5">
+                <form method="post" action="{% url 'messages_send' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="conversation_id" value="{{ active_conversation.id }}">
+                    <div class="flex gap-3">
+                        <input name="content" type="text" placeholder="Type a message..." class="flex-1 px-5 py-3 rounded-2xl bg-[#0d1218] border border-slate-700 text-sm text-slate-200">
+                        <button type="submit" class="px-6 rounded-2xl bg-slate-800 border border-slate-700 text-slate-200">Send</button>
+                    </div>
+                </form>
+            </div>
+            {% else %}
+            <!-- Empty state -->
+            <div class="flex-1 flex items-center justify-center px-8">
+
+                <div class="max-w-md text-center">
+
+                    <div class="
+                        w-24
+                        h-24
+                        mx-auto
+                        mb-6
+                        rounded-3xl
+                        bg-[#0d1218]
+                        border
+                        border-slate-800
+                        flex
+                        items-center
+                        justify-center
+                    ">
+
+                        <svg
+                            class="w-10 h-10 text-slate-600"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="1.5"
+                                d="M8 10h8M8 14h5m-8 7V5a2 2 0 012-2h10a2 2 0 012 2v16l-4-3H5a2 2 0 01-2-2z"
+                            />
+
+                        </svg>
+
+                    </div>
+
+                    <h2 class="text-2xl font-medium text-white">
+                        Select a conversation
+                    </h2>
+
+                    <p class="mt-3 text-sm leading-relaxed text-slate-500">
+
+                        Connect with healthcare professionals,
+                        research teams and support staff in one secure space.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+    </div>
+
+</div>
+
+<script>
+
+    function openConversation() {
+
+        if (window.innerWidth < 768) {
+
+            document
+                .getElementById("conversationList")
+                .classList.add("hidden");
+
+            const panel = document.getElementById("chatPanel");
+
+            panel.classList.remove("hidden");
+
+            panel.classList.add("flex");
+        }
+    }
+
+    function closeConversation() {
+
+        if (window.innerWidth < 768) {
+
+            document
+                .getElementById("conversationList")
+                .classList.remove("hidden");
+
+            const panel = document.getElementById("chatPanel");
+
+            panel.classList.remove("flex");
+
+            panel.classList.add("hidden");
+        }
+    }
+
+    window.addEventListener("resize", () => {
+
+        if (window.innerWidth >= 768) {
+
+            document
+                .getElementById("conversationList")
+                .classList.remove("hidden");
+
+            document
+                .getElementById("chatPanel")
+                .classList.remove("hidden");
+
+            document
+                .getElementById("chatPanel")
+                .classList.add("flex");
+        }
+
+    });
+
+</script>
+
+{% endblock %}
