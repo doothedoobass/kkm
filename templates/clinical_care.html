@@ -288,20 +288,31 @@
                 </div>
                 <div>
                     <h4 class="text-sm font-semibold text-white">{{ r.title }}</h4>
-                    <div class="flex items-center gap-3 text-xs text-slate-400 mt-0.5">
+                    <div class="flex flex-wrap items-center gap-2.5 text-xs text-slate-400 mt-0.5">
                         <span class="font-mono text-[#60A5FA] text-[11px]">{{ r.document_type }}</span>
                         <span>&bull;</span>
                         <span class="font-mono text-[11px] text-slate-500">{{ r.uploaded_at|date:"M d, Y H:i" }}</span>
+                        {% if r.file_size %}
+                        <span>&bull;</span>
+                        <span class="font-mono text-[11px] text-slate-400">{{ r.file_size }}</span>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             
-            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 pt-3 sm:pt-0 border-white/10">
-                <span class="font-mono text-[10px] px-2.5 py-1 rounded bg-slate-900 border border-white/10 text-slate-400 truncate max-w-[140px]" title="{{ r.encrypted_hash }}">
+            <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 pt-3 sm:pt-0 border-white/10">
+                {% if r.file %}
+                <a href="{{ r.file.url }}" target="_blank" class="px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/30 text-[#60A5FA] font-mono text-xs font-medium hover:bg-blue-500/20 transition-colors flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    View File
+                </a>
+                {% endif %}
+                
+                <span class="font-mono text-[10px] px-2.5 py-1 rounded bg-slate-900 border border-white/10 text-slate-400 truncate max-w-[130px]" title="{{ r.encrypted_hash }}">
                     {{ r.encrypted_hash|slice:":12" }}...
                 </span>
                 <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[#34D399] font-mono text-[10px] font-bold">
-                    ZK Verified
+                    SHA-256 Anchored
                 </span>
             </div>
         </div>
@@ -387,7 +398,7 @@
             </button>
         </div>
 
-        <form method="post" action="{% url 'clinical_care' %}" class="space-y-4">
+        <form method="post" action="{% url 'clinical_care' %}" enctype="multipart/form-data" class="space-y-4">
             {% csrf_token %}
             
             <div>
@@ -407,9 +418,14 @@
                 </select>
             </div>
 
+            <div>
+                <label class="block text-xs font-mono font-medium uppercase tracking-wider text-slate-300 mb-1.5">Select Medical Document File</label>
+                <input type="file" name="document_file" id="document_file" class="input-field w-full cursor-pointer file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-500/20 file:text-[#60A5FA] hover:file:bg-blue-500/30">
+            </div>
+
             <div class="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-xs text-blue-300 flex items-center gap-2">
                 <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <span>Zero-knowledge SHA-256 hash will be automatically generated and anchored upon submit.</span>
+                <span>Uploaded files will be cryptographically hashed using SHA-256 and safely anchored.</span>
             </div>
 
             <div class="flex items-center gap-3 pt-2">

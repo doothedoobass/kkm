@@ -111,6 +111,8 @@ class MedicalTourismFacility(models.Model):
 class MedicalReport(models.Model):
     title = models.CharField(max_length=200)
     document_type = models.CharField(max_length=100)
+    file = models.FileField(upload_to='medical_reports/%Y/%m/', null=True, blank=True)
+    file_size = models.CharField(max_length=50, null=True, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     encrypted_hash = models.CharField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)

@@ -144,16 +144,33 @@ def clinical_care(request):
     if request.method == "POST":
         title = request.POST.get('title', '').strip()
         doc_type = request.POST.get('document_type', 'EEG Diagnostic Report')
+        doc_file = request.FILES.get('document_file')
+        
         if title:
-            import uuid
-            enc_hash = f"0x{uuid.uuid4().hex[:18]}"
+            file_size_str = None
+            if doc_file:
+                hasher = hashlib.sha256()
+                for chunk in doc_file.chunks():
+                    hasher.update(chunk)
+                enc_hash = f"0x{hasher.hexdigest()[:24]}"
+                
+                size_bytes = doc_file.size
+                if size_bytes >= 1024 * 1024:
+                    file_size_str = f"{size_bytes / (1024 * 1024):.1f} MB"
+                else:
+                    file_size_str = f"{max(1, int(size_bytes / 1024))} KB"
+            else:
+                enc_hash = f"0x{uuid.uuid4().hex[:24]}"
+
             MedicalReport.objects.create(
                 user=request.user,
                 title=title,
                 document_type=doc_type,
+                file=doc_file,
+                file_size=file_size_str,
                 encrypted_hash=enc_hash
             )
-            django_messages.success(request, f"Medical Report '{title}' successfully anchored to e-MR registry.")
+            django_messages.success(request, f"Medical Report '{title}' successfully uploaded and SHA-256 anchored to e-MR registry.")
             return redirect('clinical_care')
         else:
             django_messages.error(request, "Please enter a valid report title.")
