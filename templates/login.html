@@ -33,23 +33,18 @@ Sign in to continue to NeuralSpace.
         <!-- Alerts -->
 
         {% if messages %}
-
         <div class="px-8 pt-6">
-
             {% for m in messages %}
-
-            <div class="mb-3 rounded-2xl border border-red-900/40 bg-red-950/20 px-4 py-3">
-
-                <p class="text-sm text-red-300">
+            <div class="mb-3 rounded-2xl border px-4 py-3
+                {% if m.tags == 'success' %}border-emerald-500/40 bg-emerald-950/30 text-emerald-300
+                {% elif m.tags == 'error' %}border-red-500/40 bg-red-950/30 text-red-300
+                {% else %}border-blue-500/40 bg-blue-950/30 text-blue-300{% endif %}">
+                <p class="text-sm">
                     {{ m }}
                 </p>
-
             </div>
-
             {% endfor %}
-
         </div>
-
         {% endif %}
 
         <!-- Form -->

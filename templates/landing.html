@@ -1,467 +1,746 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block page_title %}Welcome to NeuralSpace{% endblock %}
-{% block page_subtitle %}
-Clinical care, diagnostics, research, and health intelligence.
-{% endblock %}
+{% block page_title %}NeuralSpace | Ethics-First Brain Health & BCI Ecosystem{% endblock %}
+{% block page_subtitle %}Neural Interface Platform{% endblock %}
+
+{% block body_class %}min-h-screen bg-black text-white selection:bg-white/20 relative{% endblock %}
+{% block main_class %}min-h-screen w-full relative z-10 bg-black{% endblock %}
+{% block sidebar %}{% endblock %}
+{% block header %}{% endblock %}
+
+{% block content_wrapper_class %}w-full p-0 max-w-none bg-black text-white overflow-x-hidden{% endblock %}
 
 {% block content %}
 
-<!-- HERO -->
+<style>
+    :root {
+        --accent: #2997FF;
+        --hair: rgba(255, 255, 255, .12);
+        --hair-soft: rgba(255, 255, 255, .08);
+        --grey: rgba(255, 255, 255, .56);
+        --grey-dim: rgba(255, 255, 255, .38);
+    }
 
-<section class="relative overflow-hidden rounded-[32px] border border-slate-800 bg-[#131922]">
+    .f-sans {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', Helvetica, Arial, sans-serif;
+    }
 
-    <!-- Background -->
+    .f-mono {
+        font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+    }
 
-    <div class="absolute inset-0">
+    * {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', Helvetica, Arial, sans-serif;
+    }
 
-        <div class="absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-blue-500/5 blur-3xl"></div>
+    @keyframes traceFade {
+        0%, 100% { opacity: .5; }
+        50% { opacity: .9; }
+    }
 
-        <div class="absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-slate-600/10 blur-3xl"></div>
+    #trace-fill {
+        animation: traceFade 3s ease-in-out infinite;
+    }
 
-        <div class="absolute inset-0 opacity-[0.03]"
-             style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 32px 32px;">
+    .card {
+        border: 1px solid var(--hair-soft);
+        transition: border-color .25s ease, transform .25s ease;
+    }
+
+    .card:hover {
+        border-color: var(--hair);
+        transform: translateY(-2px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        #trace-fill { animation: none; }
+        .card { transition: none; }
+    }
+</style>
+
+<!-- SCROLL PROGRESS -->
+<div class="fixed top-0 left-0 w-full h-[2px] z-[60] bg-white/[0.06]">
+    <div id="trace-fill" class="h-full w-0 bg-white/70"></div>
+</div>
+
+<!-- NAV -->
+<nav id="site-nav" class="fixed top-0 left-0 w-full z-50 transition-all duration-500"
+    style="background:rgba(0,0,0,0); backdrop-filter:blur(0px);">
+    <div class="max-w-[1000px] mx-auto px-6 h-14 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-2.5 group">
+            <div class="w-6 h-6 rounded-md flex items-center justify-center font-bold text-[10px] tracking-wider transition-all" style="background: linear-gradient(135deg, rgba(41,151,255,0.3) 0%, rgba(255,255,255,0.05) 100%); border: 1px solid rgba(41,151,255,0.4); color: #60A5FA;">NS</div>
+            <span class="text-[15px] font-semibold tracking-tight text-white group-hover:text-white/80 transition-colors">NeuralSpace</span>
+        </a>
+
+        <!-- Desktop Menu Links -->
+        <div class="hidden md:flex items-center gap-8 text-[13px] text-white/60 font-medium">
+            <a href="#pathways" class="hover:text-white transition-colors">Pathways</a>
+            <a href="#clinical" class="hover:text-white transition-colors">Clinical Care</a>
+            <a href="#nbhdi" class="hover:text-white transition-colors">Geospatial NBHDI</a>
+            <a href="#kambrai" class="hover:text-white transition-colors">Kambrai Web3</a>
+            <a href="#specs" class="hover:text-white transition-colors">SDK</a>
         </div>
 
-    </div>
-
-    <div class="relative px-6 py-16 md:px-12 lg:px-16 lg:py-24">
-
-        <!-- Badge -->
-
-        <div class="mb-8 flex justify-center">
-
-            <span class="rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-[11px] uppercase tracking-[0.25em] text-slate-400">
-
-                NeuralVillage Ecosystem
-
-            </span>
-
-        </div>
-
-        <!-- Hero content -->
-
-        <div class="mx-auto max-w-5xl text-center">
-
-            <h1 class="font-display text-5xl leading-tight text-white md:text-7xl">
-
-                Healthcare built around
-                people, intelligence,
-                and care.
-
-            </h1>
-
-            <p class="mx-auto mt-8 max-w-3xl text-lg leading-relaxed text-slate-400">
-
-                NeuralSpace connects patients, clinicians, diagnostics,
-                telemedicine, insurance, and research into a single,
-                secure ecosystem.
-
-            </p>
-
-        </div>
-
-        <!-- Buttons -->
-
-        <div class="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-
+        <!-- Right Action CTA & Mobile Hamburger -->
+        <div class="flex items-center gap-4">
             {% if request.user.is_authenticated %}
-
-                <a href="{% url 'dashboard' %}"
-                   class="rounded-2xl bg-white px-8 py-4 text-sm font-semibold text-slate-900 transition hover:scale-[1.02]">
-
-                    Open Dashboard
-
-                </a>
-
+            <a href="{% url 'dashboard' %}"
+                class="px-4 py-1.5 rounded-full text-[12px] font-medium transition-all hover:shadow-[0_0_15px_rgba(41,151,255,0.4)]"
+                style="background:rgba(41,151,255,0.15); border:1px solid rgba(41,151,255,0.35); color:#60A5FA;">Dashboard &rsaquo;</a>
             {% else %}
-
-                <a href="{% url 'signup' %}"
-                   class="rounded-2xl bg-white px-8 py-4 text-sm font-semibold text-slate-900 transition hover:scale-[1.02]">
-
-                    Get Started
-
-                </a>
-
-                <a href="{% url 'login' %}"
-                   class="rounded-2xl border border-slate-700 bg-slate-900/50 px-8 py-4 text-sm font-semibold text-slate-200 transition hover:bg-slate-800">
-
-                    Sign In
-
-                </a>
-
+            <a href="{% url 'login' %}" class="text-[13px] text-white/70 hover:text-white transition-colors hidden sm:block">Sign in</a>
+            <a href="{% url 'signup' %}" class="px-4 py-1.5 rounded-full text-[12px] font-medium transition-all hover:opacity-90"
+                style="background:#2997FF; color:#ffffff; box-shadow:0 0 15px rgba(41,151,255,0.35);">Start onboarding</a>
             {% endif %}
 
+            <!-- Mobile Hamburger Toggle Button -->
+            <button id="landing-menu-toggle" onclick="toggleLandingMobileMenu()" class="md:hidden p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors" aria-label="Toggle menu">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
         </div>
-
-        <!-- Stats -->
-
-        <div class="mt-20 grid gap-4 md:grid-cols-4">
-
-            <div class="rounded-3xl border border-slate-800 bg-[#0f141c] p-6">
-
-                <p class="text-3xl font-semibold text-white">
-                    24/7
-                </p>
-
-                <p class="mt-2 text-sm text-slate-500">
-                    Telemedicine access
-                </p>
-
-            </div>
-
-            <div class="rounded-3xl border border-slate-800 bg-[#0f141c] p-6">
-
-                <p class="text-3xl font-semibold text-white">
-                    AI
-                </p>
-
-                <p class="mt-2 text-sm text-slate-500">
-                    Clinical intelligence
-                </p>
-
-            </div>
-
-            <div class="rounded-3xl border border-slate-800 bg-[#0f141c] p-6">
-
-                <p class="text-3xl font-semibold text-white">
-                    Secure
-                </p>
-
-                <p class="mt-2 text-sm text-slate-500">
-                    End-to-end encryption
-                </p>
-
-            </div>
-
-            <div class="rounded-3xl border border-slate-800 bg-[#0f141c] p-6">
-
-                <p class="text-3xl font-semibold text-white">
-                    Global
-                </p>
-
-                <p class="mt-2 text-sm text-slate-500">
-                    Healthcare network
-                </p>
-
-            </div>
-
-        </div>
-
     </div>
 
+    <!-- Mobile Dropdown Menu -->
+    <div id="landing-mobile-menu" class="hidden md:hidden border-b border-white/10 px-6 py-4 space-y-3 transition-all duration-300" style="background: rgba(10, 10, 14, 0.95); backdrop-filter: blur(20px);">
+        <a href="#pathways" onclick="toggleLandingMobileMenu()" class="block text-sm text-white/70 hover:text-white py-1">Pathways</a>
+        <a href="#clinical" onclick="toggleLandingMobileMenu()" class="block text-sm text-white/70 hover:text-white py-1">Clinical Care</a>
+        <a href="#nbhdi" onclick="toggleLandingMobileMenu()" class="block text-sm text-white/70 hover:text-white py-1">Geospatial NBHDI</a>
+        <a href="#kambrai" onclick="toggleLandingMobileMenu()" class="block text-sm text-white/70 hover:text-white py-1">Kambrai Web3</a>
+        <a href="#specs" onclick="toggleLandingMobileMenu()" class="block text-sm text-white/70 hover:text-white py-1">SDK</a>
+        {% if not request.user.is_authenticated %}
+        <div class="pt-2 border-t border-white/10 flex items-center justify-between">
+            <a href="{% url 'login' %}" class="text-xs text-white/70 hover:text-white">Sign in</a>
+            <a href="{% url 'signup' %}" class="px-4 py-1.5 rounded-full text-xs font-medium bg-[#2997FF] text-white">Start onboarding</a>
+        </div>
+        {% endif %}
+    </div>
+</nav>
+
+<!-- PRELOADER -->
+<div id="bci-preloader"
+    class="fixed inset-0 z-[70] flex flex-col items-center justify-center bg-black transition-opacity duration-700">
+    <div class="relative flex flex-col items-center max-w-sm px-6 text-center">
+        <svg class="h-8 w-8 mb-6" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="3" />
+            <circle id="preloader-ring" cx="50" cy="50" r="42" fill="none" stroke="#ffffff" stroke-width="3"
+                stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264" transform="rotate(-90 50 50)" />
+        </svg>
+        <p class="f-mono text-[11px] text-white/40" id="preloader-percent">0%</p>
+    </div>
+</div>
+
+<!-- HERO SCROLL CONTAINER -->
+<section id="hero-scroll-container" class="relative h-[500vh] w-full bg-black">
+
+    <div id="hero-sticky-inner" class="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+
+        <div
+            class="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block f-mono text-[10px] text-white/25 tracking-wide z-20">
+            SCROLL
+        </div>
+
+        <canvas id="hero-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
+
+        <div
+            class="relative z-20 w-full max-w-[1000px] mx-auto px-4 sm:px-6 h-full flex items-center justify-center pointer-events-none">
+
+            <!-- STAGE 1: HERO -->
+            <div id="hero-stage-1"
+                class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 transition-all pointer-events-auto">
+                <h1 class="text-[48px] sm:text-[72px] md:text-[96px] font-semibold tracking-tight leading-[1.02] text-white">
+                    NeuralSpace
+                </h1>
+                <p class="mt-4 max-w-lg text-[16px] sm:text-[19px] md:text-[21px] text-white/60 leading-snug">
+                    Your brain data. Sovereign, connected, understood.
+                </p>
+                <div class="mt-7 sm:mt-8 flex flex-wrap items-center justify-center gap-x-6 sm:gap-x-8 gap-y-3 text-[14px] sm:text-[15px]">
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="hover:opacity-70 transition-opacity"
+                        style="color:var(--accent);">Open dashboard &rsaquo;</a>
+                    {% else %}
+                    <a href="{% url 'signup' %}" class="hover:opacity-70 transition-opacity font-medium"
+                        style="color:var(--accent);">Start onboarding &rsaquo;</a>
+                    <a href="#pathways" class="text-white/70 hover:text-white transition-colors">Explore pathways
+                        &rsaquo;</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- STAGE 2: HARDWARE & EEG DIAGNOSTICS (left-aligned) -->
+            <div id="hero-stage-2"
+                class="absolute inset-x-4 sm:inset-x-6 md:inset-x-0 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all flex justify-start">
+                <div class="max-w-[340px] w-full pointer-events-auto p-5 sm:p-6 md:p-0 rounded-2xl bg-black/60 md:bg-transparent backdrop-blur-md md:backdrop-blur-none border border-white/10 md:border-none shadow-2xl">
+                    <p class="text-[12px] sm:text-[13px] text-white/40 mb-2 sm:mb-3 font-mono uppercase tracking-wider">Neural Hardware & Telemetry</p>
+                    <h2 class="text-[26px] sm:text-[32px] md:text-[38px] font-semibold tracking-tight leading-[1.08] mb-3 sm:mb-4">Precision EEG & BCI Telemetry.</h2>
+                    <p class="text-[14px] sm:text-[15px] text-white/60 leading-relaxed mb-5 sm:mb-6">
+                        High-density multi-channel electrode placement mapping cortical signals in real time. Ethics-first data encryption under your sovereignty.
+                    </p>
+                    <div class="flex gap-8 text-[13px]">
+                        <div><span class="text-white block font-semibold text-[16px] sm:text-[18px]">1024ch</span><span
+                                class="text-white/40 text-[11px] sm:text-[12px]">Signal Density</span></div>
+                        <div><span class="text-white block font-semibold text-[16px] sm:text-[18px]">0.8ms</span><span
+                                class="text-white/40 text-[11px] sm:text-[12px]">Latency</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STAGE 3: ECOSYSTEM PILLARS (EXPLODED CALLOUTS) -->
+            <div id="hero-stage-3" class="absolute inset-0 opacity-0 pointer-events-none transition-all">
+                <div class="absolute top-[16%] sm:top-[18%] left-[6%] sm:left-[10%] md:left-[14%] max-w-[220px] pointer-events-auto p-3.5 sm:p-0 rounded-xl bg-black/60 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border border-white/10 sm:border-none">
+                    <p class="text-[11px] sm:text-[13px] text-white/40 mb-1 font-mono uppercase">Clinical Care</p>
+                    <p class="text-[12px] sm:text-[13px] text-white/80 leading-relaxed">Direct clinician consultations, telemedicine & EHR exchange.</p>
+                </div>
+                <div
+                    class="absolute top-[44%] sm:top-[46%] right-[6%] sm:right-[10%] md:right-[14%] max-w-[220px] pointer-events-auto text-right md:text-left p-3.5 sm:p-0 rounded-xl bg-black/60 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border border-white/10 sm:border-none">
+                    <p class="text-[11px] sm:text-[13px] text-white/40 mb-1 font-mono uppercase">Geospatial NBHDI</p>
+                    <p class="text-[12px] sm:text-[13px] text-white/80 leading-relaxed">Global brain health index with environmental & socioeconomic factors.
+                    </p>
+                </div>
+                <div class="absolute bottom-[14%] sm:bottom-[16%] left-[10%] sm:left-[14%] md:left-[22%] max-w-[220px] pointer-events-auto p-3.5 sm:p-0 rounded-xl bg-black/60 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border border-white/10 sm:border-none">
+                    <p class="text-[11px] sm:text-[13px] text-white/40 mb-1 font-mono uppercase">Neurolearn Academy</p>
+                    <p class="text-[12px] sm:text-[13px] text-white/80 leading-relaxed">Neuroscience certifications, research rewards & mentorship.
+                    </p>
+                </div>
+            </div>
+
+            <!-- STAGE 4: KAMBRAI & SOVEREIGNTY (right-aligned) -->
+            <div id="hero-stage-4"
+                class="absolute inset-x-4 sm:inset-x-6 md:inset-x-0 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all flex justify-end">
+                <div class="max-w-[340px] w-full text-left pointer-events-auto p-5 sm:p-6 md:p-0 rounded-2xl bg-black/60 md:bg-transparent backdrop-blur-md md:backdrop-blur-none border border-white/10 md:border-none shadow-2xl">
+                    <p class="text-[12px] sm:text-[13px] text-white/40 mb-2 sm:mb-3 font-mono uppercase tracking-wider">Kambrai Web3 Connection</p>
+                    <h2 class="text-[26px] sm:text-[32px] md:text-[38px] font-semibold tracking-tight leading-[1.08] mb-3 sm:mb-4">Your data. Your rewards.</h2>
+                    <p class="text-[14px] sm:text-[15px] text-white/60 leading-relaxed mb-5 sm:mb-6">
+                        Monetize anonymized neural telemetry for Project Alpha/Beta research rewards, or lock it safely under your sovereign Web3 wallet.
+                    </p>
+                    <div class="space-y-2.5 text-[12px] sm:text-[13px]">
+                        <div class="flex justify-between border-b pb-2.5" style="border-color:var(--hair-soft);">
+                            <span class="text-white/45">Data Sovereignty</span><span class="text-white font-medium">100% Encrypted</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2.5" style="border-color:var(--hair-soft);">
+                            <span class="text-white/45">Research Rewards</span><span class="text-white font-medium">Project Alpha/Beta</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STAGE 5: CLOSE -->
+            <div id="hero-stage-5"
+                class="absolute inset-0 opacity-0 pointer-events-none transition-all flex flex-col items-center justify-center text-center px-4">
+                <h2
+                    class="text-[34px] sm:text-[54px] md:text-[64px] font-semibold tracking-tight max-w-2xl leading-[1.04]">
+                    Welcome to your<br class="hidden md:block"> NeuralSpace.
+                </h2>
+                <p class="mt-4 sm:mt-5 max-w-md text-[15px] sm:text-[17px] text-white/60">
+                    Connecting Patients, Clinicians, Researchers, and Advocates in one unified neuro-ecosystem.
+                </p>
+                <div class="mt-8 flex flex-wrap gap-x-8 gap-y-3 pointer-events-auto text-[15px]">
+                    <a href="{% url 'signup' %}" class="hover:opacity-70 transition-opacity font-medium"
+                        style="color:var(--accent);">Begin onboarding &rsaquo;</a>
+                    <a href="#pathways" class="text-white/70 hover:text-white transition-colors">See all pathways
+                        &rsaquo;</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </section>
 
-<!-- FEATURES -->
 
-<section class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+<!-- ============ POST-HERO SECTIONS ============ -->
 
-    <div class="rounded-3xl border border-slate-800 bg-[#131922] p-7">
-
-        <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900">
-
-            🩺
-
-        </div>
-
-        <h3 class="text-xl font-medium text-white">
-            Clinical Care
-        </h3>
-
-        <p class="mt-3 text-sm leading-relaxed text-slate-500">
-
-            Book appointments, consult specialists, and manage treatment plans.
-
-        </p>
-
-    </div>
-
-    <div class="rounded-3xl border border-slate-800 bg-[#131922] p-7">
-
-        <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900">
-
-            🌍
-
-        </div>
-
-        <h3 class="text-xl font-medium text-white">
-            Telemedicine
-        </h3>
-
-        <p class="mt-3 text-sm leading-relaxed text-slate-500">
-
-            Access healthcare professionals remotely from anywhere.
-
-        </p>
-
-    </div>
-
-    <div class="rounded-3xl border border-slate-800 bg-[#131922] p-7">
-
-        <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900">
-
-            🧠
-
-        </div>
-
-        <h3 class="text-xl font-medium text-white">
-            Neuro Diagnostics
-        </h3>
-
-        <p class="mt-3 text-sm leading-relaxed text-slate-500">
-
-            Brain-health assessments, testing, and intelligent insights.
-
-        </p>
-
-    </div>
-
-    <div class="rounded-3xl border border-slate-800 bg-[#131922] p-7">
-
-        <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900">
-
-            📄
-
-        </div>
-
-        <h3 class="text-xl font-medium text-white">
-            Medical Records
-        </h3>
-
-        <p class="mt-3 text-sm leading-relaxed text-slate-500">
-
-            Store reports, prescriptions, and health history securely.
-
-        </p>
-
-    </div>
-
-</section>
-
-<!-- ECOSYSTEM -->
-
-<section class="mt-10 rounded-[32px] border border-slate-800 bg-[#131922] p-8 md:p-12">
-
-    <div class="max-w-3xl">
-
-        <p class="text-xs uppercase tracking-[0.2em] text-slate-500">
-
-            Ecosystem
-
-        </p>
-
-        <h2 class="mt-4 font-display text-4xl text-white">
-
-            One platform for healthcare,
-            research, and wellness.
-
+<!-- 1. IDENTIFYING YOUR PATHWAY -->
+<section id="pathways" class="relative py-28 px-6 max-w-[1000px] mx-auto border-t"
+    style="border-color:var(--hair-soft);">
+    <div class="max-w-lg mb-16">
+        <p class="text-[13px] text-white/40 mb-3 font-mono uppercase tracking-wider">Ecosystem Pathways</p>
+        <h2 class="text-[32px] sm:text-[38px] font-semibold tracking-tight leading-tight">
+            How do you intend to use NeuralSpace?
         </h2>
-
-        <p class="mt-6 text-slate-400 leading-relaxed">
-
-            NeuralSpace combines clinical services, insurance,
-            diagnostics, medical tourism, health wallets, and
-            intelligent care systems into one connected experience.
-
-        </p>
-
     </div>
 
-    <div class="mt-12 grid gap-5 md:grid-cols-3">
-
-        <div class="rounded-2xl border border-slate-800 bg-[#0f141c] p-6">
-
-            <h4 class="text-white font-medium">
-
-                Insurance
-
-            </h4>
-
-            <p class="mt-2 text-sm text-slate-500">
-
-                Coverage plans and healthcare financing.
-
-            </p>
-
+    <div class="grid md:grid-cols-2 gap-5">
+        <div class="card rounded-2xl p-7 flex flex-col justify-between">
+            <div>
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5 font-mono text-[13px] font-bold" style="background:rgba(41,151,255,0.15); color:#60A5FA; border:1px solid rgba(41,151,255,0.3);">01</div>
+                <h3 class="text-[20px] font-semibold mb-2 text-white">The Learner</h3>
+                <p class="text-[14px] text-white/55 leading-relaxed mb-6">Study at the Neurolearn Academy, gain mentorship, and earn verified certifications in Neuroscience.</p>
+            </div>
+            <div class="text-[12px] font-mono text-[#60A5FA]">Neurolearn Academy &rsaquo;</div>
         </div>
 
-        <div class="rounded-2xl border border-slate-800 bg-[#0f141c] p-6">
-
-            <h4 class="text-white font-medium">
-
-                HealthWallet
-
-            </h4>
-
-            <p class="mt-2 text-sm text-slate-500">
-
-                Manage healthcare payments and records.
-
-            </p>
-
+        <div class="card rounded-2xl p-7 flex flex-col justify-between">
+            <div>
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5 font-mono text-[13px] font-bold" style="background:rgba(52,211,153,0.15); color:#34D399; border:1px solid rgba(52,211,153,0.3);">02</div>
+                <h3 class="text-[20px] font-semibold mb-2 text-white">The Patient / User</h3>
+                <p class="text-[14px] text-white/55 leading-relaxed mb-6">Monitor cognitive health baseline, track neuro-rehabilitation, and access clinical telemedicine interventions.</p>
+            </div>
+            <div class="text-[12px] font-mono text-[#34D399]">Clinical Care Suite &rsaquo;</div>
         </div>
 
-        <div class="rounded-2xl border border-slate-800 bg-[#0f141c] p-6">
-
-            <h4 class="text-white font-medium">
-
-                Research
-
-            </h4>
-
-            <p class="mt-2 text-sm text-slate-500">
-
-                Participate in studies and medical innovation.
-
-            </p>
-
+        <div class="card rounded-2xl p-7 flex flex-col justify-between">
+            <div>
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5 font-mono text-[13px] font-bold" style="background:rgba(245,158,11,0.15); color:#F59E0B; border:1px solid rgba(245,158,11,0.3);">03</div>
+                <h3 class="text-[20px] font-semibold mb-2 text-white">The Healthcare Provider</h3>
+                <p class="text-[14px] text-white/55 leading-relaxed mb-6">Clinicians, researchers & developers looking to conduct neuro-diagnostics and integrate BCI technology.</p>
+            </div>
+            <div class="text-[12px] font-mono text-[#F59E0B]">Clinician Network &rsaquo;</div>
         </div>
 
+        <div class="card rounded-2xl p-7 flex flex-col justify-between">
+            <div>
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5 font-mono text-[13px] font-bold" style="background:rgba(168,85,247,0.15); color:#C084FC; border:1px solid rgba(168,85,247,0.3);">04</div>
+                <h3 class="text-[20px] font-semibold mb-2 text-white">The Advocate</h3>
+                <p class="text-[14px] text-white/55 leading-relaxed mb-6">Participate in community DAOs (Nourish, Grow Together), ethics governance, and public neurotech projects.</p>
+            </div>
+            <div class="text-[12px] font-mono text-[#C084FC]">Community DAOs &rsaquo;</div>
+        </div>
     </div>
-
 </section>
 
-<!-- CTA -->
-
-<section class="mt-10 rounded-[32px] border border-slate-800 bg-gradient-to-b from-[#131922] to-[#0d1218] p-10 text-center">
-
-    <h2 class="font-display text-4xl text-white">
-
-        Begin your journey with NeuralSpace
-
-    </h2>
-
-    <p class="mx-auto mt-5 max-w-2xl text-slate-400">
-
-        Create an account to access clinicians, diagnostics,
-        medical records, and intelligent healthcare services.
-
-    </p>
-
-    {% if not request.user.is_authenticated %}
-
-        <div class="mt-8">
-
-            <a href="{% url 'signup' %}"
-               class="inline-flex rounded-2xl bg-white px-8 py-4 text-sm font-semibold text-slate-900">
-
-                Create Account
-
-            </a>
-
+<!-- 2. GEOSPATIAL BRAIN HEALTH DATA INDEX (NBHDI) -->
+<section id="nbhdi" class="relative py-28 border-y" style="border-color:var(--hair-soft); background:#050505;">
+    <div class="max-w-[1000px] mx-auto px-6 grid lg:grid-cols-2 gap-14 items-center">
+        <div>
+            <p class="text-[13px] text-white/40 mb-3 font-mono uppercase tracking-wider">Geospatial Brain Health</p>
+            <h2 class="text-[32px] sm:text-[38px] font-semibold tracking-tight mb-5 leading-tight">The Geospatial Brain Health Data Index (NBHDI).</h2>
+            <p class="text-[15px] text-white/55 leading-relaxed mb-8 max-w-md">
+                Map global cognitive baselines across urban, semi-urban, and rural communities. Correlate socioeconomic factors and environmental impact in real time.
+            </p>
+            <div class="space-y-3 text-[14px]">
+                <div class="flex items-center justify-between py-2.5 border-b" style="border-color:var(--hair-soft);">
+                    <span class="text-white/70">Socioeconomic Factors Mapping</span>
+                    <span class="text-[#34D399] font-mono text-[12px]">Enabled</span>
+                </div>
+                <div class="flex items-center justify-between py-2.5 border-b" style="border-color:var(--hair-soft);">
+                    <span class="text-white/70">Environmental Impact Analysis</span>
+                    <span class="text-[#34D399] font-mono text-[12px]">Enabled</span>
+                </div>
+                <div class="flex items-center justify-between py-2.5 border-b" style="border-color:var(--hair-soft);">
+                    <span class="text-white/70">EHR System Export & Integration</span>
+                    <span class="text-[#60A5FA] font-mono text-[12px]">Connect EHR</span>
+                </div>
+            </div>
         </div>
 
-    {% endif %}
+        <div class="rounded-2xl p-7" style="border:1px solid var(--hair-soft); background:rgba(255,255,255,0.01);">
+            <div class="flex justify-between items-center border-b pb-4 mb-6 f-mono text-[11px] text-white/40"
+                style="border-color:var(--hair-soft);">
+                <span>NBHDI Geospatial Index</span><span>Global Model Parameters</span>
+            </div>
 
+            <!-- Mock World Map Grid Visualization -->
+            <div class="relative h-48 rounded-xl overflow-hidden mb-6 flex items-center justify-center" style="background: rgba(41,151,255,0.03); border:1px solid rgba(41,151,255,0.15);">
+                <svg class="w-full h-full stroke-white/20 fill-none opacity-40" viewBox="0 0 400 180">
+                    <path d="M 50 40 Q 100 20 150 50 T 250 40 T 350 60" stroke-width="1" stroke-dasharray="4 4" />
+                    <path d="M 30 120 Q 120 140 220 110 T 370 130" stroke-width="1" stroke-dasharray="4 4" />
+                    <circle cx="90" cy="65" r="4" fill="#2997FF" />
+                    <circle cx="210" cy="85" r="5" fill="#34D399" />
+                    <circle cx="310" cy="55" r="4" fill="#F59E0B" />
+                    <circle cx="160" cy="125" r="5" fill="#34D399" />
+                </svg>
+                <div class="absolute bottom-3 left-4 f-mono text-[10px] text-white/50">Accuracy: 95.4% | Time Period: Last 12 Months</div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 f-mono text-center text-[11px]">
+                <div class="p-3 rounded-lg" style="background:rgba(255,255,255,.03);">
+                    <div class="text-white/35 text-[10px] mb-1">Urban</div>
+                    <div class="text-white/80">42%</div>
+                </div>
+                <div class="p-3 rounded-lg" style="background:rgba(255,255,255,.03);">
+                    <div class="text-white/35 text-[10px] mb-1">Semi-Urban</div>
+                    <div class="text-white/80">38%</div>
+                </div>
+                <div class="p-3 rounded-lg" style="background:rgba(255,255,255,.03);">
+                    <div class="text-white/35 text-[10px] mb-1">Rural / Ind.</div>
+                    <div class="text-white/80">20%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. CLINICAL CARE SUITE -->
+<section id="clinical" class="py-28 px-6 max-w-[1000px] mx-auto">
+    <div class="max-w-lg mb-14">
+        <p class="text-[13px] text-white/40 mb-3 font-mono uppercase tracking-wider">Clinical Care & Diagnostics</p>
+        <h2 class="text-[32px] sm:text-[38px] font-semibold tracking-tight leading-tight">Complete Neuro-Healthcare Suite.</h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="card rounded-2xl p-6">
+            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-4 text-[#60A5FA] font-mono text-[12px]">01</div>
+            <h3 class="text-[16px] font-semibold mb-2 text-white">Telemedicine</h3>
+            <p class="text-[13px] text-white/45 leading-relaxed">Direct video consultations with leading certified neuro-specialists.</p>
+        </div>
+        <div class="card rounded-2xl p-6">
+            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-4 text-[#34D399] font-mono text-[12px]">02</div>
+            <h3 class="text-[16px] font-semibold mb-2 text-white">Neuro-Diagnostics</h3>
+            <p class="text-[13px] text-white/45 leading-relaxed">EEG electrode placement analysis, cognitive baseline scans & lab tests.</p>
+        </div>
+        <div class="card rounded-2xl p-6">
+            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-4 text-[#F59E0B] font-mono text-[12px]">03</div>
+            <h3 class="text-[16px] font-semibold mb-2 text-white">Pharmacy & Rx</h3>
+            <p class="text-[13px] text-white/45 leading-relaxed">Digital drug prescriptions & medication scheduling management.</p>
+        </div>
+        <div class="card rounded-2xl p-6">
+            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-4 text-[#C084FC] font-mono text-[12px]">04</div>
+            <h3 class="text-[16px] font-semibold mb-2 text-white">Sovereign MedWallet</h3>
+            <p class="text-[13px] text-white/45 leading-relaxed">Encrypted e-MRx medical record exchange under full user control.</p>
+        </div>
+    </div>
+</section>
+
+<!-- 4. KAMBRAI CONNECTION & SDK -->
+<section id="kambrai" class="py-28 border-t" style="border-color:var(--hair-soft); background:#050505;">
+    <div class="max-w-[1000px] mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+        <div class="rounded-2xl overflow-hidden f-mono text-[12px]" style="border:1px solid var(--hair-soft);">
+            <div class="px-5 py-3 border-b flex items-center justify-between"
+                style="border-color:var(--hair-soft); background:rgba(255,255,255,.02);">
+                <span class="text-white/30">neuralspace_stream.py</span>
+                <span class="text-[#34D399] text-[10px]">Kambrai Web3 Connected</span>
+            </div>
+            <pre class="p-6 text-white/55 overflow-x-auto"><code>import neuralspace as ns
+
+# Connect to Kambrai Web3 Wallet & Stream Telemetry
+client = ns.Client(wallet_address="0x...", ethics_charter_consent=True)
+
+async for frame in client.stream_eeg_baseline():
+    # Contribute anonymized data for Project Alpha/Beta research rewards
+    reward = await client.submit_anonymized_telemetry(frame)
+    print("Neuro-Profile Calibrated:", frame.channels, "Reward:", reward)</code></pre>
+        </div>
+
+        <div>
+            <p class="text-[13px] text-white/40 mb-3 font-mono uppercase tracking-wider">Kambrai Connection & Open SDK</p>
+            <h2 class="text-[32px] font-semibold tracking-tight mb-5 leading-tight">Data Monetization & Web3 Rewards.</h2>
+            <p class="text-[15px] text-white/55 leading-relaxed mb-6 max-w-sm">
+                Connect your Web3 wallet (MetaMask, TrustWallet, or NeuralSpace Wallet) to receive research rewards for Project Alpha/Beta contributions and claim Academy badges.
+            </p>
+            <div class="flex flex-wrap gap-2 f-mono text-[12px] text-white/50">
+                <span class="px-3 py-1.5 rounded-md" style="border:1px solid var(--hair-soft);">MetaMask</span>
+                <span class="px-3 py-1.5 rounded-md" style="border:1px solid var(--hair-soft);">NeuralSpace Wallet</span>
+                <span class="px-3 py-1.5 rounded-md" style="border:1px solid var(--hair-soft);">Python SDK</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. STATS -->
+<section class="py-20 border-y" style="border-color:var(--hair-soft);">
+    <div class="max-w-[1000px] mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div>
+            <div class="text-[34px] md:text-[42px] font-semibold tracking-tight mb-1">100<span
+                    class="text-white/40 text-[18px]">%</span></div>
+            <div class="text-[12px] text-white/35">Data Sovereignty</div>
+        </div>
+        <div>
+            <div class="text-[34px] md:text-[42px] font-semibold tracking-tight mb-1">1024</div>
+            <div class="text-[12px] text-white/35">EEG Channels</div>
+        </div>
+        <div>
+            <div class="text-[34px] md:text-[42px] font-semibold tracking-tight mb-1">95.4<span
+                    class="text-white/40 text-[18px]">%</span></div>
+            <div class="text-[12px] text-white/35">Geospatial Index Precision</div>
+        </div>
+        <div>
+            <div class="text-[34px] md:text-[42px] font-semibold tracking-tight mb-1">4</div>
+            <div class="text-[12px] text-white/35">Ecosystem Pathways</div>
+        </div>
+    </div>
+</section>
+
+<!-- 6. FINAL CTA & ONBOARDING -->
+<section class="py-24 px-6 max-w-[900px] mx-auto my-14 rounded-[28px] relative overflow-hidden text-center"
+    style="border:1px solid var(--hair-soft); background:#050505;">
+    <p class="text-[13px] text-white/40 mb-5 font-mono uppercase tracking-wider">Ethics-First Neurotech</p>
+    <h2 class="text-[34px] sm:text-[42px] font-semibold tracking-tight mb-5">Welcome to your NeuralSpace.</h2>
+    <p class="text-[15px] text-white/55 max-w-md mx-auto mb-9">Complete the 5-step onboarding questionnaire to personalize your neurological baseline, choose your pathway, and access clinical care.</p>
+    {% if not request.user.is_authenticated %}
+    <div class="flex flex-wrap justify-center gap-x-8 gap-y-3 text-[15px]">
+        <a href="{% url 'signup' %}" class="hover:opacity-70 transition-opacity font-medium" style="color:var(--accent);">Start onboarding questionnaire &rsaquo;</a>
+        <a href="{% url 'login' %}" class="text-white/70 hover:text-white transition-colors">Sign in &rsaquo;</a>
+    </div>
+    {% else %}
+    <a href="{% url 'dashboard' %}" class="text-[15px] hover:opacity-70 transition-opacity font-medium"
+        style="color:var(--accent);">Open dashboard &rsaquo;</a>
+    {% endif %}
 </section>
 
 <!-- FOOTER -->
-
-<footer class="mt-16 border-t border-slate-800 pt-12 pb-8">
-
-    <div class="grid gap-10 md:grid-cols-4">
-
-        <div>
-
-            <h3 class="font-display text-2xl text-white">
-
-                NeuralSpace
-
-            </h3>
-
-            <p class="mt-4 text-sm leading-relaxed text-slate-500">
-
-                A healthcare ecosystem connecting patients,
-                clinicians, diagnostics, and intelligent care.
-
-            </p>
-
+<footer class="border-t pt-14 pb-10 text-[12px] text-white/35 transition-colors duration-500" style="border-color:var(--hair-soft); background: linear-gradient(180deg, #050505 0%, var(--ink-950) 100%);">
+    <div class="max-w-[1000px] mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-10 mb-10">
+        <div class="col-span-2">
+            <div class="text-[16px] font-semibold text-white/85 mb-3">NeuralSpace</div>
+            <p class="text-white/40 text-[13px] leading-relaxed max-w-xs">An ethics-first neurotech ecosystem uniting Patients, Clinicians, Researchers, and Advocates.</p>
         </div>
-
         <div>
-
-            <h4 class="mb-4 text-sm font-medium text-slate-300">
-
-                Care
-
-            </h4>
-
-            <ul class="space-y-3 text-sm text-slate-500">
-
-                <li>Clinical Care</li>
-
-                <li>Telemedicine</li>
-
-                <li>Appointments</li>
-
-                <li>Medical Tourism</li>
-
+            <div class="text-white/60 font-medium mb-3 text-[12px]">Ecosystem</div>
+            <ul class="space-y-2">
+                <li><a href="#pathways" class="hover:text-white/60 transition-colors">4 Pathways</a></li>
+                <li><a href="#clinical" class="hover:text-white/60 transition-colors">Clinical Care</a></li>
+                <li><a href="#nbhdi" class="hover:text-white/60 transition-colors">Geospatial Index</a></li>
             </ul>
-
         </div>
-
         <div>
-
-            <h4 class="mb-4 text-sm font-medium text-slate-300">
-
-                Platform
-
-            </h4>
-
-            <ul class="space-y-3 text-sm text-slate-500">
-
-                <li>Insurance</li>
-
-                <li>HealthWallet</li>
-
-                <li>Messages</li>
-
-                <li>Medical Records</li>
-
+            <div class="text-white/60 font-medium mb-3 text-[12px]">Platform</div>
+            <ul class="space-y-2">
+                <li><a href="{% url 'dashboard' %}" class="hover:text-white/60 transition-colors">Dashboard</a></li>
+                <li><a href="#kambrai" class="hover:text-white/60 transition-colors">Kambrai Wallet</a></li>
+                <li><a href="#specs" class="hover:text-white/60 transition-colors">SDK</a></li>
             </ul>
-
         </div>
-
-        <div>
-
-            <h4 class="mb-4 text-sm font-medium text-slate-300">
-
-                Security
-
-            </h4>
-
-            <ul class="space-y-3 text-sm text-slate-500">
-
-                <li>End-to-end encryption</li>
-
-                <li>Secure storage</li>
-
-                <li>User consent</li>
-
-                <li>Privacy controls</li>
-
-            </ul>
-
-        </div>
-
     </div>
-
-    <div class="mt-12 flex flex-col gap-4 border-t border-slate-800 pt-8 text-xs text-slate-600 md:flex-row md:justify-between">
-
-        <p>
-
-            © 2026 NeuralSpace · NeuralVillage Ecosystem.
-
-        </p>
-
-        <p>
-
-            Clinical Care · Diagnostics · Wellness · Research
-
-        </p>
-
+    <div class="max-w-[1000px] mx-auto px-6 border-t pt-7 flex flex-col md:flex-row justify-between items-center gap-4"
+        style="border-color:var(--hair-soft);">
+        <div>&copy; 2026 NeuralSpace. All rights reserved. NeuralVillage Neuro-Ethics Charter.</div>
+        <div class="flex gap-6">
+            <a href="#" class="hover:text-white/60">Privacy</a>
+            <a href="#" class="hover:text-white/60">Terms</a>
+        </div>
     </div>
-
 </footer>
+
+
+<!-- ============ SCRIPT: PRELOADER, CANVAS ENGINE, GSAP TIMELINE ============ -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const TOTAL_FRAMES = 240;
+        const CRITICAL_FRAMES = 36;
+        const staticBaseUrl = "{% static 'frames/' %}";
+
+        const frames = new Array(TOTAL_FRAMES + 1);
+        const loadedFlags = new Array(TOTAL_FRAMES + 1).fill(false);
+        let loadedCount = 0;
+        let criticalDone = false;
+        const frameState = { currentFrame: 0 };
+
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas ? canvas.getContext('2d', { alpha: true }) : null;
+
+        const preloader = document.getElementById('bci-preloader');
+        const preloaderRing = document.getElementById('preloader-ring');
+        const preloaderPercent = document.getElementById('preloader-percent');
+        const RING_CIRCUMFERENCE = 264;
+
+        const nav = document.getElementById('site-nav');
+        const traceFill = document.getElementById('trace-fill');
+        const heroSection = document.getElementById('hero-scroll-container');
+
+        function getFrameUrl(index) {
+            const padded = String(index).padStart(3, '0');
+            return `${staticBaseUrl}ezgif-frame-${padded}.png`;
+        }
+
+        function resizeCanvas() {
+            if (!canvas || !ctx) return;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = `${window.innerWidth}px`;
+            canvas.style.height = `${window.innerHeight}px`;
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dpr, dpr);
+            renderCanvasFrame();
+        }
+
+        function nearestLoadedFrame(target) {
+            if (loadedFlags[target]) return target;
+            for (let d = 1; d < TOTAL_FRAMES; d++) {
+                if (target - d >= 1 && loadedFlags[target - d]) return target - d;
+                if (target + d <= TOTAL_FRAMES && loadedFlags[target + d]) return target + d;
+            }
+            return 1;
+        }
+
+        function renderCanvasFrame() {
+            if (!canvas || !ctx) return;
+            const wanted = Math.max(1, Math.floor(frameState.currentFrame) + 1);
+            const frameIndex = nearestLoadedFrame(wanted);
+            const img = frames[frameIndex];
+            if (!img) return;
+
+            const cw = window.innerWidth;
+            const ch = window.innerHeight;
+            ctx.clearRect(0, 0, cw, ch);
+
+            const w = img.naturalWidth || img.width || 1920;
+            const h = img.naturalHeight || img.height || 1080;
+            if (w === 0 || h === 0) return;
+
+            const hRatio = cw / w;
+            const vRatio = ch / h;
+            let targetScale = 0.85;
+            if (cw < 640) {
+                targetScale = 0.96;
+            } else if (cw < 1024) {
+                targetScale = 0.90;
+            }
+            const ratio = Math.min(hRatio, vRatio) * targetScale;
+
+            const shiftX = (cw - w * ratio) / 2;
+            const shiftY = (ch - h * ratio) / 2;
+
+            try {
+                ctx.drawImage(img, 0, 0, w, h, shiftX, shiftY, w * ratio, h * ratio);
+            } catch(e) {}
+        }
+
+        function buildLoadOrder() {
+            const order = [];
+            const seen = new Set();
+            const step = TOTAL_FRAMES / CRITICAL_FRAMES;
+            for (let i = 0; i < CRITICAL_FRAMES; i++) {
+                const idx = Math.min(TOTAL_FRAMES, Math.max(1, Math.round(1 + i * step)));
+                if (!seen.has(idx)) { seen.add(idx); order.push(idx); }
+            }
+            for (let i = 1; i <= TOTAL_FRAMES; i++) {
+                if (!seen.has(i)) { seen.add(i); order.push(i); }
+            }
+            return order;
+        }
+
+        function loadFrame(i, onDone) {
+            const img = new Image();
+            img.src = getFrameUrl(i);
+            img.onload = () => {
+                loadedFlags[i] = true;
+                if (i === 1 || !loadedFlags[1]) renderCanvasFrame();
+                if (onDone) onDone();
+            };
+            img.onerror = () => { if (onDone) onDone(); };
+            frames[i] = img;
+        }
+
+        function preloadFrames() {
+            const order = buildLoadOrder();
+            let cursor = 0;
+
+            function step() {
+                if (cursor >= order.length) return;
+                const frameIndex = order[cursor++];
+                loadFrame(frameIndex, () => {
+                    loadedCount++;
+
+                    if (!criticalDone) {
+                        const progress = Math.round((loadedCount / CRITICAL_FRAMES) * 100);
+                        const offset = RING_CIRCUMFERENCE - (Math.min(progress, 100) / 100) * RING_CIRCUMFERENCE;
+                        if (preloaderRing) preloaderRing.style.strokeDashoffset = offset;
+                        if (preloaderPercent) preloaderPercent.innerText = `${Math.min(progress, 100)}%`;
+                    }
+
+                    if (!criticalDone && loadedCount >= CRITICAL_FRAMES) {
+                        criticalDone = true;
+                        onCriticalFramesLoaded();
+                    }
+
+                    setTimeout(step, 5);
+                });
+            }
+
+            for (let p = 0; p < 8; p++) step();
+
+            setTimeout(() => {
+                if (!criticalDone) {
+                    criticalDone = true;
+                    onCriticalFramesLoaded();
+                }
+            }, 1200);
+        }
+
+        function onCriticalFramesLoaded() {
+            if (preloader) {
+                preloader.style.pointerEvents = 'none';
+                preloader.style.opacity = '0';
+                setTimeout(() => { preloader.style.display = 'none'; }, 500);
+            }
+            resizeCanvas();
+            renderCanvasFrame();
+            initGSAPAnimations();
+        }
+
+        function initGSAPAnimations() {
+            if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+            gsap.registerPlugin(ScrollTrigger);
+
+            const masterTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#hero-scroll-container",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 0.2,
+                    pin: "#hero-sticky-inner",
+                    pinSpacing: false,
+                    onUpdate: (self) => {
+                        const f = Math.min(TOTAL_FRAMES - 1, Math.floor(self.progress * (TOTAL_FRAMES - 1)));
+                        frameState.currentFrame = f;
+                        requestAnimationFrame(renderCanvasFrame);
+                        if (traceFill) traceFill.style.width = `${self.progress * 100}%`;
+                    }
+                }
+            });
+
+            masterTl.to("#hero-stage-1", { opacity: 0, y: -60, duration: 0.15, ease: "power1.inOut" }, 0.08)
+                    .to("#hero-stage-2", { opacity: 1, duration: 0.15, ease: "power2.out" }, 0.18)
+                    .to("#hero-stage-2", { opacity: 0, x: -30, duration: 0.12, ease: "power1.in" }, 0.32)
+                    .to("#hero-stage-3", { opacity: 1, duration: 0.15, ease: "power2.out" }, 0.38)
+                    .to("#hero-stage-3", { opacity: 0, duration: 0.12, ease: "power1.in" }, 0.58)
+                    .to("#hero-stage-4", { opacity: 1, duration: 0.15, ease: "power2.out" }, 0.62)
+                    .to("#hero-stage-4", { opacity: 0, x: 30, duration: 0.12, ease: "power1.in" }, 0.78)
+                    .to("#hero-stage-5", { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" }, 0.82);
+
+            ScrollTrigger.create({
+                trigger: "#hero-scroll-container",
+                start: "top+=80 top",
+                onEnter: () => {
+                    if (nav) {
+                        nav.style.background = 'rgba(0,0,0,0.85)';
+                        nav.style.backdropFilter = 'blur(16px)';
+                        nav.style.borderBottom = '1px solid rgba(255,255,255,0.08)';
+                    }
+                },
+                onLeaveBack: () => {
+                    if (nav) {
+                        nav.style.background = 'rgba(0,0,0,0)';
+                        nav.style.backdropFilter = 'blur(0px)';
+                        nav.style.borderBottom = 'none';
+                    }
+                }
+            });
+
+            gsap.utils.toArray('.card').forEach((card) => {
+                gsap.from(card, {
+                    scrollTrigger: { trigger: card, start: "top 85%" },
+                    opacity: 0, y: 24, duration: 0.6, ease: "power2.out"
+                });
+            });
+        }
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                resizeCanvas();
+                if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+            }, 100);
+        });
+
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                resizeCanvas();
+                if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+            }, 250);
+        });
+
+        preloadFrames();
+    });
+
+    function toggleLandingMobileMenu() {
+        const menu = document.getElementById('landing-mobile-menu');
+        if (menu) {
+            menu.classList.toggle('hidden');
+        }
+    }
+</script>
 
 {% endblock %}

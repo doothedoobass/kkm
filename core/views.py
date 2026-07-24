@@ -496,15 +496,16 @@ def signup(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         if not username or not password:
-            django_messages.error(request, 'Username and password required.')
+            django_messages.error(request, 'Username and password are required.')
             return redirect('signup')
         if User.objects.filter(username=username).exists():
-            django_messages.error(request, 'Username already taken.')
+            django_messages.error(request, 'Username is already taken.')
             return redirect('signup')
         user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
-        django_messages.success(request, 'Account created. Please log in.')
-        return redirect('login')
+        login(request, user)
+        django_messages.success(request, f'Welcome to NeuralSpace, {user.username}! Your account was created successfully.')
+        return redirect('onboarding')
     return render(request, 'signup.html')
 
 
@@ -515,13 +516,15 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            django_messages.success(request, f'Welcome back, {user.username}!')
             return redirect('dashboard')
         else:
-            django_messages.error(request, 'Invalid credentials')
+            django_messages.error(request, 'Invalid username or password. Please try again.')
             return redirect('login')
     return render(request, 'login.html')
 
 
 def logout_view(request):
     logout(request)
+    django_messages.info(request, 'You have been signed out safely.')
     return redirect('landing')
