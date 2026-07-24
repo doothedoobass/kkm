@@ -9,6 +9,8 @@ from django.urls import reverse
 from .models import *
 from django.db import models
 import json
+import hashlib
+import uuid
 
 def get_current_profile(request=None):
     if request and hasattr(request, 'user') and request.user.is_authenticated:
