@@ -190,7 +190,10 @@ def clinical_care(request):
             Clinician.objects.create(name=name, specialty=spec, institution=inst, rating=rat, image_url=img)
         clinicians = Clinician.objects.all()
 
-    reports = MedicalReport.objects.filter(user=request.user).order_by('-uploaded_at')
+    try:
+        reports = list(MedicalReport.objects.filter(user=request.user).order_by('-uploaded_at'))
+    except Exception:
+        reports = []
 
     return render(request, 'clinical_care.html', {
         'clinicians': clinicians, 
