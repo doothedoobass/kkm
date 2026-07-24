@@ -148,19 +148,20 @@
             <!-- STAGE 1: HERO -->
             <div id="hero-stage-1"
                 class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 transition-all pointer-events-auto">
-                <h1 class="text-[48px] sm:text-[72px] md:text-[96px] font-semibold tracking-tight leading-[1.02] text-white">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#2997FF]/35 bg-[#2997FF]/10 text-[#60A5FA] text-[11px] font-mono uppercase tracking-widest mb-4 backdrop-blur-md">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#60A5FA] animate-pulse"></span> BCI Telemetry & Sovereign Health
+                </div>
+                <h1 class="text-[48px] sm:text-[72px] md:text-[96px] font-semibold tracking-tight leading-[1.02] bg-clip-text text-transparent bg-gradient-to-b from-white via-slate-100 to-[#60A5FA] drop-shadow-[0_0_35px_rgba(41,151,255,0.4)]">
                     NeuralSpace
                 </h1>
-                <p class="mt-4 max-w-lg text-[16px] sm:text-[19px] md:text-[21px] text-white/60 leading-snug">
+                <p class="mt-4 max-w-lg text-[16px] sm:text-[19px] md:text-[21px] text-blue-100/70 leading-snug">
                     Your brain data. Sovereign, connected, understood.
                 </p>
                 <div class="mt-7 sm:mt-8 flex flex-wrap items-center justify-center gap-x-6 sm:gap-x-8 gap-y-3 text-[14px] sm:text-[15px]">
                     {% if request.user.is_authenticated %}
-                    <a href="{% url 'dashboard' %}" class="hover:opacity-70 transition-opacity"
-                        style="color:var(--accent);">Open dashboard &rsaquo;</a>
+                    <a href="{% url 'dashboard' %}" class="hover:opacity-70 transition-opacity font-medium text-[#60A5FA]">Open dashboard &rsaquo;</a>
                     {% else %}
-                    <a href="{% url 'signup' %}" class="hover:opacity-70 transition-opacity font-medium"
-                        style="color:var(--accent);">Start onboarding &rsaquo;</a>
+                    <a href="{% url 'signup' %}" class="hover:opacity-70 transition-opacity font-medium text-[#60A5FA]">Start onboarding &rsaquo;</a>
                     <a href="#pathways" class="text-white/70 hover:text-white transition-colors">Explore pathways
                         &rsaquo;</a>
                     {% endif %}
@@ -170,16 +171,16 @@
             <!-- STAGE 2: HARDWARE & EEG DIAGNOSTICS (left-aligned) -->
             <div id="hero-stage-2"
                 class="absolute inset-x-4 sm:inset-x-6 md:inset-x-0 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all flex justify-start">
-                <div class="max-w-[340px] w-full pointer-events-auto p-5 sm:p-6 md:p-0 rounded-2xl bg-black/60 md:bg-transparent backdrop-blur-md md:backdrop-blur-none border border-white/10 md:border-none shadow-2xl">
-                    <p class="text-[12px] sm:text-[13px] text-white/40 mb-2 sm:mb-3 font-mono uppercase tracking-wider">Neural Hardware & Telemetry</p>
-                    <h2 class="text-[26px] sm:text-[32px] md:text-[38px] font-semibold tracking-tight leading-[1.08] mb-3 sm:mb-4">Precision EEG & BCI Telemetry.</h2>
-                    <p class="text-[14px] sm:text-[15px] text-white/60 leading-relaxed mb-5 sm:mb-6">
+                <div class="max-w-[340px] w-full pointer-events-auto p-5 sm:p-6 md:p-0 rounded-2xl bg-black/70 md:bg-transparent backdrop-blur-md md:backdrop-blur-none border border-white/10 md:border-none shadow-2xl">
+                    <p class="text-[12px] sm:text-[13px] text-[#60A5FA] mb-2 sm:mb-3 font-mono uppercase tracking-wider">Neural Hardware & Telemetry</p>
+                    <h2 class="text-[26px] sm:text-[32px] md:text-[38px] font-semibold tracking-tight leading-[1.08] mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-50 to-[#60A5FA]">Precision EEG & BCI Telemetry.</h2>
+                    <p class="text-[14px] sm:text-[15px] text-blue-100/70 leading-relaxed mb-5 sm:mb-6">
                         High-density multi-channel electrode placement mapping cortical signals in real time. Ethics-first data encryption under your sovereignty.
                     </p>
                     <div class="flex gap-8 text-[13px]">
-                        <div><span class="text-white block font-semibold text-[16px] sm:text-[18px]">1024ch</span><span
+                        <div><span class="text-[#60A5FA] block font-semibold text-[16px] sm:text-[18px]">1024ch</span><span
                                 class="text-white/40 text-[11px] sm:text-[12px]">Signal Density</span></div>
-                        <div><span class="text-white block font-semibold text-[16px] sm:text-[18px]">0.8ms</span><span
+                        <div><span class="text-[#34D399] block font-semibold text-[16px] sm:text-[18px]">0.8ms</span><span
                                 class="text-white/40 text-[11px] sm:text-[12px]">Latency</span></div>
                     </div>
                 </div>
@@ -187,19 +188,19 @@
 
             <!-- STAGE 3: ECOSYSTEM PILLARS (EXPLODED CALLOUTS) -->
             <div id="hero-stage-3" class="absolute inset-0 opacity-0 pointer-events-none transition-all">
-                <div class="absolute top-[16%] sm:top-[18%] left-[6%] sm:left-[10%] md:left-[14%] max-w-[220px] pointer-events-auto p-3.5 sm:p-0 rounded-xl bg-black/60 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border border-white/10 sm:border-none">
-                    <p class="text-[11px] sm:text-[13px] text-white/40 mb-1 font-mono uppercase">Clinical Care</p>
-                    <p class="text-[12px] sm:text-[13px] text-white/80 leading-relaxed">Direct clinician consultations, telemedicine & EHR exchange.</p>
+                <div class="absolute top-[16%] sm:top-[18%] left-[6%] sm:left-[10%] md:left-[14%] max-w-[220px] pointer-events-auto p-3.5 sm:p-0 rounded-xl bg-black/70 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border border-white/10 sm:border-none">
+                    <p class="text-[11px] sm:text-[13px] text-[#60A5FA] mb-1 font-mono uppercase">Clinical Care</p>
+                    <p class="text-[12px] sm:text-[13px] text-white/90 leading-relaxed">Direct clinician consultations, telemedicine & EHR exchange.</p>
                 </div>
                 <div
-                    class="absolute top-[44%] sm:top-[46%] right-[6%] sm:right-[10%] md:right-[14%] max-w-[220px] pointer-events-auto text-right md:text-left p-3.5 sm:p-0 rounded-xl bg-black/60 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border border-white/10 sm:border-none">
-                    <p class="text-[11px] sm:text-[13px] text-white/40 mb-1 font-mono uppercase">Geospatial NBHDI</p>
-                    <p class="text-[12px] sm:text-[13px] text-white/80 leading-relaxed">Global brain health index with environmental & socioeconomic factors.
+                    class="absolute top-[44%] sm:top-[46%] right-[6%] sm:right-[10%] md:right-[14%] max-w-[220px] pointer-events-auto text-right md:text-left p-3.5 sm:p-0 rounded-xl bg-black/70 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border border-white/10 sm:border-none">
+                    <p class="text-[11px] sm:text-[13px] text-[#60A5FA] mb-1 font-mono uppercase">Geospatial NBHDI</p>
+                    <p class="text-[12px] sm:text-[13px] text-white/90 leading-relaxed">Global brain health index with environmental & socioeconomic factors.
                     </p>
                 </div>
-                <div class="absolute bottom-[14%] sm:bottom-[16%] left-[10%] sm:left-[14%] md:left-[22%] max-w-[220px] pointer-events-auto p-3.5 sm:p-0 rounded-xl bg-black/60 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border border-white/10 sm:border-none">
-                    <p class="text-[11px] sm:text-[13px] text-white/40 mb-1 font-mono uppercase">Neurolearn Academy</p>
-                    <p class="text-[12px] sm:text-[13px] text-white/80 leading-relaxed">Neuroscience certifications, research rewards & mentorship.
+                <div class="absolute bottom-[14%] sm:bottom-[16%] left-[10%] sm:left-[14%] md:left-[22%] max-w-[220px] pointer-events-auto p-3.5 sm:p-0 rounded-xl bg-black/70 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border border-white/10 sm:border-none">
+                    <p class="text-[11px] sm:text-[13px] text-[#60A5FA] mb-1 font-mono uppercase">Neurolearn Academy</p>
+                    <p class="text-[12px] sm:text-[13px] text-white/90 leading-relaxed">Neuroscience certifications, research rewards & mentorship.
                     </p>
                 </div>
             </div>
@@ -207,10 +208,10 @@
             <!-- STAGE 4: KAMBRAI & SOVEREIGNTY (right-aligned) -->
             <div id="hero-stage-4"
                 class="absolute inset-x-4 sm:inset-x-6 md:inset-x-0 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all flex justify-end">
-                <div class="max-w-[340px] w-full text-left pointer-events-auto p-5 sm:p-6 md:p-0 rounded-2xl bg-black/60 md:bg-transparent backdrop-blur-md md:backdrop-blur-none border border-white/10 md:border-none shadow-2xl">
-                    <p class="text-[12px] sm:text-[13px] text-white/40 mb-2 sm:mb-3 font-mono uppercase tracking-wider">Kambrai Web3 Connection</p>
-                    <h2 class="text-[26px] sm:text-[32px] md:text-[38px] font-semibold tracking-tight leading-[1.08] mb-3 sm:mb-4">Your data. Your rewards.</h2>
-                    <p class="text-[14px] sm:text-[15px] text-white/60 leading-relaxed mb-5 sm:mb-6">
+                <div class="max-w-[340px] w-full text-left pointer-events-auto p-5 sm:p-6 md:p-0 rounded-2xl bg-black/70 md:bg-transparent backdrop-blur-md md:backdrop-blur-none border border-white/10 md:border-none shadow-2xl">
+                    <p class="text-[12px] sm:text-[13px] text-[#60A5FA] mb-2 sm:mb-3 font-mono uppercase tracking-wider">Kambrai Web3 Connection</p>
+                    <h2 class="text-[26px] sm:text-[32px] md:text-[38px] font-semibold tracking-tight leading-[1.08] mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-50 to-[#60A5FA]">Your data. Your rewards.</h2>
+                    <p class="text-[14px] sm:text-[15px] text-blue-100/70 leading-relaxed mb-5 sm:mb-6">
                         Monetize anonymized neural telemetry for Project Alpha/Beta research rewards, or lock it safely under your sovereign Web3 wallet.
                     </p>
                     <div class="space-y-2.5 text-[12px] sm:text-[13px]">
@@ -218,7 +219,7 @@
                             <span class="text-white/45">Data Sovereignty</span><span class="text-white font-medium">100% Encrypted</span>
                         </div>
                         <div class="flex justify-between border-b pb-2.5" style="border-color:var(--hair-soft);">
-                            <span class="text-white/45">Research Rewards</span><span class="text-white font-medium">Project Alpha/Beta</span>
+                            <span class="text-white/45">Research Rewards</span><span class="text-[#60A5FA] font-medium">Project Alpha/Beta</span>
                         </div>
                     </div>
                 </div>
@@ -228,15 +229,14 @@
             <div id="hero-stage-5"
                 class="absolute inset-0 opacity-0 pointer-events-none transition-all flex flex-col items-center justify-center text-center px-4">
                 <h2
-                    class="text-[34px] sm:text-[54px] md:text-[64px] font-semibold tracking-tight max-w-2xl leading-[1.04]">
+                    class="text-[34px] sm:text-[54px] md:text-[64px] font-semibold tracking-tight max-w-2xl leading-[1.04] bg-clip-text text-transparent bg-gradient-to-b from-white via-slate-100 to-[#60A5FA] drop-shadow-[0_0_35px_rgba(41,151,255,0.35)]">
                     Welcome to your<br class="hidden md:block"> NeuralSpace.
                 </h2>
-                <p class="mt-4 sm:mt-5 max-w-md text-[15px] sm:text-[17px] text-white/60">
+                <p class="mt-4 sm:mt-5 max-w-md text-[15px] sm:text-[17px] text-blue-100/70">
                     Connecting Patients, Clinicians, Researchers, and Advocates in one unified neuro-ecosystem.
                 </p>
                 <div class="mt-8 flex flex-wrap gap-x-8 gap-y-3 pointer-events-auto text-[15px]">
-                    <a href="{% url 'signup' %}" class="hover:opacity-70 transition-opacity font-medium"
-                        style="color:var(--accent);">Begin onboarding &rsaquo;</a>
+                    <a href="{% url 'signup' %}" class="hover:opacity-70 transition-opacity font-medium text-[#60A5FA]">Begin onboarding &rsaquo;</a>
                     <a href="#pathways" class="text-white/70 hover:text-white transition-colors">See all pathways
                         &rsaquo;</a>
                 </div>
