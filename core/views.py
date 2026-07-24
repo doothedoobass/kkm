@@ -7,10 +7,23 @@ from django.contrib import messages as django_messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .models import *
-from django.db import models
+from django.db import models, connection
 import json
 import hashlib
 import uuid
+
+def ensure_medicalreport_schema():
+    try:
+        with connection.cursor() as cursor:
+            if connection.vendor == 'sqlite':
+                cursor.execute("PRAGMA table_info(core_medicalreport);")
+                columns = [row[1] for row in cursor.fetchall()]
+                if columns and 'file' not in columns:
+                    cursor.execute("ALTER TABLE core_medicalreport ADD COLUMN file varchar(100);")
+                if columns and 'file_size' not in columns:
+                    cursor.execute("ALTER TABLE core_medicalreport ADD COLUMN file_size varchar(50);")
+    except Exception:
+        pass
 
 def get_current_profile(request=None):
     if request and hasattr(request, 'user') and request.user.is_authenticated:
@@ -19,7 +32,11 @@ def get_current_profile(request=None):
 
 @login_required(login_url='login')
 def dashboard(request):
-    reports = MedicalReport.objects.filter(user=request.user).order_by('-uploaded_at')[:3]
+    ensure_medicalreport_schema()
+    try:
+        reports = MedicalReport.objects.filter(user=request.user).order_by('-uploaded_at')[:3]
+    except Exception:
+        reports = []
     # Compute simple stats
     index_points = BrainHealthDataIndex.objects.count()
     clinicians_count = Clinician.objects.filter(available_for_telemedicine=True).count()
@@ -143,6 +160,7 @@ def myspace(request):
 
 @login_required(login_url='login')
 def clinical_care(request):
+    ensure_medicalreport_schema()
     if request.method == "POST":
         title = request.POST.get('title', '').strip()
         doc_type = request.POST.get('document_type', 'EEG Diagnostic Report')
