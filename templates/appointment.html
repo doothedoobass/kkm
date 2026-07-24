@@ -5,38 +5,39 @@
 {% block content %}
 <style>
     /* Inherited Dashboard Architecture */
-    .panel { background-color: var(--ink-800); border: 1px solid var(--line); border-radius: 14px; }
+    .panel { background-color: var(--ink-800); border: 1px solid var(--line); border-radius: 16px; }
     
     .input-field {
         width: 100%; background-color: var(--ink-900); border: 1px solid var(--line); 
-        border-radius: 10px; padding: 0.75rem 1rem; color: var(--fog-100); 
-        font-size: 13px; font-family: 'IBM Plex Sans', sans-serif;
+        border-radius: 12px; padding: 0.75rem 1rem; color: var(--fog-100); 
+        font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif;
         transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
-    .input-field:focus { outline: none; border-color: var(--fog-500); box-shadow: 0 0 0 2px rgba(255,255,255,0.05); }
+    .input-field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(41, 151, 255, 0.15); }
     .input-field::placeholder { color: var(--fog-500); }
     
-    .input-label { display: block; font-size: 11px; font-weight: 600; color: var(--fog-300); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .input-label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; color: var(--fog-300); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.08em; }
     
     .btn-primary {
         width: 100%; display: flex; align-items: center; justify-content: center;
         background-color: var(--fog-100); color: var(--ink-900); font-weight: 600; 
-        font-size: 13px; padding: 0.85rem; border-radius: 10px; border: none;
-        transition: opacity 0.2s ease; cursor: pointer;
+        font-size: 13px; padding: 0.85rem; border-radius: 12px; border: none;
+        transition: all 0.2s ease; cursor: pointer;
     }
-    .btn-primary:hover { opacity: 0.9; }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
 
     /* Custom Radio Cards */
     .radio-input { display: none; }
     .radio-card {
         display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem;
-        background-color: var(--ink-900); border: 1px solid var(--line); border-radius: 10px; 
+        background-color: var(--ink-900); border: 1px solid var(--line); border-radius: 12px; 
         padding: 1.25rem 1rem; cursor: pointer; transition: all 0.2s ease; text-align: center; height: 100%;
     }
-    .radio-card:hover { border-color: var(--fog-500); }
+    .radio-card:hover { border-color: rgba(41, 151, 255, 0.35); transform: translateY(-1px); }
     .radio-input:checked + .radio-card {
         border-color: var(--accent-text);
-        background-color: rgba(143, 170, 196, 0.08); /* Faint accent wash */
+        background-color: rgba(41, 151, 255, 0.12);
+        box-shadow: 0 0 15px rgba(41, 151, 255, 0.2);
     }
     .radio-card .card-icon { color: var(--fog-500); transition: color 0.2s ease; }
     .radio-input:checked + .radio-card .card-icon { color: var(--accent-text); }

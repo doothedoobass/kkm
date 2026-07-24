@@ -7,25 +7,24 @@ Sign in to continue to NeuralSpace.
 
 {% block content %}
 
-<div class="max-w-lg mx-auto py-8 md:py-14">
+<div class="max-w-md mx-auto py-8 md:py-14 px-4">
 
-    <div class="overflow-hidden rounded-3xl border border-slate-800 bg-[#131922] shadow-2xl">
+    <div class="overflow-hidden rounded-3xl border border-white/10 bg-[#0B0E14]/90 backdrop-blur-xl shadow-2xl">
 
         <!-- Header -->
 
-        <div class="border-b border-slate-800 px-8 py-8">
+        <div class="border-b border-white/10 px-6 sm:px-8 py-8 text-center sm:text-left">
 
-            <span class="text-[11px] uppercase tracking-[0.22em] text-slate-500">
-                NeuralSpace
+            <span class="text-[11px] font-mono uppercase tracking-[0.22em] text-[#60A5FA]">
+                NeuralSpace Sovereign Access
             </span>
 
-            <h2 class="mt-3 font-display text-3xl text-white">
+            <h2 class="mt-2 font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
                 Log in to your account
             </h2>
 
-            <p class="mt-2 text-sm leading-relaxed text-slate-400">
-                Access your health records, secure messages, appointments,
-                and the rest of your NeuralSpace workspace.
+            <p class="mt-2 text-xs sm:text-sm leading-relaxed text-slate-400">
+                Access your health records, secure telemetry messages, appointments, and the rest of your NeuralSpace workspace.
             </p>
 
         </div>
@@ -33,7 +32,7 @@ Sign in to continue to NeuralSpace.
         <!-- Alerts -->
 
         {% if messages %}
-        <div class="px-8 pt-6">
+        <div class="px-6 sm:px-8 pt-6">
             {% for m in messages %}
             <div class="mb-3 rounded-2xl border px-4 py-3
                 {% if m.tags == 'success' %}border-emerald-500/40 bg-emerald-950/30 text-emerald-300
@@ -49,7 +48,7 @@ Sign in to continue to NeuralSpace.
 
         <!-- Form -->
 
-        <form method="post" class="space-y-6 px-8 py-8">
+        <form method="post" class="space-y-5 px-6 sm:px-8 py-7">
 
             {% csrf_token %}
 
@@ -57,7 +56,7 @@ Sign in to continue to NeuralSpace.
 
             <div>
 
-                <label class="mb-2 block text-sm font-medium text-slate-300">
+                <label class="mb-2 block text-xs font-mono font-medium uppercase tracking-wider text-slate-300">
                     Username
                 </label>
 
@@ -68,17 +67,20 @@ Sign in to continue to NeuralSpace.
                     autocomplete="username"
                     class="
                         w-full
-                        rounded-2xl
+                        rounded-xl
                         border
-                        border-slate-700
-                        bg-[#0d1218]
+                        border-white/10
+                        bg-[#07090E]
                         px-4
                         py-3
-                        text-slate-100
+                        text-sm
+                        text-white
                         placeholder:text-slate-500
                         outline-none
-                        transition
-                        focus:border-slate-500
+                        transition-all
+                        focus:border-[#2997FF]
+                        focus:ring-2
+                        focus:ring-[#2997FF]/20
                     "
                 />
 
@@ -90,13 +92,13 @@ Sign in to continue to NeuralSpace.
 
                 <div class="mb-2 flex items-center justify-between">
 
-                    <label class="text-sm font-medium text-slate-300">
+                    <label class="text-xs font-mono font-medium uppercase tracking-wider text-slate-300">
                         Password
                     </label>
 
                     <a
                         href="#"
-                        class="text-xs text-slate-500 transition hover:text-slate-300"
+                        class="text-xs text-slate-500 transition hover:text-[#60A5FA]"
                     >
                         Forgot password?
                     </a>
@@ -110,17 +112,20 @@ Sign in to continue to NeuralSpace.
                     autocomplete="current-password"
                     class="
                         w-full
-                        rounded-2xl
+                        rounded-xl
                         border
-                        border-slate-700
-                        bg-[#0d1218]
+                        border-white/10
+                        bg-[#07090E]
                         px-4
                         py-3
-                        text-slate-100
+                        text-sm
+                        text-white
                         placeholder:text-slate-500
                         outline-none
-                        transition
-                        focus:border-slate-500
+                        transition-all
+                        focus:border-[#2997FF]
+                        focus:ring-2
+                        focus:ring-[#2997FF]/20
                     "
                 />
 
@@ -128,7 +133,7 @@ Sign in to continue to NeuralSpace.
 
             <!-- Remember me -->
 
-            <label class="flex items-center gap-3 text-sm text-slate-400">
+            <label class="flex items-center gap-3 text-xs text-slate-400 cursor-pointer">
 
                 <input
                     type="checkbox"
@@ -136,13 +141,13 @@ Sign in to continue to NeuralSpace.
                         h-4
                         w-4
                         rounded
-                        border-slate-700
-                        bg-[#0d1218]
+                        border-white/20
+                        bg-[#07090E]
+                        accent-[#2997FF]
                     "
                 />
 
                 Keep me signed in
-
             </label>
 
             <!-- Submit -->
@@ -151,32 +156,36 @@ Sign in to continue to NeuralSpace.
                 type="submit"
                 class="
                     w-full
-                    rounded-2xl
-                    bg-slate-100
+                    rounded-xl
+                    bg-[#2997FF]
                     py-3.5
                     text-sm
                     font-semibold
-                    text-slate-900
-                    transition
-                    hover:opacity-90
+                    text-white
+                    shadow-lg
+                    shadow-[#2997FF]/25
+                    transition-all
+                    hover:bg-[#38BDF8]
+                    hover:shadow-[#2997FF]/40
+                    active:scale-[0.99]
                 "
             >
-                Log in
+                Log in &rsaquo;
             </button>
 
         </form>
 
         <!-- Footer -->
 
-        <div class="border-t border-slate-800 px-8 py-5 text-center">
+        <div class="border-t border-white/10 px-6 sm:px-8 py-5 text-center">
 
-            <p class="text-sm text-slate-500">
+            <p class="text-xs text-slate-400">
 
                 Don't have an account?
 
                 <a
                     href="{% url 'signup' %}"
-                    class="ml-1 text-slate-300 transition hover:text-white"
+                    class="ml-1 text-[#60A5FA] font-medium transition hover:underline"
                 >
                     Create one
                 </a>

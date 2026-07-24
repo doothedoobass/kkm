@@ -5,52 +5,52 @@
 {% block content %}
 <style>
     /* Inherited Dashboard Architecture */
-    .panel { background-color: var(--ink-800); border: 1px solid var(--line); border-radius: 14px; }
+    .panel { background-color: var(--ink-800); border: 1px solid var(--line); border-radius: 16px; }
     
     .input-field {
         width: 100%; background-color: var(--ink-900); border: 1px solid var(--line); 
-        border-radius: 10px; padding: 0.75rem 1rem; color: var(--fog-100); 
-        font-size: 13px; font-family: 'IBM Plex Sans', sans-serif;
+        border-radius: 12px; padding: 0.75rem 1rem; color: var(--fog-100); 
+        font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif;
         transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
-    .input-field:focus { outline: none; border-color: var(--fog-500); box-shadow: 0 0 0 2px rgba(255,255,255,0.05); }
+    .input-field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(41, 151, 255, 0.15); }
     .input-field::placeholder { color: var(--fog-500); }
     
-    .input-label { display: block; font-size: 11px; font-weight: 600; color: var(--fog-300); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .input-label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; color: var(--fog-300); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.08em; }
     
     .btn-primary {
         width: 100%; display: flex; align-items: center; justify-content: center;
         background-color: var(--fog-100); color: var(--ink-900); font-weight: 600; 
-        font-size: 13px; padding: 0.85rem; border-radius: 10px; border: none;
-        transition: opacity 0.2s ease; cursor: pointer;
+        font-size: 13px; padding: 0.85rem; border-radius: 12px; border: none;
+        transition: all 0.2s ease; cursor: pointer;
     }
-    .btn-primary:hover { opacity: 0.9; }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
 
     .quiet-btn {
-        display: inline-flex; align-items: center; font-size: 11px; font-weight: 500;
+        display: inline-flex; align-items: center; font-size: 11px; font-weight: 600;
         color: var(--fog-300); background-color: var(--ink-700); border: 1px solid var(--line);
-        padding: 0.4rem 0.75rem; border-radius: 8px; transition: all 0.15s ease; cursor: pointer;
+        padding: 0.4rem 0.75rem; border-radius: 10px; transition: all 0.2s ease; cursor: pointer;
     }
-    .quiet-btn:hover, .quiet-btn.active { color: var(--fog-100); border-color: var(--fog-500); background-color: var(--ink-600); }
+    .quiet-btn:hover, .quiet-btn.active { color: #ffffff; border-color: rgba(41, 151, 255, 0.4); background-color: var(--ink-600); }
 
     .check-row {
         display: flex; align-items: center; justify-content: space-between;
         padding: 0.75rem; background-color: var(--ink-900); border: 1px solid var(--line-soft); 
-        border-radius: 8px; margin-bottom: 0.5rem;
+        border-radius: 10px; margin-bottom: 0.5rem;
     }
 
     /* Map Specific Overrides */
-    #tourismMap { border-radius: 0 0 14px 14px; background: #0a0f1c; z-index: 0; }
+    #tourismMap { border-radius: 0 0 16px 16px; background: #0a0f1c; z-index: 0; }
     .leaflet-popup-content-wrapper { 
         background-color: var(--ink-900) !important; 
         border: 1px solid var(--line) !important; 
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
-        border-radius: 10px !important;
+        border-radius: 12px !important;
     }
     .leaflet-popup-tip { background-color: var(--ink-900) !important; }
     .leaflet-popup-close-button { color: var(--fog-500) !important; }
     .leaflet-popup-close-button:hover { color: var(--fog-100) !important; }
-    .leaflet-container { font-family: 'IBM Plex Sans', sans-serif !important; }
+    .leaflet-container { font-family: 'Plus Jakarta Sans', sans-serif !important; }
 </style>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

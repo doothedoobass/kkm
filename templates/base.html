@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NeuralSpace</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'Inter', 'sans-serif'],
+                        display: ['"Space Grotesk"', '"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        accent: {
+                            DEFAULT: '#2997FF',
+                            soft: 'rgba(41, 151, 255, 0.12)',
+                            text: '#60A5FA',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,7 +35,7 @@
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
         :root {
             /* Ground — Pro Obsidian Palette */
@@ -48,7 +68,7 @@
         * { box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'IBM Plex Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
             background-color: var(--ink-950);
             color: var(--fog-100);
             transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
@@ -59,8 +79,9 @@
             transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .font-display { font-family: 'Inter', -apple-system, sans-serif; font-optical-sizing: auto; }
-        .font-mono { font-family: 'IBM Plex Mono', monospace; }
+        .font-sans { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
+        .font-display { font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif; font-optical-sizing: auto; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
 
         @keyframes settle {
             from { opacity: 0; transform: translateY(6px); }

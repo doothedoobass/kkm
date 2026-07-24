@@ -7,25 +7,24 @@ Set up your NeuralSpace account and begin your journey.
 
 {% block content %}
 
-<div class="max-w-lg mx-auto py-8 md:py-14">
+<div class="max-w-md mx-auto py-8 md:py-14 px-4">
 
-    <div class="rounded-3xl border border-slate-800 bg-[#131922] overflow-hidden shadow-2xl">
+    <div class="rounded-3xl border border-white/10 bg-[#0B0E14]/90 backdrop-blur-xl overflow-hidden shadow-2xl">
 
         <!-- Header -->
 
-        <div class="px-8 py-8 border-b border-slate-800">
+        <div class="px-6 sm:px-8 py-8 border-b border-white/10 text-center sm:text-left">
 
-            <span class="text-[11px] uppercase tracking-[0.2em] text-slate-500">
-                NeuralSpace
+            <span class="text-[11px] font-mono uppercase tracking-[0.22em] text-[#60A5FA]">
+                NeuralSpace Onboarding
             </span>
 
-            <h2 class="mt-3 text-3xl font-display text-white">
+            <h2 class="mt-2 text-2xl sm:text-3xl font-bold font-display text-white tracking-tight">
                 Create your account
             </h2>
 
-            <p class="mt-2 text-sm text-slate-400 leading-relaxed">
-                Access healthcare services, secure communication,
-                and personalized experiences across the NeuralSpace ecosystem.
+            <p class="mt-2 text-xs sm:text-sm text-slate-400 leading-relaxed">
+                Access healthcare services, secure telemetry, and personalized experiences across the NeuralSpace ecosystem.
             </p>
 
         </div>
@@ -33,7 +32,7 @@ Set up your NeuralSpace account and begin your journey.
         <!-- Errors -->
 
         {% if messages %}
-        <div class="px-8 pt-6">
+        <div class="px-6 sm:px-8 pt-6">
             {% for m in messages %}
             <div class="mb-3 rounded-2xl border px-4 py-3
                 {% if m.tags == 'success' %}border-emerald-500/40 bg-emerald-950/30 text-emerald-300
@@ -49,7 +48,7 @@ Set up your NeuralSpace account and begin your journey.
 
         <!-- Form -->
 
-        <form method="post" class="px-8 py-8 space-y-6">
+        <form method="post" class="px-6 sm:px-8 py-7 space-y-5">
 
             {% csrf_token %}
 
@@ -57,7 +56,7 @@ Set up your NeuralSpace account and begin your journey.
 
             <div>
 
-                <label class="block mb-2 text-sm font-medium text-slate-300">
+                <label class="block mb-2 text-xs font-mono font-medium uppercase tracking-wider text-slate-300">
                     Username
                 </label>
 
@@ -67,17 +66,20 @@ Set up your NeuralSpace account and begin your journey.
                     placeholder="Choose a username"
                     class="
                         w-full
-                        rounded-2xl
+                        rounded-xl
                         border
-                        border-slate-700
-                        bg-[#0d1218]
+                        border-white/10
+                        bg-[#07090E]
                         px-4
                         py-3
-                        text-slate-100
+                        text-sm
+                        text-white
                         placeholder:text-slate-500
-                        focus:outline-none
-                        focus:border-slate-500
-                        transition
+                        outline-none
+                        transition-all
+                        focus:border-[#2997FF]
+                        focus:ring-2
+                        focus:ring-[#2997FF]/20
                     "
                 >
 
@@ -87,7 +89,7 @@ Set up your NeuralSpace account and begin your journey.
 
             <div>
 
-                <label class="block mb-2 text-sm font-medium text-slate-300">
+                <label class="block mb-2 text-xs font-mono font-medium uppercase tracking-wider text-slate-300">
                     Email address
                 </label>
 
@@ -97,17 +99,20 @@ Set up your NeuralSpace account and begin your journey.
                     placeholder="you@example.com"
                     class="
                         w-full
-                        rounded-2xl
+                        rounded-xl
                         border
-                        border-slate-700
-                        bg-[#0d1218]
+                        border-white/10
+                        bg-[#07090E]
                         px-4
                         py-3
-                        text-slate-100
+                        text-sm
+                        text-white
                         placeholder:text-slate-500
-                        focus:outline-none
-                        focus:border-slate-500
-                        transition
+                        outline-none
+                        transition-all
+                        focus:border-[#2997FF]
+                        focus:ring-2
+                        focus:ring-[#2997FF]/20
                     "
                 >
 
@@ -117,7 +122,7 @@ Set up your NeuralSpace account and begin your journey.
 
             <div>
 
-                <label class="block mb-2 text-sm font-medium text-slate-300">
+                <label class="block mb-2 text-xs font-mono font-medium uppercase tracking-wider text-slate-300">
                     Password
                 </label>
 
@@ -127,21 +132,24 @@ Set up your NeuralSpace account and begin your journey.
                     placeholder="Create a secure password"
                     class="
                         w-full
-                        rounded-2xl
+                        rounded-xl
                         border
-                        border-slate-700
-                        bg-[#0d1218]
+                        border-white/10
+                        bg-[#07090E]
                         px-4
                         py-3
-                        text-slate-100
+                        text-sm
+                        text-white
                         placeholder:text-slate-500
-                        focus:outline-none
-                        focus:border-slate-500
-                        transition
+                        outline-none
+                        transition-all
+                        focus:border-[#2997FF]
+                        focus:ring-2
+                        focus:ring-[#2997FF]/20
                     "
                 >
 
-                <p class="mt-2 text-xs text-slate-500">
+                <p class="mt-2 text-[11px] text-slate-500">
                     Use at least 8 characters.
                 </p>
 
@@ -153,18 +161,22 @@ Set up your NeuralSpace account and begin your journey.
                 type="submit"
                 class="
                     w-full
-                    rounded-2xl
-                    bg-slate-100
+                    rounded-xl
+                    bg-[#2997FF]
                     py-3.5
                     text-sm
                     font-semibold
-                    text-slate-900
-                    transition
-                    hover:opacity-90
+                    text-white
+                    shadow-lg
+                    shadow-[#2997FF]/25
+                    transition-all
+                    hover:bg-[#38BDF8]
+                    hover:shadow-[#2997FF]/40
+                    active:scale-[0.99]
                 "
             >
 
-                Create Account
+                Create Account &rsaquo;
 
             </button>
 
@@ -172,15 +184,15 @@ Set up your NeuralSpace account and begin your journey.
 
         <!-- Footer -->
 
-        <div class="border-t border-slate-800 px-8 py-5 text-center">
+        <div class="border-t border-white/10 px-6 sm:px-8 py-5 text-center">
 
-            <p class="text-sm text-slate-500">
+            <p class="text-xs text-slate-400">
 
                 Already have an account?
 
                 <a
                     href="{% url 'login' %}"
-                    class="ml-1 text-slate-300 hover:text-white transition"
+                    class="ml-1 text-[#60A5FA] font-medium hover:underline transition"
                 >
                     Sign in
                 </a>
