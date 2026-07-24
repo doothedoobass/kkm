@@ -141,9 +141,41 @@ def myspace(request):
 
 @login_required(login_url='login')
 def clinical_care(request):
+    if request.method == "POST":
+        title = request.POST.get('title', '').strip()
+        doc_type = request.POST.get('document_type', 'EEG Diagnostic Report')
+        if title:
+            import uuid
+            enc_hash = f"0x{uuid.uuid4().hex[:18]}"
+            MedicalReport.objects.create(
+                user=request.user,
+                title=title,
+                document_type=doc_type,
+                encrypted_hash=enc_hash
+            )
+            django_messages.success(request, f"Medical Report '{title}' successfully anchored to e-MR registry.")
+            return redirect('clinical_care')
+        else:
+            django_messages.error(request, "Please enter a valid report title.")
+
+    clinicians = Clinician.objects.all()
+    if not clinicians.exists():
+        docs = [
+            ("Dr. Aris Thorne", "Neurosurgery & BCI", "Geneva Neurological", 4.95, "https://ui-avatars.com/api/?name=Aris+Thorne&background=1e293b&color=3b82f6"),
+            ("Dr. Chukwuma Adebayo", "Cognitive Neurology", "Neural Village Labs", 4.92, "https://ui-avatars.com/api/?name=Chukwuma+Adebayo&background=1e293b&color=10b981"),
+            ("Dr. Elena Rostova", "EEG Pathology", "Harvard Brain Science", 4.88, "https://ui-avatars.com/api/?name=Elena+Rostova&background=1e293b&color=8b5cf6"),
+            ("Dr. Satoshi Nakamoto", "Neuro-Encryption", "Tokyo Tech", 4.99, "https://ui-avatars.com/api/?name=Satoshi+N&background=1e293b&color=f59e0b"),
+            ("Dr. Sarah Jenkins", "Pediatric Neurology", "London Health", 4.75, "https://ui-avatars.com/api/?name=Sarah+Jenkins&background=1e293b&color=ef4444"),
+        ]
+        for name, spec, inst, rat, img in docs:
+            Clinician.objects.create(name=name, specialty=spec, institution=inst, rating=rat, image_url=img)
+        clinicians = Clinician.objects.all()
+
+    reports = MedicalReport.objects.filter(user=request.user).order_by('-uploaded_at')
+
     return render(request, 'clinical_care.html', {
-        'clinicians': Clinician.objects.all(), 
-        'reports': MedicalReport.objects.filter(user=request.user),
+        'clinicians': clinicians, 
+        'reports': reports,
         'profile': get_current_profile(request)
     })
 
