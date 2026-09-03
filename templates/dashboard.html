@@ -1,59 +1,39 @@
 {% extends 'base.html' %}
 {% block page_title %}Dashboard Overview{% endblock %}
-{% block page_subtitle %}Welcome back, <span class="font-semibold" style="color: var(--fog-100);">{{ profile.full_name|default:request.user.get_full_name|default:request.user.username }}</span>. Here is your NeuralSpace summary.{% endblock %}
+{% block page_subtitle %}Welcome back, <span class="font-semibold text-primary">{{ profile.full_name|default:request.user.get_full_name|default:request.user.username }}</span>. Here is your NeuralSpace summary.{% endblock %}
 
 {% block content %}
-<style>
-    .dash-card {
-        background-color: var(--ink-800);
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        padding: 1.5rem;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .dash-card:hover {
-        border-color: rgba(41, 151, 255, 0.35);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 20px rgba(41, 151, 255, 0.1);
-    }
-    .icon-chip {
-        width: 2.5rem; height: 2.5rem;
-        border-radius: 12px;
-        display: flex; align-items: center; justify-content: center;
-        background-color: var(--ink-700);
-        border: 1px solid var(--line);
-        flex-shrink: 0;
-    }
-    .stat-label { color: var(--fog-500); font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
-    .stat-value { font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 2.1rem; color: var(--fog-100); line-height: 1; letter-spacing: -0.02em; }
-    .stat-foot { display: flex; align-items: center; font-size: 11px; color: var(--fog-500); margin-top: 1rem; }
-    .stat-dot { width: 6px; height: 6px; border-radius: 999px; margin-right: 8px; flex-shrink: 0; }
-    .panel { background-color: var(--ink-800); border: 1px solid var(--line); border-radius: 16px; }
-    .quiet-btn {
-        display: inline-flex; align-items: center; font-size: 11px; font-weight: 600;
-        color: var(--fog-300); background-color: var(--ink-700); border: 1px solid var(--line);
-        padding: 0.5rem 0.9rem; border-radius: 10px; transition: all 0.2s ease;
-    }
-    .quiet-btn:hover { color: #ffffff; border-color: rgba(41, 151, 255, 0.4); background-color: var(--ink-900); }
-    .record-row {
-        display: flex; align-items: flex-start; gap: 1rem; padding: 0.85rem;
-        background-color: var(--ink-900); border: 1px solid var(--line-soft); border-radius: 12px;
-        transition: all 0.2s ease;
-    }
-    .record-row:hover { border-color: rgba(255, 255, 255, 0.2); transform: translateX(2px); }
-</style>
+
+{% if feature_hints %}
+<div class="feature-tip-layer" aria-live="polite">
+    {% for hint in feature_hints %}
+    <div class="feature-tip-bubble hidden" data-feature-key="{{ hint.key }}" data-anchor="{{ hint.anchor }}">
+        <div class="feature-tip-header">
+            <span class="feature-tip-tag">Quick tip</span>
+            <button type="button" class="dismiss-feature-tip" data-feature-key="{{ hint.key }}" aria-label="Dismiss tip">×</button>
+        </div>
+        <h4>{{ hint.title }}</h4>
+        <p>{{ hint.body }}</p>
+        <div class="feature-tip-actions">
+            <button type="button" class="feature-tip-btn feature-tip-skip" data-feature-key="{{ hint.key }}">Skip</button>
+            <button type="button" class="feature-tip-btn feature-tip-next" data-feature-key="{{ hint.key }}">Next</button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 
 <!-- Top Metrics Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
 
     <!-- Card 1: Nodes -->
-    <div class="dash-card">
+    <div id="dashboard-overview-card" class="dash-card">
         <div class="flex justify-between items-start">
             <div>
                 <h3 class="stat-label">NBHDI Global Nodes</h3>
                 <p class="stat-value">{{ index_points }}</p>
             </div>
-            <div class="icon-chip" style="color: var(--accent-text);">
+            <div class="icon-chip icon-chip-accent">
                 <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 20 20">
                     <circle cx="10" cy="4" r="1.8" stroke-width="1.5"/><circle cx="4" cy="14" r="1.8" stroke-width="1.5"/><circle cx="16" cy="14" r="1.8" stroke-width="1.5"/>
                     <path stroke-linecap="round" stroke-width="1.5" d="M10 5.8L5 12.5M10 5.8l5 6.7M5.8 14h8.4"/>
@@ -61,8 +41,8 @@
             </div>
         </div>
         <div class="stat-foot">
-            <svg class="w-3 h-3 mr-1.5" style="color: var(--signal);" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4 13l5-5 3 3 4-5m0 0h-3m3 0v3"/></svg>
-            <span style="color: var(--signal);" class="font-medium mr-1.5">{{ index_points_change }}</span> this month
+            <svg class="w-3 h-3 mr-1.5 text-signal" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4 13l5-5 3 3 4-5m0 0h-3m3 0v3"/></svg>
+            <span class="font-medium mr-1.5 text-signal">{{ index_points_change }}</span> this month
         </div>
     </div>
 
@@ -81,7 +61,7 @@
             </div>
         </div>
         <div class="stat-foot">
-            <span class="stat-dot" style="background-color: var(--signal);"></span> Ready for Telemedicine
+            <span class="stat-dot dot-signal"></span> Ready for Telemedicine
         </div>
     </div>
 
@@ -100,7 +80,7 @@
             </div>
         </div>
         <div class="stat-foot">
-            <span class="stat-dot" style="background-color: var(--accent-text);"></span> Specialized Care Centers
+            <span class="stat-dot dot-accent"></span> Specialized Care Centers
         </div>
     </div>
 
@@ -109,9 +89,9 @@
         <div class="flex justify-between items-start">
             <div>
                 <h3 class="stat-label">Neuro-Token Balance</h3>
-                <p class="stat-value">{{ wallet_balance|default:0|floatformat:0 }} <span class="text-xs font-mono font-medium ml-1" style="color: var(--accent-text);">NST</span></p>
+                <p class="stat-value">{{ wallet_balance|default:0|floatformat:0 }} <span class="text-xs font-mono font-medium ml-1 text-accent">NST</span></p>
             </div>
-            <div class="icon-chip" style="color: var(--mark);">
+            <div class="icon-chip icon-chip-mark">
                 <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 20 20">
                     <circle cx="10" cy="10" r="6.5" stroke-width="1.5"/>
                     <path stroke-linecap="round" stroke-width="1.5" d="M10 7v6M8.2 8.4c0-.9.8-1.6 1.8-1.6s1.8.6 1.8 1.4c0 1.9-3.6.9-3.6 2.8 0 .8.8 1.4 1.8 1.4s1.8-.6 1.8-1.4"/>
@@ -119,7 +99,7 @@
             </div>
         </div>
         <div class="stat-foot">
-            <span class="stat-dot" style="background-color: var(--mark);"></span> Synced to Web3 Wallet
+            <span class="stat-dot dot-mark"></span> Synced to Web3 Wallet
         </div>
     </div>
 </div>
@@ -128,11 +108,11 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
     <!-- Chart Section -->
-    <div class="panel lg:col-span-2 p-7 flex flex-col">
+    <div id="dashboard-chart-panel" class="panel lg:col-span-2 p-7 flex flex-col">
         <div class="flex justify-between items-center mb-8">
             <div>
-                <h3 class="font-display text-lg font-medium" style="color: var(--fog-100);">Cognitive Performance Tracking</h3>
-                <p class="text-xs mt-1" style="color: var(--fog-500);">7-day neural retention and stress baseline analysis</p>
+                <h3 class="font-display text-lg font-medium text-primary">Cognitive Performance Tracking</h3>
+                <p class="text-xs mt-1 text-muted">7-day neural retention and stress baseline analysis</p>
             </div>
             <a href="#" class="quiet-btn">
                 <svg class="w-3.5 h-3.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 14v1a2 2 0 002 2h8a2 2 0 002-2v-1m-8-3l3 3m0 0l3-3m-3 3V3"/></svg>
@@ -145,10 +125,10 @@
     </div>
 
     <!-- Recent Records Section -->
-    <div class="panel p-7 flex flex-col">
+    <div id="dashboard-reports-panel" class="panel p-7 flex flex-col">
         <div class="flex justify-between items-center mb-6">
             <h3 class="font-display text-lg font-medium" style="color: var(--fog-100);">Recent e-MR Uploads</h3>
-            <span class="text-[10px] font-semibold px-2.5 py-1 rounded-full" style="background-color: var(--ink-700); color: var(--fog-300); border: 1px solid var(--line);">Live</span>
+            <span class="text-[10px] font-semibold px-2.5 py-1 rounded-full panel-tag">Live</span>
         </div>
 
         <div class="flex-1 space-y-2.5 overflow-y-auto pr-1">
@@ -158,28 +138,18 @@
                     <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 3.5h6l3.5 3.5V16a1 1 0 01-1 1H6a1 1 0 01-1-1V4.5a1 1 0 011-1z"/><path stroke-linecap="round" stroke-width="1.5" d="M7.5 10.5h5M7.5 13h5"/></svg>
                 </div>
                 <div class="flex-1 min-w-0">
-                    <h4 class="text-sm font-medium truncate" style="color: var(--fog-100);">{{ report.title }}</h4>
-                    <p class="text-[11px] mt-0.5 truncate" style="color: var(--fog-500);">{{ report.uploaded_at|date:"M d, Y" }} &bull; <span style="color: var(--accent-text);">{{ report.document_type }}</span></p>
+                    <h4 class="text-sm font-medium truncate text-primary">{{ report.title }}</h4>
+                    <p class="text-[11px] mt-0.5 truncate text-muted">{{ report.uploaded_at|date:"M d, Y" }} &bull; <span class="text-accent">{{ report.document_type }}</span></p>
                 </div>
             </div>
             {% empty %}
-            <!-- Empty State Mockup for visual testing if no records exist -->
             <div class="record-row">
                 <div class="icon-chip" style="color: var(--fog-300);">
                     <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 3.5h6l3.5 3.5V16a1 1 0 01-1 1H6a1 1 0 01-1-1V4.5a1 1 0 011-1z"/><path stroke-linecap="round" stroke-width="1.5" d="M7.5 10.5h5M7.5 13h5"/></svg>
                 </div>
                 <div class="flex-1 min-w-0">
-                    <h4 class="text-sm font-medium truncate" style="color: var(--fog-100);">Cognitive MRI Scan</h4>
-                    <p class="text-[11px] mt-0.5 truncate" style="color: var(--fog-500);">Oct 24, 2023 &bull; <span style="color: var(--accent-text);">Imaging</span></p>
-                </div>
-            </div>
-            <div class="record-row">
-                <div class="icon-chip" style="color: var(--fog-300);">
-                    <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 3.5h6l3.5 3.5V16a1 1 0 01-1 1H6a1 1 0 01-1-1V4.5a1 1 0 011-1z"/><path stroke-linecap="round" stroke-width="1.5" d="M7.5 10.5h5M7.5 13h5"/></svg>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h4 class="text-sm font-medium truncate" style="color: var(--fog-100);">Lab Results Panel</h4>
-                    <p class="text-[11px] mt-0.5 truncate" style="color: var(--fog-500);">Oct 20, 2023 &bull; <span style="color: var(--accent-text);">Pathology</span></p>
+                    <h4 class="text-sm font-medium truncate text-primary">No e-MR uploads yet</h4>
+                    <p class="text-[11px] mt-0.5 truncate text-muted">Upload a report to see it here.</p>
                 </div>
             </div>
             {% endfor %}
@@ -194,7 +164,138 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const bubbles = Array.from(document.querySelectorAll('.feature-tip-bubble'));
+        let activeIndex = -1;
+
+        function markSeen(key) {
+            if (!key) return Promise.resolve();
+            return fetch('{% url "feature_hint_mark_seen" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: 'key=' + encodeURIComponent(key)
+            }).catch(() => {});
+        }
+
+        function positionFeatureTip(bubble) {
+            const anchorSelector = bubble.dataset.anchor;
+            const target = anchorSelector ? document.querySelector(anchorSelector) : null;
+
+            if (!target) {
+                bubble.style.left = 'auto';
+                bubble.style.right = '1.25rem';
+                bubble.style.top = '5rem';
+                return;
+            }
+
+            const rect = target.getBoundingClientRect();
+            const bubbleWidth = bubble.offsetWidth || 300;
+            const gap = 18;
+            let left = rect.right + gap;
+            let top = rect.top + (rect.height / 2) - 42;
+
+            if (left + bubbleWidth > window.innerWidth - 20) {
+                left = rect.left - bubbleWidth - gap;
+            }
+
+            if (left < 16) {
+                left = window.innerWidth - bubbleWidth - 20;
+            }
+
+            if (top < 20) {
+                top = 20;
+            }
+
+            bubble.style.left = `${left}px`;
+            bubble.style.top = `${top}px`;
+            bubble.style.right = 'auto';
+        }
+
+        function showTooltip(index) {
+            if (index < 0 || index >= bubbles.length) {
+                bubbles.forEach((bubble) => bubble.classList.add('hidden'));
+                activeIndex = -1;
+                return;
+            }
+
+            activeIndex = index;
+            const targetBubble = bubbles[index];
+            const anchorSelector = targetBubble.dataset.anchor;
+            const target = anchorSelector ? document.querySelector(anchorSelector) : null;
+
+            if (target) {
+                const rect = target.getBoundingClientRect();
+                if (rect.top < 80 || rect.bottom > window.innerHeight - 80) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+            bubbles.forEach((bubble, i) => {
+                const isActive = i === index;
+                bubble.classList.toggle('hidden', !isActive);
+                if (isActive) positionFeatureTip(bubble);
+            });
+        }
+
+        function finishCurrent(action) {
+            const current = bubbles[activeIndex];
+            if (!current) return;
+            const key = current.dataset.featureKey;
+            if (action === 'next') {
+                markSeen(key).finally(() => {
+                    showTooltip(Math.min(activeIndex + 1, bubbles.length - 1));
+                });
+                return;
+            }
+
+            markSeen(key).finally(() => {
+                showTooltip(activeIndex + 1);
+            });
+        }
+
+        document.querySelectorAll('.dismiss-feature-tip').forEach((button) => {
+            button.addEventListener('click', function() {
+                const key = this.dataset.featureKey;
+                const current = bubbles[activeIndex];
+                if (!key || !current) return;
+                markSeen(key).finally(() => {
+                    showTooltip(activeIndex + 1);
+                });
+            });
+        });
+
+        document.querySelectorAll('.feature-tip-next').forEach((button) => {
+            button.addEventListener('click', function() {
+                const key = this.dataset.featureKey;
+                const current = bubbles[activeIndex];
+                if (!key || !current) return;
+                markSeen(key).finally(() => {
+                    showTooltip(activeIndex + 1);
+                });
+            });
+        });
+
+        document.querySelectorAll('.feature-tip-skip').forEach((button) => {
+            button.addEventListener('click', function() {
+                const key = this.dataset.featureKey;
+                const current = bubbles[activeIndex];
+                if (!key || !current) return;
+                markSeen(key).finally(() => {
+                    showTooltip(activeIndex + 1);
+                });
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            if (activeIndex >= 0) positionFeatureTip(bubbles[activeIndex]);
+        });
+
+        showTooltip(0);
+
         const canvas = document.getElementById('activityChart');
+        if (!canvas) return;
         const ctx = canvas.getContext('2d');
 
         const accent = '#4F6B8A';   // held-back slate blue — primary series
@@ -218,10 +319,10 @@
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                labels: labels.length ? labels : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 datasets: [{
                     label: 'Focus Retention',
-                    data: [65, 78, 62, 85, 92, 75, 88],
+                    data: focusData.length ? focusData : [65, 78, 62, 85, 92, 75, 88],
                     borderColor: accent,
                     backgroundColor: accentGradient,
                     borderWidth: 2,
@@ -234,7 +335,7 @@
                     fill: true
                 }, {
                     label: 'Stress Levels',
-                    data: [40, 35, 55, 30, 25, 45, 30],
+                    data: stressData.length ? stressData : [40, 35, 55, 30, 25, 45, 30],
                     borderColor: secondary,
                     backgroundColor: secondaryGradient,
                     borderWidth: 2,

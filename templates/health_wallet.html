@@ -3,46 +3,6 @@
 {% block page_subtitle %}Manage Web3 rewards, research grants, and DAO metrics.{% endblock %}
 
 {% block content %}
-<style>
-    /* Inherited Dashboard Architecture */
-    .panel { background-color: var(--ink-800); border: 1px solid var(--line); border-radius: 14px; }
-    
-    .btn-primary {
-        display: inline-flex; align-items: center; justify-content: center;
-        background-color: var(--mark); color: var(--ink-900); font-weight: 600; 
-        font-size: 13px; padding: 0.75rem 1.25rem; border-radius: 10px; border: none;
-        transition: opacity 0.2s ease; cursor: pointer;
-    }
-    .btn-primary:hover { opacity: 0.9; }
-
-    .btn-secondary {
-        display: inline-flex; align-items: center; justify-content: center;
-        background-color: var(--ink-700); color: var(--fog-100); font-weight: 600; 
-        font-size: 13px; padding: 0.75rem 1.25rem; border-radius: 10px; border: 1px solid var(--line);
-        transition: border-color 0.2s ease; cursor: pointer;
-    }
-    .btn-secondary:hover { border-color: var(--fog-500); }
-
-    /* Table styling */
-    .data-table th { font-size: 10px; font-weight: 600; color: var(--fog-500); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--line); padding: 1rem; }
-    .data-table td { padding: 1rem; border-bottom: 1px solid var(--line-soft); transition: background-color 0.15s ease; }
-    .data-table tr:hover td { background-color: var(--ink-700); }
-    .data-table tr:last-child td { border-bottom: none; }
-
-    .pulse-dot {
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-    @keyframes pulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.5; transform: scale(1.2); }
-    }
-    
-    .wallet-pill {
-        display: inline-flex; align-items: center; background-color: var(--ink-900);
-        border: 1px solid var(--line); border-radius: 10px; padding: 0.4rem 0.75rem;
-        font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--fog-300);
-    }
-</style>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 max-w-7xl mx-auto w-full">
     

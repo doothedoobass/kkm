@@ -17,6 +17,20 @@ class NeuroProfile(models.Model):
     def __str__(self):
         return self.full_name
 
+
+class UserFeatureHint(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    key = models.CharField(max_length=100)
+    title = models.CharField(max_length=150)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'key')
+
+    def __str__(self):
+        return f"{self.user.username}: {self.key}"
+
 class ResourceItem(models.Model):
     RESOURCE_TYPES = [
         ('RESEARCH', 'Research Paper'),
@@ -34,6 +48,21 @@ class ResourceItem(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.TextField()
+    link_url = models.CharField(max_length=255, blank=True, default='')
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.username}: {self.message[:60]}"
+
 
 class WellnessProtocol(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

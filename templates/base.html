@@ -1,17 +1,19 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NeuralSpace</title>
+    <link rel="stylesheet" href="{% static 'css/neuralspace-theme.css' %}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'Inter', 'sans-serif'],
-                        display: ['"Space Grotesk"', '"Plus Jakarta Sans"', 'sans-serif'],
+                        sans: ['"Manrope"', '-apple-system', 'BlinkMacSystemFont', 'Inter', 'sans-serif'],
+                        display: ['"Sora"', '"Manrope"', 'sans-serif'],
                         mono: ['"JetBrains Mono"', 'monospace'],
                     },
                     colors: {
@@ -27,6 +29,7 @@
     </script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>window.Leaflet = window.L;</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- GSAP & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -34,185 +37,9 @@
     <!-- Lenis Smooth Scroll -->
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
-        :root {
-            /* Ground — Pro Obsidian Palette */
-            --ink-950: #07090E;
-            --ink-900: #0B0E14;
-            --ink-800: #121722;
-            --ink-700: #1A2232;
-
-            /* Structure — Refined hairlines */
-            --line: rgba(255, 255, 255, 0.08);
-            --line-soft: rgba(255, 255, 255, 0.04);
-
-            /* Text */
-            --fog-100: #F3F4F6;
-            --fog-300: #9CA3AF;
-            --fog-500: #6B7280;
-
-            /* Accent — NeuralSpace Electric Blue */
-            --accent: #2997FF;
-            --accent-soft: rgba(41, 151, 255, 0.12);
-            --accent-text: #60A5FA;
-
-            /* Signal */
-            --signal: #34D399;
-
-            /* Cue */
-            --mark: #F59E0B;
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
-            background-color: var(--ink-950);
-            color: var(--fog-100);
-            transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
-        }
-
-        /* Page Theme Fade Overlay */
-        #page-fade-overlay {
-            transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .font-sans { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
-        .font-display { font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif; font-optical-sizing: auto; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
-
-        @keyframes settle {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .content-in { animation: settle 0.4s ease-out forwards; }
-
-        @keyframes breathe {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.55; }
-        }
-        .signal-dot { animation: breathe 3.2s ease-in-out infinite; }
-
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
-
-        /* Sidebar Base Transitions */
-        #sidebar { transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-
-        .nav-group-list { overflow: hidden; transition: max-height 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
-
-        .nav-link {
-            border-left: 2px solid transparent;
-            transition: all 0.18s ease;
-            color: var(--fog-300);
-            border-radius: 8px;
-        }
-        .nav-link:hover {
-            background-color: var(--ink-800);
-            border-left-color: rgba(255, 255, 255, 0.3);
-            color: var(--fog-100);
-        }
-        .nav-link svg { color: var(--fog-500); transition: color 0.18s ease; }
-        .nav-link:hover svg { color: var(--fog-100); }
-
-        .nav-link.active {
-            background-color: var(--accent-soft);
-            border-left-color: var(--accent);
-            color: #ffffff;
-            box-shadow: inset 0 0 15px rgba(41, 151, 255, 0.1);
-        }
-        .nav-link.active svg { color: var(--accent-text); }
-
-        .group-toggle { color: var(--fog-500); letter-spacing: 0.08em; }
-        .group-toggle:hover { color: var(--fog-300); }
-        .group-chevron { transition: transform 0.2s ease; }
-        .group-chevron.open { transform: rotate(90deg); }
-
-        #collapse-toggle svg { transition: transform 0.22s ease; }
-
-        /* -------------------------------------------
-           Desktop Rules (Min 768px)
-        -------------------------------------------- */
-        @media (min-width: 768px) {
-            #sidebar.collapsed { width: 4.75rem; }
-            #sidebar.collapsed .label-fade,
-            #sidebar.collapsed .group-heading,
-            #sidebar.collapsed .brand-text,
-            #sidebar.collapsed .profile-text,
-            #sidebar.collapsed .msg-badge,
-            #sidebar.collapsed .group-chevron { display: none; }
-            #sidebar.collapsed .nav-row { justify-content: center; }
-            #sidebar.collapsed .nav-link { padding-left: 0; padding-right: 0; }
-
-            /* Tooltip for collapsed rail */
-            .rail-tip {
-                position: absolute;
-                left: calc(100% + 10px);
-                top: 50%;
-                transform: translateY(-50%);
-                background: var(--ink-700);
-                border: 1px solid var(--line);
-                color: var(--fog-100);
-                font-size: 0.72rem;
-                padding: 4px 9px;
-                border-radius: 5px;
-                white-space: nowrap;
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity 0.12s ease;
-                z-index: 40;
-                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-            }
-            #sidebar.collapsed .nav-row:hover .rail-tip { opacity: 1; }
-            #sidebar:not(.collapsed) .rail-tip { display: none; }
-            #sidebar.collapsed #collapse-toggle svg { transform: rotate(180deg); }
-        }
-
-        /* -------------------------------------------
-           Tablet-ish header tightening (600–768px)
-        -------------------------------------------- */
-        @media (max-width: 767px) {
-            #sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100%;
-                width: min(20rem, 86vw);
-                transform: translateX(-100%);
-                z-index: 50;
-            }
-            #sidebar.mobile-open {
-                transform: translateX(0);
-                box-shadow: 10px 0 30px -5px rgba(0, 0, 0, 0.8);
-            }
-            .rail-tip { display: none; }
-
-            /* Point inner collapse button leftward to signify 'close' */
-            #collapse-toggle svg { transform: rotate(180deg); }
-        }
-
-        /* -------------------------------------------
-           Header: never let title/actions collide.
-        -------------------------------------------- */
-        #app-header {
-            row-gap: 0.5rem;
-            column-gap: 0.75rem;
-        }
-        #header-titles { min-width: 0; }
-        #header-titles h2,
-        #header-titles p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        #header-actions { flex-shrink: 0; }
-        #header-actions a { white-space: nowrap; }
-
-        @media (max-width: 420px) {
-            #header-titles h2 { font-size: 1.05rem; }
-            #header-actions a { padding-left: 0.6rem; padding-right: 0.6rem; padding-top: 0.4rem; padding-bottom: 0.4rem; font-size: 0.75rem; }
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="{% block body_class %}h-screen flex overflow-hidden selection:bg-[#2997FF]/30 relative{% endblock %}">
 
@@ -224,10 +51,10 @@
     <div id="toast-container" class="fixed top-5 right-5 z-[9999] max-w-md w-full px-4 space-y-3 pointer-events-none">
         {% for message in messages %}
         <div class="toast-item pointer-events-auto flex items-center justify-between p-4 rounded-2xl border shadow-2xl backdrop-blur-xl transition-all duration-300 transform translate-y-0 opacity-100
-            {% if message.tags == 'success' %}bg-[#062919]/90 border-[#34D399]/40 text-[#34D399]
-            {% elif message.tags == 'error' %}bg-[#2A080C]/90 border-[#F87171]/40 text-[#F87171]
-            {% elif message.tags == 'warning' %}bg-[#2D1B00]/90 border-[#F59E0B]/40 text-[#F59E0B]
-            {% else %}bg-[#0B1528]/90 border-[#60A5FA]/40 text-[#60A5FA]{% endif %}">
+            {% if message.tags == 'success' %}toast-success
+            {% elif message.tags == 'error' %}toast-error
+            {% elif message.tags == 'warning' %}toast-warning
+            {% else %}toast-info{% endif %}">
             <div class="flex items-center space-x-3">
                 {% if message.tags == 'success' %}
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
@@ -260,7 +87,7 @@
     {% block sidebar %}
     {% if request.user.is_authenticated %}
     <!-- Mobile Floating Toggle Arrow -->
-    <button id="mobile-floating-toggle" onclick="toggleMobileSidebar()" class="md:hidden fixed top-4 left-0 z-30 p-2.5 rounded-r-xl border-y border-r shadow-2xl flex items-center justify-center transition-transform duration-300 hover:translate-x-1" style="background-color: var(--ink-800); border-color: var(--line); color: var(--accent-text);" aria-label="Open menu">
+    <button id="mobile-floating-toggle" onclick="toggleMobileSidebar()" class="sidebar-open-button md:hidden fixed top-4 left-0 z-30 p-2.5 rounded-r-xl border-y border-r shadow-2xl flex items-center justify-center transition-transform duration-300 hover:translate-x-1" aria-label="Open menu">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
     </button>
 
@@ -268,19 +95,19 @@
     <div id="mobile-overlay" class="md:hidden fixed inset-0 z-40 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleMobileSidebar()"></div>
 
     <!-- Sidebar -->
-    <aside id="sidebar" class="w-72 flex-shrink-0 h-full flex flex-col justify-between overflow-y-auto overflow-x-hidden border-r" style="background-color: var(--ink-900); border-color: var(--line);">
+    <aside id="sidebar" class="w-72 flex-shrink-0 h-full flex flex-col justify-between overflow-y-auto overflow-x-hidden border-r bg-[var(--ink-900)] border-[var(--line)]">
 
         <div>
             <!-- Brand -->
-            <div class="flex items-center justify-between px-5 pt-5 pb-6 border-b" style="border-color: var(--line);">
+            <div class="flex items-center justify-between px-5 pt-5 pb-6 border-b border-[var(--line)]">
                 <div class="flex items-center space-x-3 min-w-0">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-sans text-xs font-bold tracking-wider" style="background: linear-gradient(135deg, rgba(41,151,255,0.2) 0%, rgba(13,17,23,0.9) 100%); border: 1px solid rgba(41,151,255,0.3); color: #60A5FA;">NS</div>
+                    <div class="sidebar-brand-box w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-sans text-xs font-bold tracking-wider">NS</div>
                     <div class="brand-text min-w-0">
                         <h1 class="font-sans font-semibold text-[15px] leading-tight text-white truncate">NeuralSpace</h1>
-                        <span class="text-[9px] font-mono uppercase tracking-[0.18em]" style="color: var(--fog-500);">NeuralSpace Care Ecosystem</span>
+                        <span class="text-[9px] font-mono uppercase tracking-[0.18em] text-[var(--fog-500)]">NeuralSpace Care Ecosystem</span>
                     </div>
                 </div>
-                <button id="collapse-toggle" class="flex-shrink-0 w-7 h-7 rounded flex items-center justify-center hover:bg-white/10" style="color: var(--fog-500);" aria-label="Toggle sidebar" title="Toggle sidebar" onclick="toggleSidebar()">
+                <button id="collapse-toggle" class="flex-shrink-0 w-7 h-7 rounded flex items-center justify-center hover:bg-white/10 text-[var(--fog-500)]" aria-label="Toggle sidebar" title="Toggle sidebar" onclick="toggleSidebar()">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12.5 4L7 10l5.5 6"/></svg>
                 </button>
             </div>
@@ -288,9 +115,10 @@
             <!-- Navigation -->
             <nav class="px-3 py-4 text-sm">
 
+                {% with current=request.resolver_match.url_name %}
                 <!-- Overview -->
                 <div class="mb-1">
-                    <a href="{% url 'dashboard' %}" class="nav-row nav-link active relative flex items-center space-x-3 py-2.5 px-3">
+                    <a href="{% url 'dashboard' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3{% if current == 'dashboard' %} active{% endif %}">
                         <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 20 20"><rect x="2.5" y="2.5" width="6" height="6" rx="1.3" stroke-width="1.5"/><rect x="11.5" y="2.5" width="6" height="6" rx="1.3" stroke-width="1.5"/><rect x="2.5" y="11.5" width="6" height="6" rx="1.3" stroke-width="1.5"/><rect x="11.5" y="11.5" width="6" height="6" rx="1.3" stroke-width="1.5"/></svg>
                         <span class="label-fade">Dashboard</span>
                         <span class="rail-tip">Dashboard</span>
@@ -303,26 +131,31 @@
                         <span class="group-heading">Care</span>
                         <svg class="group-chevron open w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M7 4l6 6-6 6"/></svg>
                     </button>
-                    <div id="grp-care" class="nav-group-list" style="max-height: 220px;">
-                        <a href="{% url 'myspace' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3">
+                    <div id="grp-care" class="nav-group-list nav-group-tall">
+                        <a href="{% url 'myspace' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3{% if current == 'myspace' %} active{% endif %}">
                             <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="6.8" r="3.1" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M3.5 17c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/></svg>
                             <span class="label-fade">MySpace</span>
                             <span class="rail-tip">MySpace</span>
                         </a>
-                        <a href="{% url 'clinical_care' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3">
+                        <a href="{% url 'clinical_care' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3{% if current == 'clinical_care' %} active{% endif %}">
                             <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.5 10.5h3l1.6-3.4 2 6.2 1.6-3.8h2.3l1.4 1h3.1"/></svg>
                             <span class="label-fade">Clinical Care</span>
                             <span class="rail-tip">Clinical Care</span>
                         </a>
-                        <a href="{% url 'medical_tourism' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3">
+                        <a href="{% url 'medical_tourism' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3{% if current == 'medical_tourism' %} active{% endif %}">
                             <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.2" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M12.7 7.3l-2.1 4.9-4.9 2.1 2.1-4.9z"/></svg>
                             <span class="label-fade">Medical Tourism</span>
                             <span class="rail-tip">Medical Tourism</span>
                         </a>
-                        <a href="{% url 'appointment' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3">
+                        <a href="{% url 'appointment' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3{% if current == 'appointment' %} active{% endif %}">
                             <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 20 20"><rect x="2.5" y="4" width="15" height="13.5" rx="1.5" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M2.5 8h15M6.5 2.5v3M13.5 2.5v3"/></svg>
                             <span class="label-fade">Appointment</span>
                             <span class="rail-tip">Appointment</span>
+                        </a>
+                        <a href="{% url 'wellness' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3{% if current == 'wellness' %} active{% endif %}">
+                            <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.8 12.3a3.4 3.4 0 01-4.8 0M7.5 8.3h.01M12.5 8.3h.01M17.5 10a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z"/></svg>
+                            <span class="label-fade">Wellness</span>
+                            <span class="rail-tip">Wellness</span>
                         </a>
                     </div>
                 </div>
@@ -333,16 +166,21 @@
                         <span class="group-heading">Coverage</span>
                         <svg class="group-chevron open w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M7 4l6 6-6 6"/></svg>
                     </button>
-                    <div id="grp-coverage" class="nav-group-list" style="max-height: 120px;">
-                        <a href="{% url 'insurance' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3">
+                    <div id="grp-coverage" class="nav-group-list nav-group-mid">
+                        <a href="{% url 'insurance' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3{% if current == 'insurance' %} active{% endif %}">
                             <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 2.5l6.3 2.3v4.4c0 4.2-2.7 7.2-6.3 8.3-3.6-1.1-6.3-4.1-6.3-8.3V4.8z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.3 10l1.9 1.9 3.5-3.9"/></svg>
                             <span class="label-fade">Health Insurance</span>
                             <span class="rail-tip">Health Insurance</span>
                         </a>
-                        <a href="{% url 'health_wallet' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3">
+                        <a href="{% url 'health_wallet' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3{% if current == 'health_wallet' %} active{% endif %}">
                             <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.5 6.3A1.8 1.8 0 014.3 4.5h9.4a1.8 1.8 0 011.8 1.8v7.4a1.8 1.8 0 01-1.8 1.8H4.3a1.8 1.8 0 01-1.8-1.8z"/><path stroke-linecap="round" stroke-width="1.5" d="M13 9.6h2.2a1 1 0 011 1v0.8a1 1 0 01-1 1H13"/></svg>
                             <span class="label-fade">HealthWallet</span>
                             <span class="rail-tip">HealthWallet</span>
+                        </a>
+                        <a href="{% url 'select_plan' %}" class="nav-row nav-link relative flex items-center space-x-3 py-2.5 px-3{% if current == 'select_plan' %} active{% endif %}">
+                            <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 2.5l6.3 2.3v4.4c0 4.2-2.7 7.2-6.3 8.3-3.6-1.1-6.3-4.1-6.3-8.3V4.8z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.3 10l1.9 1.9 3.5-3.9"/></svg>
+                            <span class="label-fade">Select Plan</span>
+                            <span class="rail-tip">Select Plan</span>
                         </a>
                     </div>
                 </div>
@@ -353,31 +191,48 @@
                         <span class="group-heading">Communication</span>
                         <svg class="group-chevron open w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M7 4l6 6-6 6"/></svg>
                     </button>
-                    <div id="grp-comm" class="nav-group-list" style="max-height: 70px;">
-                        <a href="{% url 'messages' %}" class="nav-row nav-link relative flex items-center justify-between py-2.5 px-3">
+                    <div id="grp-comm" class="nav-group-list nav-group-short">
+                        <a href="{% url 'messages' %}" class="nav-row nav-link relative flex items-center justify-between py-2.5 px-3{% if current == 'messages' %} active{% endif %}">
                             <span class="flex items-center space-x-3">
                                 <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5.3A1.8 1.8 0 014.8 3.5h10.4A1.8 1.8 0 0117 5.3v6.4a1.8 1.8 0 01-1.8 1.8H8.4L4.6 17v-3.6H4.8A1.8 1.8 0 013 11.6z"/></svg>
                                 <span class="label-fade">Messages</span>
                             </span>
-                            <span class="msg-badge text-[10px] font-semibold px-2 py-0.5 rounded-full" style="background-color: var(--accent-soft); color: var(--accent-text); border: 1px solid rgba(41, 151, 255, 0.3);">3</span>
-                            <span class="rail-tip">Messages · 3 new</span>
+                            {% if unread_message_count %}
+                            <span class="msg-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[var(--accent-soft)] text-[var(--accent-text)] border border-[rgba(41,151,255,0.3)]">{{ unread_message_count }}</span>
+                            <span class="rail-tip">Messages · {{ unread_message_count }} new</span>
+                            {% else %}
+                            <span class="rail-tip">Messages</span>
+                            {% endif %}
+                        </a>
+                        <a href="{% url 'notifications' %}" class="nav-row nav-link relative flex items-center justify-between py-2.5 px-3{% if current == 'notifications' %} active{% endif %}">
+                            <span class="flex items-center space-x-3">
+                                <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 2.5a3.2 3.2 0 013.2 3.2v1.3c0 1.4.5 2.8 1.4 3.9l.7.9H4.7l.7-.9a5.4 5.4 0 001.4-3.9V5.7A3.2 3.2 0 0110 2.5zm0 15a2.1 2.1 0 01-2.1-2.1h4.2A2.1 2.1 0 0110 17.5z"/></svg>
+                                <span class="label-fade">Notifications</span>
+                            </span>
+                            {% if unread_notifications_count %}
+                            <span class="msg-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[var(--accent-soft)] text-[var(--accent-text)] border border-[rgba(41,151,255,0.3)]">{{ unread_notifications_count }}</span>
+                            <span class="rail-tip">Notifications · {{ unread_notifications_count }} new</span>
+                            {% else %}
+                            <span class="rail-tip">Notifications</span>
+                            {% endif %}
                         </a>
                     </div>
                 </div>
+                {% endwith %}
             </nav>
         </div>
 
         <!-- Bottom Sidebar -->
-        <div class="p-4 border-t" style="border-color: var(--line);">
-            <a href="{% url 'onboarding' %}" class="label-fade group flex items-center justify-center space-x-2 py-2 text-center rounded-lg text-xs font-medium mb-3 border transition-colors hover:border-amber-500/50" style="border-color: rgba(245, 158, 11, 0.25); color: var(--mark); background-color: rgba(245, 158, 11, 0.05);">
+        <div class="p-4 border-t border-[var(--line)]">
+            <a href="{% url 'onboarding' %}" class="label-fade group flex items-center justify-center space-x-2 py-2 text-center rounded-lg text-xs font-medium mb-3 border transition-colors hover:border-amber-500/50 border-[rgba(245,158,11,0.25)] text-[var(--mark)] bg-[rgba(245,158,11,0.05)]">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 20 20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 3v14M3 10h14"/></svg>
                 <span>Run Onboarding</span>
             </a>
             <a href="{% url 'profile' %}" class="flex items-center space-x-3 p-2 rounded-xl transition-colors hover:bg-white/5 border border-transparent hover:border-white/10">
-                <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold uppercase flex-shrink-0" style="background-color: var(--ink-800); border: 1px solid var(--line); color: var(--fog-100);">{{ profile.full_name|default:request.user.get_full_name|default:request.user.username|make_list|first }}</div>
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold uppercase flex-shrink-0 bg-[var(--ink-800)] border border-[var(--line)] text-[var(--fog-100)]">{{ profile.full_name|default:request.user.get_full_name|default:request.user.username|make_list|first }}</div>
                 <div class="profile-text overflow-hidden flex-1">
                     <p class="text-xs font-medium truncate text-white">{{ profile.full_name|default:request.user.get_full_name|default:request.user.username }}</p>
-                    <p class="text-[10px] truncate" style="color: var(--fog-500);">{{ profile.pathway|default:"No Pathway Active" }}</p>
+                    <p class="text-[10px] truncate text-[var(--fog-500)]">{{ profile.pathway|default:"No Pathway Active" }}</p>
                 </div>
             </a>
         </div>
@@ -386,22 +241,22 @@
     {% endblock %}
 
     <!-- Main Content -->
-    <main class="{% block main_class %}flex-1 flex flex-col h-full relative overflow-y-auto z-10 w-full{% endblock %}" style="background-color: var(--ink-950);">
+    <main class="{% block main_class %}flex-1 flex flex-col h-full relative overflow-y-auto z-10 w-full{% endblock %} bg-[var(--ink-950)]">
         {% block header %}
         <!-- Header -->
-        <header id="app-header" class="sticky top-0 z-30 backdrop-blur-xl border-b px-4 sm:px-5 md:px-8 py-3.5 flex flex-wrap items-center justify-between" style="background-color: rgba(7, 9, 14, 0.8); border-color: var(--line);">
+        <header id="app-header" class="sticky top-0 z-30 backdrop-blur-xl border-b border-[var(--line)] px-4 sm:px-5 md:px-8 py-3.5 flex flex-wrap items-center justify-between bg-[rgba(7,9,14,0.8)]">
             <div id="header-titles" class="pl-9 md:pl-0 flex-1">
                 <h2 class="font-sans text-xl md:text-[22px] font-semibold tracking-tight text-white leading-tight">{% block page_title %}Dashboard{% endblock %}</h2>
-                <p class="text-[11px] md:text-xs mt-0.5 font-medium" style="color: var(--fog-500);">{% block page_subtitle %}Overview &amp; Analytics{% endblock %}</p>
+                <p class="text-[11px] md:text-xs mt-0.5 font-medium text-[var(--fog-500)]">{% block page_subtitle %}Overview &amp; Analytics{% endblock %}</p>
             </div>
 
             <div id="header-actions" class="flex items-center gap-2 md:gap-3">
                 {% if request.user.is_authenticated %}
-                    <a href="{% url 'dashboard' %}" class="px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200" style="background-color: var(--accent-soft); border: 1px solid rgba(41, 151, 255, 0.3); color: var(--accent-text);">Dashboard</a>
-                    <a href="{% url 'logout' %}" class="px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 hover:bg-white/10" style="background-color: rgba(255,255,255,0.04); border: 1px solid var(--line); color: var(--fog-300);">Logout</a>
+                    <a href="{% url 'dashboard' %}" class="header-action-link px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200">Dashboard</a>
+                    <a href="{% url 'logout' %}" class="header-action-link secondary px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 hover:bg-white/10">Logout</a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 hover:bg-white/10" style="background-color: rgba(255,255,255,0.04); border: 1px solid var(--line); color: var(--fog-300);">Login</a>
-                    <a href="{% url 'signup' %}" class="px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 hover:opacity-90" style="background-color: var(--accent); color: #ffffff; box-shadow: 0 0 15px rgba(41,151,255,0.35);">Sign up</a>
+                    <a href="{% url 'login' %}" class="header-action-link secondary px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 hover:bg-white/10">Login</a>
+                    <a href="{% url 'signup' %}" class="header-action-link primary px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 hover:opacity-90">Sign up</a>
                 {% endif %}
             </div>
         </header>
@@ -494,5 +349,118 @@
             });
         });
     </script>
+
+    {% if feature_hints %}
+    <!--
+        Feature-tip (onboarding bubble) driver.
+        This used to be pasted verbatim into dashboard.html and myspace.html
+        (~130 identical lines each). It now lives here once and runs on any
+        page that renders the `.feature-tip-layer` / `.feature-tip-bubble`
+        markup — both of those templates should have their inline <script>
+        copies removed once this ships.
+    -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const bubbles = Array.from(document.querySelectorAll('.feature-tip-bubble'));
+            if (!bubbles.length) return;
+
+            let activeIndex = -1;
+
+            function markSeen(key) {
+                if (!key) return Promise.resolve();
+                return fetch('{% url "feature_hint_mark_seen" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: 'key=' + encodeURIComponent(key)
+                }).catch(() => {});
+            }
+
+            function positionFeatureTip(bubble) {
+                const anchorSelector = bubble.dataset.anchor;
+                const target = anchorSelector ? document.querySelector(anchorSelector) : null;
+
+                if (!target) {
+                    bubble.style.left = 'auto';
+                    bubble.style.right = '1.25rem';
+                    bubble.style.top = '5rem';
+                    return;
+                }
+
+                const rect = target.getBoundingClientRect();
+                const bubbleWidth = bubble.offsetWidth || 300;
+                const gap = 18;
+                let left = rect.right + gap;
+                let top = rect.top + (rect.height / 2) - 42;
+
+                if (left + bubbleWidth > window.innerWidth - 20) {
+                    left = rect.left - bubbleWidth - gap;
+                }
+                if (left < 16) {
+                    left = window.innerWidth - bubbleWidth - 20;
+                }
+                if (top < 20) {
+                    top = 20;
+                }
+
+                bubble.style.left = `${left}px`;
+                bubble.style.top = `${top}px`;
+                bubble.style.right = 'auto';
+            }
+
+            function showTooltip(index) {
+                if (index < 0 || index >= bubbles.length) {
+                    bubbles.forEach((bubble) => bubble.classList.add('hidden'));
+                    activeIndex = -1;
+                    return;
+                }
+
+                activeIndex = index;
+                const targetBubble = bubbles[index];
+                const anchorSelector = targetBubble.dataset.anchor;
+                const target = anchorSelector ? document.querySelector(anchorSelector) : null;
+
+                if (target) {
+                    const rect = target.getBoundingClientRect();
+                    if (rect.top < 80 || rect.bottom > window.innerHeight - 80) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+
+                bubbles.forEach((bubble, i) => {
+                    const isActive = i === index;
+                    bubble.classList.toggle('hidden', !isActive);
+                    if (isActive) positionFeatureTip(bubble);
+                });
+            }
+
+            function advancePast(key) {
+                if (!key) {
+                    showTooltip(activeIndex + 1);
+                    return;
+                }
+                markSeen(key).finally(() => {
+                    showTooltip(activeIndex + 1);
+                });
+            }
+
+            document.querySelectorAll('.dismiss-feature-tip, .feature-tip-next, .feature-tip-skip').forEach((button) => {
+                button.addEventListener('click', function() {
+                    const current = bubbles[activeIndex];
+                    if (!current) return;
+                    advancePast(this.dataset.featureKey);
+                });
+            });
+
+            window.addEventListener('resize', () => {
+                if (activeIndex >= 0) positionFeatureTip(bubbles[activeIndex]);
+            });
+
+            showTooltip(0);
+        });
+    </script>
+    {% endif %}
 </body>
 </html>

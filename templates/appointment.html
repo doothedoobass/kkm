@@ -3,66 +3,6 @@
 {% block page_subtitle %}Schedule visits with verified clinicians and R&D labs.{% endblock %}
 
 {% block content %}
-<style>
-    /* Inherited Dashboard Architecture */
-    .panel { background-color: var(--ink-800); border: 1px solid var(--line); border-radius: 16px; }
-    
-    .input-field {
-        width: 100%; background-color: var(--ink-900); border: 1px solid var(--line); 
-        border-radius: 12px; padding: 0.75rem 1rem; color: var(--fog-100); 
-        font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-    .input-field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(41, 151, 255, 0.15); }
-    .input-field::placeholder { color: var(--fog-500); }
-    
-    .input-label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; color: var(--fog-300); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.08em; }
-    
-    .btn-primary {
-        width: 100%; display: flex; align-items: center; justify-content: center;
-        background-color: var(--fog-100); color: var(--ink-900); font-weight: 600; 
-        font-size: 13px; padding: 0.85rem; border-radius: 12px; border: none;
-        transition: all 0.2s ease; cursor: pointer;
-    }
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-
-    /* Custom Radio Cards */
-    .radio-input { display: none; }
-    .radio-card {
-        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem;
-        background-color: var(--ink-900); border: 1px solid var(--line); border-radius: 12px; 
-        padding: 1.25rem 1rem; cursor: pointer; transition: all 0.2s ease; text-align: center; height: 100%;
-    }
-    .radio-card:hover { border-color: rgba(41, 151, 255, 0.35); transform: translateY(-1px); }
-    .radio-input:checked + .radio-card {
-        border-color: var(--accent-text);
-        background-color: rgba(41, 151, 255, 0.12);
-        box-shadow: 0 0 15px rgba(41, 151, 255, 0.2);
-    }
-    .radio-card .card-icon { color: var(--fog-500); transition: color 0.2s ease; }
-    .radio-input:checked + .radio-card .card-icon { color: var(--accent-text); }
-    
-    .radio-card .card-title { font-size: 13px; font-weight: 600; color: var(--fog-100); }
-    .radio-card .card-desc { font-size: 11px; color: var(--fog-500); margin-top: 2px; }
-
-    /* Sync Toggles */
-    .sync-row { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line-soft); }
-    .sync-row:last-child { border-bottom: none; padding-bottom: 0; }
-    
-    .toggle-checkbox { display: none; }
-    .toggle-label {
-        position: relative; display: inline-block; width: 36px; height: 20px;
-        background-color: var(--ink-700); border-radius: 20px; cursor: pointer;
-        transition: background-color 0.2s ease; flex-shrink: 0; margin-top: 2px;
-    }
-    .toggle-label::after {
-        content: ''; position: absolute; top: 2px; left: 2px;
-        width: 16px; height: 16px; background-color: var(--fog-300);
-        border-radius: 50%; transition: transform 0.2s ease, background-color 0.2s ease;
-    }
-    .toggle-checkbox:checked + .toggle-label { background-color: var(--accent-soft); }
-    .toggle-checkbox:checked + .toggle-label::after { transform: translateX(16px); background-color: var(--accent-text); }
-</style>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto w-full">
     

@@ -7,20 +7,6 @@ Private communication across the NeuralSpace network.
 
 {% block content %}
 
-<style>
-    .messages-shell {
-        height: calc(100vh - 170px);
-        min-height: 620px;
-    }
-
-    @media (max-width: 768px) {
-        .messages-shell {
-            height: calc(100vh - 90px);
-            min-height: auto;
-        }
-    }
-</style>
-
 <div class="messages-shell overflow-hidden rounded-3xl border border-white/10 bg-[#0B0E14]/90 backdrop-blur-xl shadow-2xl">
 
     <div class="flex h-full">
@@ -260,7 +246,7 @@ Private communication across the NeuralSpace network.
             <div class="flex-1 overflow-y-auto p-6 space-y-4">
                 {% for m in active_conversation.messages.all %}
                 <div class="flex {% if m.sender_user == request.user %}justify-end{% else %}justify-start{% endif %}">
-                    <div class="max-w-[70%] p-3 rounded-xl" style="background-color: {% if m.sender_user == request.user %}#0b1220{% else %}#0d1218{% endif %}; border:1px solid var(--line);">
+                    <div class="message-bubble max-w-[70%] p-3 rounded-xl {% if m.sender_user == request.user %}self{% else %}other{% endif %}">
                         <div class="text-sm text-slate-200">{{ m.content }}</div>
                         <div class="text-[11px] text-slate-500 mt-2 text-right">{{ m.timestamp|time:"H:i" }}</div>
                     </div>

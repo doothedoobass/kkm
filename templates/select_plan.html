@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block page_title %}Select a plan{% endblock %}
+{% block page_subtitle %}Choose the coverage tier that matches your care and recovery needs.{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto w-full">
+    <div class="mb-8">
+        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-white/5 border border-white/10 text-white/60 text-[10px] font-mono uppercase tracking-widest mb-4">
+            Coverage options
+        </div>
+        <h2 class="text-3xl font-semibold text-white">Select a plan</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-center">
+        {% for plan in plans %}
+        <div class="plan-card {% if forloop.counter == 2 %}highlighted{% endif %}">
+            {% if forloop.counter == 2 %}
+            <div class="badge-recommended">Optimal Fit</div>
+            {% endif %}
+
+            <div class="mb-5">
+                <h3 class="font-display text-xl font-medium text-white">{{ plan.name }}</h3>
+                <div class="mt-4 flex items-baseline">
+                    <span class="text-[28px] font-semibold tracking-tight text-white">${{ plan.monthly_premium }}</span>
+                    <span class="text-[12px] ml-1 text-white/50">/ mo</span>
+                </div>
+            </div>
+
+            <div class="w-full h-px mb-6 bg-white/10"></div>
+
+            <div class="flex-1 mb-8">
+                <p class="text-[13px] leading-relaxed whitespace-pre-line text-white/70">{{ plan.coverage_details }}</p>
+            </div>
+
+            <form method="post" action="{% url 'insurance_subscribe' %}">
+                {% csrf_token %}
+                <input type="hidden" name="plan_id" value="{{ plan.id }}">
+                <button type="submit" class="{% if forloop.counter == 2 %}btn-primary{% else %}btn-secondary{% endif %}">Choose plan</button>
+            </form>
+        </div>
+        {% empty %}
+        <div class="col-span-3 rounded-2xl border border-white/10 bg-white/[0.02] p-8 text-center text-white/70">
+            No plans are currently available. Please check back soon.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

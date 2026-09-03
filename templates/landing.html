@@ -4,308 +4,193 @@
 {% block page_title %}NeuralSpace | Ethics-First Brain Health & BCI Ecosystem{% endblock %}
 {% block page_subtitle %}Neural Interface Platform{% endblock %}
 
-{% block body_class %}min-h-screen bg-black text-white selection:bg-white/20 relative{% endblock %}
-{% block main_class %}min-h-screen w-full relative z-10 bg-black{% endblock %}
+{% block body_class %}min-h-screen bg-[#000000] text-[#ededed] selection:bg-white/20 relative{% endblock %}
+{% block main_class %}min-h-screen w-full relative z-10 bg-[#000000]{% endblock %}
 {% block sidebar %}{% endblock %}
 {% block header %}{% endblock %}
 
-{% block content_wrapper_class %}w-full p-0 max-w-none bg-black text-white overflow-x-hidden{% endblock %}
+{% block content_wrapper_class %}w-full p-0 max-w-none bg-[#000000] text-[#ededed] overflow-x-hidden{% endblock %}
 
 {% block content %}
 
-<style>
-    :root {
-        --accent: #2997FF;
-        --hair: rgba(255, 255, 255, .12);
-        --hair-soft: rgba(255, 255, 255, .08);
-        --grey: rgba(255, 255, 255, .56);
-        --grey-dim: rgba(255, 255, 255, .38);
-    }
-
-    .f-sans {
-        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', Helvetica, Arial, sans-serif;
-    }
-
-    .f-mono {
-        font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-    }
-
-    * {
-        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', Helvetica, Arial, sans-serif;
-    }
-
-    @keyframes traceFade {
-
-        0%,
-        100% {
-            opacity: .5;
-        }
-
-        50% {
-            opacity: .9;
-        }
-    }
-
-    #trace-fill {
-        animation: traceFade 3s ease-in-out infinite;
-    }
-
-    .card {
-        border: 1px solid var(--hair-soft);
-        transition: border-color .25s ease, transform .25s ease;
-    }
-
-    .card:hover {
-        border-color: var(--hair);
-        transform: translateY(-2px);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        #trace-fill {
-            animation: none;
-        }
-
-        .card {
-            transition: none;
-        }
-    }
-</style>
-
-<!-- SCROLL PROGRESS -->
-<div class="fixed top-0 left-0 w-full h-[2px] z-[60] bg-white/[0.06]">
-    <div id="trace-fill" class="h-full w-0 bg-white/70"></div>
+<div class="fixed top-0 left-0 w-full h-[1px] z-[60] bg-white/[0.05]">
+    <div id="trace-fill" class="h-full w-0"></div>
 </div>
 
-<!-- NAV -->
-<nav id="site-nav" class="fixed top-0 left-0 w-full z-50 transition-all duration-500"
-    style="background:rgba(0,0,0,0); backdrop-filter:blur(0px);">
-    <div class="max-w-[1000px] mx-auto px-6 h-14 flex items-center justify-between">
-        <a href="#" class="flex items-center gap-2.5 group">
-            <div class="w-6 h-6 rounded-md flex items-center justify-center font-bold text-[10px] tracking-wider transition-all"
-                style="background: linear-gradient(135deg, rgba(41,151,255,0.3) 0%, rgba(255,255,255,0.05) 100%); border: 1px solid rgba(41,151,255,0.4); color: #60A5FA;">
-                NS</div>
-            <span
-                class="text-[15px] font-semibold tracking-tight text-white group-hover:text-white/80 transition-colors">NeuralSpace</span>
+<nav id="site-nav" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-transparent border-b border-transparent">
+    <div class="max-w-[1000px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between relative z-50 bg-[#000000] md:bg-transparent">
+        
+        <a href="#" class="flex items-center gap-2 group">
+            <div class="w-5 h-5 rounded flex items-center justify-center font-bold text-[9px] tracking-wider bg-white text-black">
+                NS
+            </div>
+            <span class="text-[14px] font-medium tracking-tight text-white group-hover:text-white/70 transition-colors">NeuralSpace</span>
         </a>
 
-        <!-- Desktop Menu Links -->
         <div class="hidden md:flex items-center gap-8 text-[13px] text-white/60 font-medium">
             <a href="#pathways" class="hover:text-white transition-colors">Pathways</a>
             <a href="#clinical" class="hover:text-white transition-colors">Clinical Care</a>
-            <a href="#nbhdi" class="hover:text-white transition-colors">Geospatial NBHDI</a>
-            <a href="#NeuralWallet" class="hover:text-white transition-colors">NeuralWallet</a>
+            <a href="#nbhdi" class="hover:text-white transition-colors">Geospatial Data</a>
+            <a href="#NeuralWallet" class="hover:text-white transition-colors">Wallet</a>
             <a href="#specs" class="hover:text-white transition-colors">SDK</a>
         </div>
 
-        <!-- Right Action CTA & Mobile Hamburger -->
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3 sm:gap-4">
             {% if request.user.is_authenticated %}
-            <a href="{% url 'dashboard' %}"
-                class="px-4 py-1.5 rounded-full text-[12px] font-medium transition-all hover:shadow-[0_0_15px_rgba(41,151,255,0.4)]"
-                style="background:rgba(41,151,255,0.15); border:1px solid rgba(41,151,255,0.35); color:#60A5FA;">Dashboard
-                &rsaquo;</a>
+            <a href="{% url 'dashboard' %}" class="hidden sm:block px-4 py-1.5 rounded-full text-[12px] font-medium transition-all bg-white/10 border border-white/20 text-white hover:bg-white/20">
+                Dashboard
+            </a>
             {% else %}
-            <a href="{% url 'login' %}"
-                class="text-[13px] text-white/70 hover:text-white transition-colors hidden sm:block">Sign in</a>
-            <a href="{% url 'signup' %}"
-                class="px-4 py-1.5 rounded-full text-[12px] font-medium transition-all hover:opacity-90"
-                style="background:#2997FF; color:#ffffff; box-shadow:0 0 15px rgba(41,151,255,0.35);">Start
-                onboarding</a>
+            <a href="{% url 'login' %}" class="text-[13px] text-white/60 hover:text-white transition-colors hidden sm:block">Sign in</a>
+            <a href="{% url 'signup' %}" class="hidden sm:block px-4 py-1.5 rounded-full text-[12px] font-medium transition-all bg-white text-black hover:bg-white/90">
+                Start Onboarding
+            </a>
             {% endif %}
 
-            <!-- Mobile Hamburger Toggle Button -->
-            <button id="landing-menu-toggle" onclick="toggleLandingMobileMenu()"
-                class="md:hidden p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-                aria-label="Toggle menu">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                        d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+            <button id="landing-menu-toggle" aria-label="Toggle menu" class="md:hidden p-2 text-white/60 hover:text-white focus:outline-none transition-transform">
+                <svg id="menu-icon-open" class="w-6 h-6 block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
         </div>
     </div>
 
-    <!-- Mobile Dropdown Menu -->
-    <div id="landing-mobile-menu"
-        class="hidden md:hidden border-b border-white/10 px-6 py-4 space-y-3 transition-all duration-300"
-        style="background: rgba(10, 10, 14, 0.95); backdrop-filter: blur(20px);">
-        <a href="#pathways" onclick="toggleLandingMobileMenu()"
-            class="block text-sm text-white/70 hover:text-white py-1">Pathways</a>
-        <a href="#clinical" onclick="toggleLandingMobileMenu()"
-            class="block text-sm text-white/70 hover:text-white py-1">Clinical Care</a>
-        <a href="#nbhdi" onclick="toggleLandingMobileMenu()"
-            class="block text-sm text-white/70 hover:text-white py-1">Geospatial NBHDI</a>
-        <a href="#NeuralWallet" onclick="toggleLandingMobileMenu()"
-            class="block text-sm text-white/70 hover:text-white py-1">NeuralWallet</a>
-        <a href="#specs" onclick="toggleLandingMobileMenu()"
-            class="block text-sm text-white/70 hover:text-white py-1">SDK</a>
-        {% if not request.user.is_authenticated %}
-        <div class="pt-2 border-t border-white/10 flex items-center justify-between">
-            <a href="{% url 'login' %}" class="text-xs text-white/70 hover:text-white">Sign in</a>
-            <a href="{% url 'signup' %}"
-                class="px-4 py-1.5 rounded-full text-xs font-medium bg-[#2997FF] text-white">Start onboarding</a>
+    <div id="landing-mobile-menu" class="absolute top-full left-0 w-full bg-[#0a0a0a] border-b border-white/10 shadow-2xl transition-all duration-300 ease-in-out transform -translate-y-full opacity-0 -z-10 md:hidden">
+        <div class="px-6 py-6 space-y-5">
+            <a href="#pathways" class="mobile-link block text-base font-medium text-white/70 hover:text-white">Pathways</a>
+            <a href="#clinical" class="mobile-link block text-base font-medium text-white/70 hover:text-white">Clinical Care</a>
+            <a href="#nbhdi" class="mobile-link block text-base font-medium text-white/70 hover:text-white">Geospatial Data</a>
+            <a href="#NeuralWallet" class="mobile-link block text-base font-medium text-white/70 hover:text-white">Wallet</a>
+            <a href="#specs" class="mobile-link block text-base font-medium text-white/70 hover:text-white">SDK</a>
+            
+            <div class="pt-6 mt-2 border-t border-white/10 flex flex-col gap-4 sm:hidden">
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="mobile-link w-full text-center px-4 py-3 rounded-lg text-sm font-medium bg-white/10 border border-white/20 text-white">Open Dashboard</a>
+                {% else %}
+                <a href="{% url 'login' %}" class="mobile-link block text-center text-base font-medium text-white/70 hover:text-white">Sign in</a>
+                <a href="{% url 'signup' %}" class="mobile-link w-full text-center px-4 py-3 rounded-lg text-sm font-medium bg-white text-black">Start Onboarding</a>
+                {% endif %}
+            </div>
         </div>
-        {% endif %}
     </div>
 </nav>
 
-<!-- PRELOADER -->
-<div id="bci-preloader"
-    class="fixed inset-0 z-[70] flex flex-col items-center justify-center bg-black transition-opacity duration-700">
-    <div class="relative flex flex-col items-center max-w-sm px-6 text-center">
-        <svg class="h-8 w-8 mb-6" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="3" />
-            <circle id="preloader-ring" cx="50" cy="50" r="42" fill="none" stroke="#ffffff" stroke-width="3"
-                stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264" transform="rotate(-90 50 50)" />
-        </svg>
-        <p class="f-mono text-[11px] text-white/40" id="preloader-percent">0%</p>
-    </div>
+<div id="bci-preloader" class="fixed inset-0 z-[70] flex flex-col items-center justify-center bg-[#000000] transition-opacity duration-500">
+    <div class="standard-spinner mb-4"></div>
+    <p class="text-[12px] text-white/40 font-medium" id="preloader-percent">Loading 0%</p>
 </div>
 
-<!-- HERO SCROLL CONTAINER -->
-<section id="hero-scroll-container" class="relative h-[500vh] w-full bg-black">
-
+<section id="hero-scroll-container" class="relative h-[500vh] w-full bg-[#000000]">
     <div id="hero-sticky-inner" class="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
 
-        <div
-            class="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block f-mono text-[10px] text-white/25 tracking-wide z-20">
-            SCROLL
-        </div>
+        <canvas id="hero-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-80"></canvas>
 
-        <canvas id="hero-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
+        <div class="relative z-20 w-full max-w-[1000px] mx-auto px-4 sm:px-6 h-full flex items-center justify-center pointer-events-none">
 
-        <div
-            class="relative z-20 w-full max-w-[1000px] mx-auto px-4 sm:px-6 h-full flex items-center justify-center pointer-events-none">
-
-            <!-- STAGE 1: HERO -->
-            <div id="hero-stage-1"
-                class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 transition-all pointer-events-auto">
-                <div class="max-w-2xl mx-auto p-8 sm:p-10 rounded-3xl bg-[#0a0a0e] border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.95)] flex flex-col items-center">
-                    <div
-                        class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-white/12 bg-white/[0.05] text-white/80 text-[11px] font-mono uppercase tracking-widest mb-5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#2997FF]"></span> BCI Telemetry & Sovereign Health
+            <div id="hero-stage-1" class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 transition-all pointer-events-auto">
+                <div class="max-w-2xl mx-auto p-8 rounded-2xl minimal-card backdrop-blur-md flex flex-col items-center">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-white/70 text-[10px] font-mono uppercase tracking-wider mb-5">
+                        BCI Telemetry & Sovereign Health
                     </div>
-                    <h1
-                        class="text-[44px] sm:text-[68px] md:text-[84px] font-semibold tracking-tight leading-[1.02] bg-clip-text text-transparent bg-gradient-to-b from-white via-slate-100 to-white/60">
+                    <h1 class="text-[44px] sm:text-[56px] md:text-[64px] font-semibold tracking-tight leading-[1.05] text-white">
                         NeuralSpace
                     </h1>
-                    <p class="mt-4 max-w-lg text-[15px] sm:text-[18px] text-white/70 leading-relaxed font-normal">
+                    <p class="mt-4 max-w-md text-[16px] text-white/60 leading-relaxed font-light">
                         Your brain data. Sovereign, connected, understood.
                     </p>
-                    <div
-                        class="mt-8 flex flex-wrap items-center justify-center gap-x-6 sm:gap-x-8 gap-y-3 text-[14px] sm:text-[15px]">
+                    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
                         {% if request.user.is_authenticated %}
-                        <a href="{% url 'dashboard' %}"
-                            class="hover:text-white transition-colors font-medium text-[#2997FF]">Open dashboard &rsaquo;</a>
+                        <a href="{% url 'dashboard' %}" class="px-6 py-2.5 rounded-full text-[14px] font-medium text-black bg-white hover:bg-white/90 transition-all w-full sm:w-auto">
+                            Open Dashboard
+                        </a>
                         {% else %}
-                        <a href="{% url 'signup' %}"
-                            class="hover:text-white transition-colors font-medium text-[#2997FF]">Start onboarding &rsaquo;</a>
-                        <a href="#pathways" class="text-white/70 hover:text-white transition-colors">Explore pathways &rsaquo;</a>
+                        <a href="{% url 'signup' %}" class="px-6 py-2.5 rounded-full text-[14px] font-medium text-black bg-white hover:bg-white/90 transition-all w-full sm:w-auto">
+                            Start Onboarding
+                        </a>
+                        <a href="#pathways" class="px-6 py-2.5 rounded-full text-[14px] font-medium text-white bg-transparent border border-white/20 hover:bg-white/5 transition-all w-full sm:w-auto">
+                            Explore Pathways
+                        </a>
                         {% endif %}
                     </div>
                 </div>
             </div>
 
-            <!-- STAGE 2: HARDWARE & EEG DIAGNOSTICS (Right Anchored Card) -->
-            <div id="hero-stage-2"
-                class="absolute inset-x-4 sm:inset-x-6 md:inset-x-0 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all flex justify-end">
-                <div
-                    class="max-w-[380px] w-full pointer-events-auto p-6 sm:p-7 rounded-2xl bg-[#0a0a0e] border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.95)]">
-                    <p class="text-[11px] text-white/40 mb-2 font-mono uppercase tracking-widest font-medium">Neural Hardware & Telemetry</p>
-                    <h2 class="text-[24px] sm:text-[28px] font-semibold tracking-tight leading-tight mb-3 text-white">
-                        Precision EEG & BCI Telemetry.
+            <div id="hero-stage-2" class="absolute inset-x-4 md:inset-x-0 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all flex justify-end">
+                <div class="max-w-[380px] w-full pointer-events-auto p-7 rounded-2xl minimal-card backdrop-blur-md">
+                    <p class="text-[11px] text-white/40 mb-2 font-mono uppercase tracking-wider">Hardware & Telemetry</p>
+                    <h2 class="text-[24px] font-semibold tracking-tight leading-tight mb-3 text-white">
+                        Precision EEG & BCI.
                     </h2>
-                    <p class="text-[13px] sm:text-[14px] text-white/70 leading-relaxed mb-6">
-                        High-density multi-channel electrode placement mapping cortical signals in real time under ethics-first encryption.
+                    <p class="text-[14px] text-white/60 leading-relaxed mb-6 font-light">
+                        High-density multi-channel electrode placement mapping cortical signals in real time under strict encryption protocols.
                     </p>
                     <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
                         <div>
-                            <span class="text-white block font-semibold text-[18px] sm:text-[20px]">1024ch</span>
+                            <span class="text-white block font-medium text-[20px]">1024ch</span>
                             <span class="text-white/40 text-[11px] font-mono">Signal Density</span>
                         </div>
                         <div>
-                            <span class="text-[#34D399] block font-semibold text-[18px] sm:text-[20px]">0.8ms</span>
-                            <span class="text-white/40 text-[11px] font-mono font-normal">Latency</span>
+                            <span class="text-white block font-medium text-[20px]">0.8ms</span>
+                            <span class="text-white/40 text-[11px] font-mono">Latency</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- STAGE 3: ECOSYSTEM PILLARS (Right Anchored Card - Same Dock) -->
-            <div id="hero-stage-3"
-                class="absolute inset-x-4 sm:inset-x-6 md:inset-x-0 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all flex justify-end">
-                <div
-                    class="max-w-[380px] w-full pointer-events-auto p-6 sm:p-7 rounded-2xl bg-[#0a0a0e] border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.95)]">
-                    <p class="text-[11px] text-white/40 mb-2 font-mono uppercase tracking-widest font-medium">Ecosystem Pillars</p>
-                    <h2 class="text-[24px] sm:text-[28px] font-semibold tracking-tight leading-tight mb-4 text-white">
-                        Unified Neuro-Ecosystem.
+            <div id="hero-stage-3" class="absolute inset-x-4 md:inset-x-0 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all flex justify-end">
+                <div class="max-w-[380px] w-full pointer-events-auto p-7 rounded-2xl minimal-card backdrop-blur-md">
+                    <p class="text-[11px] text-white/40 mb-2 font-mono uppercase tracking-wider">Ecosystem</p>
+                    <h2 class="text-[24px] font-semibold tracking-tight leading-tight mb-4 text-white">
+                        Unified Infrastructure.
                     </h2>
                     <div class="space-y-4">
-                        <div class="flex gap-3 items-start">
-                            <span class="w-2 h-2 rounded-full bg-[#2997FF] mt-1.5 shrink-0"></span>
-                            <div>
-                                <h3 class="text-[14px] font-semibold text-white">Clinical Care Suite</h3>
-                                <p class="text-[12px] text-white/70 leading-relaxed">Direct clinician consultations, telemedicine & EHR exchange.</p>
-                            </div>
+                        <div class="border-b border-white/10 pb-3">
+                            <h3 class="text-[14px] font-medium text-white">Clinical Care Suite</h3>
+                            <p class="text-[13px] text-white/50 mt-1 font-light">Direct clinician consultations & EHR exchange.</p>
                         </div>
-                        <div class="flex gap-3 items-start border-t border-white/10 pt-3">
-                            <span class="w-2 h-2 rounded-full bg-[#34D399] mt-1.5 shrink-0"></span>
-                            <div>
-                                <h3 class="text-[14px] font-semibold text-white">Geospatial NBHDI Index</h3>
-                                <p class="text-[12px] text-white/70 leading-relaxed">Cognitive baselines mapped with environmental & socioeconomic factors.</p>
-                            </div>
+                        <div class="border-b border-white/10 pb-3">
+                            <h3 class="text-[14px] font-medium text-white">Geospatial NBHDI Index</h3>
+                            <p class="text-[13px] text-white/50 mt-1 font-light">Cognitive baselines mapped globally.</p>
                         </div>
-                        <div class="flex gap-3 items-start border-t border-white/10 pt-3">
-                            <span class="w-2 h-2 rounded-full bg-[#C084FC] mt-1.5 shrink-0"></span>
-                            <div>
-                                <h3 class="text-[14px] font-semibold text-white">Neurolearn Academy</h3>
-                                <p class="text-[12px] text-white/70 leading-relaxed">Neuroscience certifications, research rewards & mentorship.</p>
-                            </div>
+                        <div>
+                            <h3 class="text-[14px] font-medium text-white">Neurolearn Academy</h3>
+                            <p class="text-[13px] text-white/50 mt-1 font-light">Neuroscience certifications and mentorship.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- STAGE 4: NeuralWallet & SOVEREIGNTY (Right Anchored Card - Same Dock) -->
-            <div id="hero-stage-4"
-                class="absolute inset-x-4 sm:inset-x-6 md:inset-x-0 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all flex justify-end">
-                <div
-                    class="max-w-[380px] w-full text-left pointer-events-auto p-6 sm:p-7 rounded-2xl bg-[#0a0a0e] border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.95)]">
-                    <p class="text-[11px] text-white/40 mb-2 font-mono uppercase tracking-widest font-medium">NeuralWallet Connection</p>
-                    <h2 class="text-[24px] sm:text-[28px] font-semibold tracking-tight leading-tight mb-3 text-white">
-                        Your data. Your rewards.
+            <div id="hero-stage-4" class="absolute inset-x-4 md:inset-x-0 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all flex justify-end">
+                <div class="max-w-[380px] w-full pointer-events-auto p-7 rounded-2xl minimal-card backdrop-blur-md">
+                    <p class="text-[11px] text-white/40 mb-2 font-mono uppercase tracking-wider">Data Sovereignty</p>
+                    <h2 class="text-[24px] font-semibold tracking-tight leading-tight mb-3 text-white">
+                        Your Data. Your Rules.
                     </h2>
-                    <p class="text-[13px] sm:text-[14px] text-white/70 leading-relaxed mb-6">
-                        Monetize anonymized neural telemetry for Project Alpha/Beta research rewards, or lock it safely under your sovereign Web3 wallet.
+                    <p class="text-[14px] text-white/60 leading-relaxed mb-6 font-light">
+                        Contribute anonymized neural telemetry for research, or lock it safely under your sovereign Web3 wallet.
                     </p>
-                    <div class="space-y-3 text-[12px] sm:text-[13px] pt-4 border-t border-white/10">
-                        <div class="flex justify-between">
-                            <span class="text-white/40">Data Sovereignty</span>
-                            <span class="text-white font-medium">100% Encrypted</span>
+                    <div class="space-y-3 text-[13px] pt-4 border-t border-white/10 font-mono">
+                        <div class="flex justify-between text-white/70">
+                            <span>Sovereignty</span> <span class="text-white">100% Encrypted</span>
                         </div>
-                        <div class="flex justify-between">
-                            <span class="text-white/40">Research Rewards</span>
-                            <span class="text-[#2997FF] font-medium">Project Alpha/Beta</span>
+                        <div class="flex justify-between text-white/70">
+                            <span>Research Program</span> <span class="text-white">Project Alpha</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- STAGE 5: CLOSE -->
-            <div id="hero-stage-5"
-                class="absolute inset-0 opacity-0 pointer-events-none transition-all flex flex-col items-center justify-center text-center px-4">
-                <div class="max-w-xl mx-auto p-8 sm:p-10 rounded-3xl bg-[#0a0a0e] border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.95)] flex flex-col items-center">
-                    <h2
-                        class="text-[32px] sm:text-[48px] md:text-[56px] font-semibold tracking-tight max-w-2xl leading-[1.04] bg-clip-text text-transparent bg-gradient-to-b from-white via-slate-100 to-white/70">
-                        Welcome to your<br class="hidden md:block"> NeuralSpace.
+            <div id="hero-stage-5" class="absolute inset-0 opacity-0 pointer-events-none transition-all flex flex-col items-center justify-center text-center px-4">
+                <div class="max-w-xl mx-auto p-10 rounded-2xl minimal-card backdrop-blur-md flex flex-col items-center">
+                    <h2 class="text-[36px] sm:text-[48px] font-semibold tracking-tight leading-[1.1] text-white">
+                        Welcome to your<br>NeuralSpace.
                     </h2>
-                    <p class="mt-4 sm:mt-5 max-w-md text-[14px] sm:text-[16px] text-white/70 leading-relaxed font-normal">
-                        Connecting Patients, Clinicians, Researchers, and Advocates in one unified neuro-ecosystem.
+                    <p class="mt-4 text-[16px] text-white/60 font-light max-w-sm">
+                        Connecting Patients, Clinicians, Researchers, and Advocates.
                     </p>
-                    <div class="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3 pointer-events-auto text-[14px] sm:text-[15px]">
-                        <a href="{% url 'signup' %}"
-                            class="hover:text-white transition-colors font-medium text-[#2997FF]">Begin onboarding &rsaquo;</a>
-                        <a href="#pathways" class="text-white/70 hover:text-white transition-colors">See all pathways &rsaquo;</a>
+                    <div class="mt-8 flex gap-4 pointer-events-auto">
+                        <a href="{% url 'signup' %}" class="px-6 py-2.5 rounded-full text-[14px] font-medium text-black bg-white hover:bg-white/90 transition-all">
+                            Begin Onboarding
+                        </a>
                     </div>
                 </div>
             </div>
@@ -315,299 +200,302 @@
 </section>
 
 
-<!-- ============ POST-HERO SECTIONS ============ -->
-
-<!-- 1. IDENTIFYING YOUR PATHWAY -->
-<section id="pathways" class="relative py-28 px-6 max-w-[1000px] mx-auto border-t"
-    style="border-color:var(--hair-soft);">
+<section id="pathways" class="relative py-28 px-6 max-w-[1000px] mx-auto border-t border-white/10">
     <div class="max-w-lg mb-16">
-        <p class="text-[13px] text-white/40 mb-3 font-mono uppercase tracking-wider">Ecosystem Pathways</p>
-        <h2 class="text-[32px] sm:text-[38px] font-semibold tracking-tight leading-tight">
+        <p class="text-[12px] text-white/40 mb-3 font-mono uppercase tracking-wider">Platform Pathways</p>
+        <h2 class="text-[32px] font-semibold tracking-tight leading-tight text-white">
             How do you intend to use NeuralSpace?
         </h2>
     </div>
 
     <div class="grid md:grid-cols-2 gap-5">
-        <div class="card rounded-2xl p-7 flex flex-col justify-between">
+        <div class="minimal-card rounded-xl p-7 flex flex-col justify-between group cursor-pointer hover:-translate-y-1">
             <div>
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5 font-mono text-[13px] font-bold"
-                    style="background:rgba(41,151,255,0.15); color:#60A5FA; border:1px solid rgba(41,151,255,0.3);">01
-                </div>
+                <div class="text-[12px] font-mono text-white/40 mb-4">01</div>
                 <h3 class="text-[20px] font-semibold mb-2 text-white">The Learner</h3>
-                <p class="text-[14px] text-white/55 leading-relaxed mb-6">Study at the Neurolearn Academy, gain
-                    mentorship, and earn verified certifications in Neuroscience.</p>
+                <p class="text-[14px] text-white/60 leading-relaxed mb-6 font-light">Study at the Neurolearn Academy, gain mentorship, and earn verified certifications in Neuroscience.</p>
             </div>
-            <div class="text-[12px] font-mono text-[#60A5FA]">Neurolearn Academy &rsaquo;</div>
+            <div class="text-[13px] font-medium text-white flex items-center gap-2 group-hover:gap-3 transition-all">
+                Neurolearn Academy &rarr;
+            </div>
         </div>
 
-        <div class="card rounded-2xl p-7 flex flex-col justify-between">
+        <div class="minimal-card rounded-xl p-7 flex flex-col justify-between group cursor-pointer hover:-translate-y-1">
             <div>
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5 font-mono text-[13px] font-bold"
-                    style="background:rgba(52,211,153,0.15); color:#34D399; border:1px solid rgba(52,211,153,0.3);">02
-                </div>
+                <div class="text-[12px] font-mono text-white/40 mb-4">02</div>
                 <h3 class="text-[20px] font-semibold mb-2 text-white">The Patient / User</h3>
-                <p class="text-[14px] text-white/55 leading-relaxed mb-6">Monitor cognitive health baseline, track
-                    neuro-rehabilitation, and access clinical telemedicine interventions.</p>
+                <p class="text-[14px] text-white/60 leading-relaxed mb-6 font-light">Monitor cognitive health baseline, track neuro-rehabilitation, and access clinical telemedicine.</p>
             </div>
-            <div class="text-[12px] font-mono text-[#34D399]">Clinical Care Suite &rsaquo;</div>
+            <div class="text-[13px] font-medium text-white flex items-center gap-2 group-hover:gap-3 transition-all">
+                Clinical Care Suite &rarr;
+            </div>
         </div>
 
-        <div class="card rounded-2xl p-7 flex flex-col justify-between">
+        <div class="minimal-card rounded-xl p-7 flex flex-col justify-between group cursor-pointer hover:-translate-y-1">
             <div>
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5 font-mono text-[13px] font-bold"
-                    style="background:rgba(245,158,11,0.15); color:#F59E0B; border:1px solid rgba(245,158,11,0.3);">03
-                </div>
+                <div class="text-[12px] font-mono text-white/40 mb-4">03</div>
                 <h3 class="text-[20px] font-semibold mb-2 text-white">The Healthcare Provider</h3>
-                <p class="text-[14px] text-white/55 leading-relaxed mb-6">Clinicians, researchers & developers looking
-                    to conduct neuro-diagnostics and integrate BCI technology.</p>
+                <p class="text-[14px] text-white/60 leading-relaxed mb-6 font-light">Clinicians, researchers & developers conducting neuro-diagnostics and integrating BCI technology.</p>
             </div>
-            <div class="text-[12px] font-mono text-[#F59E0B]">Clinician Network &rsaquo;</div>
+            <div class="text-[13px] font-medium text-white flex items-center gap-2 group-hover:gap-3 transition-all">
+                Clinician Network &rarr;
+            </div>
         </div>
 
-        <div class="card rounded-2xl p-7 flex flex-col justify-between">
+        <div class="minimal-card rounded-xl p-7 flex flex-col justify-between group cursor-pointer hover:-translate-y-1">
             <div>
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5 font-mono text-[13px] font-bold"
-                    style="background:rgba(168,85,247,0.15); color:#C084FC; border:1px solid rgba(168,85,247,0.3);">04
-                </div>
+                <div class="text-[12px] font-mono text-white/40 mb-4">04</div>
                 <h3 class="text-[20px] font-semibold mb-2 text-white">The Advocate</h3>
-                <p class="text-[14px] text-white/55 leading-relaxed mb-6">Participate in community DAOs (Nourish, Grow
-                    Together), ethics governance, and public neurotech projects.</p>
+                <p class="text-[14px] text-white/60 leading-relaxed mb-6 font-light">Participate in community DAOs, ethics governance, and public neurotech projects.</p>
             </div>
-            <div class="text-[12px] font-mono text-[#C084FC]">Community DAOs &rsaquo;</div>
+            <div class="text-[13px] font-medium text-white flex items-center gap-2 group-hover:gap-3 transition-all">
+                Community DAOs &rarr;
+            </div>
         </div>
     </div>
 </section>
 
-<!-- 2. GEOSPATIAL BRAIN HEALTH DATA INDEX (NBHDI) -->
-<section id="nbhdi" class="relative py-28 border-y" style="border-color:var(--hair-soft); background:#050505;">
+<section id="nbhdi" class="relative py-28 border-y border-white/10 bg-[#050505]">
     <div class="max-w-[1000px] mx-auto px-6 grid lg:grid-cols-2 gap-14 items-center">
         <div>
-            <p class="text-[13px] text-white/40 mb-3 font-mono uppercase tracking-wider">Geospatial Brain Health</p>
-            <h2 class="text-[32px] sm:text-[38px] font-semibold tracking-tight mb-5 leading-tight">The Geospatial Brain
-                Health Data Index (NBHDI).</h2>
-            <p class="text-[15px] text-white/55 leading-relaxed mb-8 max-w-md">
-                Map global cognitive baselines across urban, semi-urban, and rural communities. Correlate socioeconomic
-                factors and environmental impact in real time.
+            <p class="text-[12px] text-white/40 mb-3 font-mono uppercase tracking-wider">Geospatial Brain Health</p>
+            <h2 class="text-[32px] font-semibold tracking-tight mb-5 leading-tight text-white">
+                The NBHDI Index.
+            </h2>
+            <p class="text-[15px] text-white/60 leading-relaxed mb-8 font-light">
+                Map global cognitive baselines across urban, semi-urban, and rural communities. Correlate socioeconomic factors and environmental impact in real time.
             </p>
-            <div class="space-y-3 text-[14px]">
-                <div class="flex items-center justify-between py-2.5 border-b" style="border-color:var(--hair-soft);">
-                    <span class="text-white/70">Socioeconomic Factors Mapping</span>
-                    <span class="text-[#34D399] font-mono text-[12px]">Enabled</span>
+            <div class="space-y-2 text-[14px]">
+                <div class="flex items-center justify-between py-3 border-b border-white/10">
+                    <span class="text-white/80">Socioeconomic Factors Mapping</span>
+                    <span class="text-white font-mono text-[11px] px-2 py-1 bg-white/10 rounded">Enabled</span>
                 </div>
-                <div class="flex items-center justify-between py-2.5 border-b" style="border-color:var(--hair-soft);">
-                    <span class="text-white/70">Environmental Impact Analysis</span>
-                    <span class="text-[#34D399] font-mono text-[12px]">Enabled</span>
+                <div class="flex items-center justify-between py-3 border-b border-white/10">
+                    <span class="text-white/80">Environmental Impact Analysis</span>
+                    <span class="text-white font-mono text-[11px] px-2 py-1 bg-white/10 rounded">Enabled</span>
                 </div>
-                <div class="flex items-center justify-between py-2.5 border-b" style="border-color:var(--hair-soft);">
-                    <span class="text-white/70">EHR System Export & Integration</span>
-                    <span class="text-[#60A5FA] font-mono text-[12px]">Connect EHR</span>
+                <div class="flex items-center justify-between py-3">
+                    <span class="text-white/80">EHR System Export & Integration</span>
+                    <span class="text-white font-mono text-[11px] px-2 py-1 border border-white/20 rounded">Connect</span>
                 </div>
             </div>
         </div>
 
-        <div class="rounded-2xl p-7" style="border:1px solid var(--hair-soft); background:rgba(255,255,255,0.01);">
-            <div class="flex justify-between items-center border-b pb-4 mb-6 f-mono text-[11px] text-white/40"
-                style="border-color:var(--hair-soft);">
-                <span>NBHDI Geospatial Index</span><span>Global Model Parameters</span>
+        <div class="rounded-xl p-8 minimal-card bg-black">
+            <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-6 f-mono text-[11px] text-white/50">
+                <span>NBHDI Network Map</span><span>Global Parameters</span>
             </div>
 
-            <!-- Mock World Map Grid Visualization -->
-            <div class="relative h-48 rounded-xl overflow-hidden mb-6 flex items-center justify-center"
-                style="background: rgba(41,151,255,0.03); border:1px solid rgba(41,151,255,0.15);">
-                <svg class="w-full h-full stroke-white/20 fill-none opacity-40" viewBox="0 0 400 180">
-                    <path d="M 50 40 Q 100 20 150 50 T 250 40 T 350 60" stroke-width="1" stroke-dasharray="4 4" />
-                    <path d="M 30 120 Q 120 140 220 110 T 370 130" stroke-width="1" stroke-dasharray="4 4" />
-                    <circle cx="90" cy="65" r="4" fill="#2997FF" />
-                    <circle cx="210" cy="85" r="5" fill="#34D399" />
-                    <circle cx="310" cy="55" r="4" fill="#F59E0B" />
-                    <circle cx="160" cy="125" r="5" fill="#34D399" />
+            <div class="relative h-48 rounded-lg overflow-hidden mb-6 flex items-center justify-center border border-white/10 bg-[#0a0a0a]">
+                <svg class="w-full h-full stroke-white/20 fill-none" viewBox="0 0 400 180">
+                    <path d="M 50 40 Q 100 20 150 50 T 250 40 T 350 60" stroke-width="1" />
+                    <path d="M 30 120 Q 120 140 220 110 T 370 130" stroke-width="1" />
+                    <circle cx="90" cy="65" r="3" fill="#ffffff" />
+                    <circle cx="210" cy="85" r="4" fill="#ffffff" />
+                    <circle cx="310" cy="55" r="3" fill="#ffffff" />
+                    <circle cx="160" cy="125" r="4" fill="#ffffff" />
                 </svg>
-                <div class="absolute bottom-3 left-4 f-mono text-[10px] text-white/50">Accuracy: 95.4% | Time Period:
-                    Last 12 Months</div>
+                <div class="absolute bottom-3 left-4 f-mono text-[10px] text-white/50">Accuracy: 95.4% | Epoch: 12M</div>
             </div>
 
             <div class="grid grid-cols-3 gap-3 f-mono text-center text-[11px]">
-                <div class="p-3 rounded-lg" style="background:rgba(255,255,255,.03);">
-                    <div class="text-white/35 text-[10px] mb-1">Urban</div>
-                    <div class="text-white/80">42%</div>
+                <div class="p-3 rounded border border-white/10">
+                    <div class="text-white/40 text-[10px] mb-1">Urban</div>
+                    <div class="text-white">42%</div>
                 </div>
-                <div class="p-3 rounded-lg" style="background:rgba(255,255,255,.03);">
-                    <div class="text-white/35 text-[10px] mb-1">Semi-Urban</div>
-                    <div class="text-white/80">38%</div>
+                <div class="p-3 rounded border border-white/10">
+                    <div class="text-white/40 text-[10px] mb-1">Semi-Urban</div>
+                    <div class="text-white">38%</div>
                 </div>
-                <div class="p-3 rounded-lg" style="background:rgba(255,255,255,.03);">
-                    <div class="text-white/35 text-[10px] mb-1">Rural / Ind.</div>
-                    <div class="text-white/80">20%</div>
+                <div class="p-3 rounded border border-white/10">
+                    <div class="text-white/40 text-[10px] mb-1">Rural</div>
+                    <div class="text-white">20%</div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- 3. CLINICAL CARE SUITE -->
 <section id="clinical" class="py-28 px-6 max-w-[1000px] mx-auto">
     <div class="max-w-lg mb-14">
-        <p class="text-[13px] text-white/40 mb-3 font-mono uppercase tracking-wider">Clinical Care & Diagnostics</p>
-        <h2 class="text-[32px] sm:text-[38px] font-semibold tracking-tight leading-tight">Complete Neuro-Healthcare
-            Suite.</h2>
+        <p class="text-[12px] text-white/40 mb-3 font-mono uppercase tracking-wider">Clinical Care</p>
+        <h2 class="text-[32px] font-semibold tracking-tight leading-tight text-white">
+            Professional Diagnostics Suite.
+        </h2>
     </div>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="card rounded-2xl p-6">
-            <div
-                class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-4 text-[#60A5FA] font-mono text-[12px]">
-                01</div>
+        <div class="minimal-card rounded-xl p-6 hover:-translate-y-1">
             <h3 class="text-[16px] font-semibold mb-2 text-white">Telemedicine</h3>
-            <p class="text-[13px] text-white/45 leading-relaxed">Direct video consultations with leading certified
-                neuro-specialists.</p>
+            <p class="text-[13px] text-white/50 leading-relaxed font-light">Direct video consultations with leading certified neuro-specialists.</p>
         </div>
-        <div class="card rounded-2xl p-6">
-            <div
-                class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-4 text-[#34D399] font-mono text-[12px]">
-                02</div>
+        <div class="minimal-card rounded-xl p-6 hover:-translate-y-1">
             <h3 class="text-[16px] font-semibold mb-2 text-white">Neuro-Diagnostics</h3>
-            <p class="text-[13px] text-white/45 leading-relaxed">EEG electrode placement analysis, cognitive baseline
-                scans & lab tests.</p>
+            <p class="text-[13px] text-white/50 leading-relaxed font-light">EEG electrode placement analysis, cognitive baseline scans & lab tests.</p>
         </div>
-        <div class="card rounded-2xl p-6">
-            <div
-                class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-4 text-[#F59E0B] font-mono text-[12px]">
-                03</div>
+        <div class="minimal-card rounded-xl p-6 hover:-translate-y-1">
             <h3 class="text-[16px] font-semibold mb-2 text-white">Pharmacy & Rx</h3>
-            <p class="text-[13px] text-white/45 leading-relaxed">Digital drug prescriptions & medication scheduling
-                management.</p>
+            <p class="text-[13px] text-white/50 leading-relaxed font-light">Digital drug prescriptions & medication scheduling management.</p>
         </div>
-        <div class="card rounded-2xl p-6">
-            <div
-                class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-4 text-[#C084FC] font-mono text-[12px]">
-                04</div>
+        <div class="minimal-card rounded-xl p-6 hover:-translate-y-1">
             <h3 class="text-[16px] font-semibold mb-2 text-white">Sovereign MedWallet</h3>
-            <p class="text-[13px] text-white/45 leading-relaxed">Encrypted e-MRx medical record exchange under full user
-                control.</p>
+            <p class="text-[13px] text-white/50 leading-relaxed font-light">Encrypted e-MRx medical record exchange under full user control.</p>
         </div>
     </div>
 </section>
 
-<!-- 4. NeuralWallet CONNECTION & SDK -->
-<section id="NeuralWallet" class="py-28 border-t" style="border-color:var(--hair-soft); background:#050505;">
+<section id="specs" class="py-28 border-t border-white/10 bg-[#050505]">
     <div class="max-w-[1000px] mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
-        <div class="rounded-2xl overflow-hidden f-mono text-[12px]" style="border:1px solid var(--hair-soft);">
-            <div class="px-5 py-3 border-b flex items-center justify-between"
-                style="border-color:var(--hair-soft); background:rgba(255,255,255,.02);">
-                <span class="text-white/30">neuralspace_stream.py</span>
-                <span class="text-[#34D399] text-[10px]">NeuralWallet Connected</span>
+        <div class="rounded-xl overflow-hidden f-mono text-[12px] border border-white/10 bg-[#0a0a0a]">
+            <div class="px-5 py-3 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                <span class="text-white/50">neuralspace_stream.py</span>
+                <span class="text-white/70 text-[10px]">Python SDK</span>
             </div>
-            <pre class="p-6 text-white/55 overflow-x-auto"><code>import neuralspace as ns
+            <pre class="p-6 text-white/70 overflow-x-auto leading-relaxed"><code><span class="text-white/40">import</span> neuralspace <span class="text-white/40">as</span> ns
 
-# Connect to NeuralWallet & Stream Telemetry
-client = ns.Client(wallet_address="0x...", ethics_charter_consent=True)
+<span class="text-white/30"># Initialize sovereign connection</span>
+client = ns.Client(wallet_address="0x...")
 
-async for frame in client.stream_eeg_baseline():
-    # Contribute anonymized data for Project Alpha/Beta research rewards
-    reward = await client.submit_anonymized_telemetry(frame)
-    print("Neuro-Profile Calibrated:", frame.channels, "Reward:", reward)</code></pre>
+<span class="text-white/40">async for</span> frame <span class="text-white/40">in</span> client.stream_eeg():
+    <span class="text-white/30"># Process telemetry locally</span>
+    reward = await client.submit(frame)
+    print("Calibrated:", frame.channels)</code></pre>
         </div>
 
         <div>
-            <p class="text-[13px] text-white/40 mb-3 font-mono uppercase tracking-wider">NeuralWallet Connection & Open
-                SDK</p>
-            <h2 class="text-[32px] font-semibold tracking-tight mb-5 leading-tight">Data Monetization & Web3 Rewards.
+            <p class="text-[12px] text-white/40 mb-3 font-mono uppercase tracking-wider">Developer SDK</p>
+            <h2 class="text-[32px] font-semibold tracking-tight mb-5 leading-tight text-white">
+                Build the future of brain-computer interfaces.
             </h2>
-            <p class="text-[15px] text-white/55 leading-relaxed mb-6 max-w-sm">
-                Connect your Web3 wallet (MetaMask, TrustWallet, or NeuralSpace Wallet) to receive research rewards for
-                Project Alpha/Beta contributions and claim Academy badges.
+            <p class="text-[15px] text-white/60 leading-relaxed mb-6 font-light max-w-sm">
+                Integrate directly with the NeuralSpace protocol. Stream real-time EEG data, manage cryptographic sovereignty, and build advanced neuro-diagnostic tools.
             </p>
-            <div class="flex flex-wrap gap-2 f-mono text-[12px] text-white/50">
-                <span class="px-3 py-1.5 rounded-md" style="border:1px solid var(--hair-soft);">MetaMask</span>
-                <span class="px-3 py-1.5 rounded-md" style="border:1px solid var(--hair-soft);">NeuralSpace
-                    Wallet</span>
-                <span class="px-3 py-1.5 rounded-md" style="border:1px solid var(--hair-soft);">Python SDK</span>
+            <div class="flex flex-wrap gap-2 f-mono text-[11px] text-white/70">
+                <span class="px-3 py-1.5 rounded bg-white/10">Python SDK</span>
+                <span class="px-3 py-1.5 rounded border border-white/20">REST API</span>
+                <span class="px-3 py-1.5 rounded border border-white/20">WebSockets</span>
             </div>
         </div>
     </div>
 </section>
 
-<!-- 5. STATS -->
-<section class="py-20 border-y" style="border-color:var(--hair-soft);">
-    <div class="max-w-[1000px] mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+<section class="py-20 border-y border-white/10 bg-[#000000]">
+    <div class="max-w-[1000px] mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/10">
         <div>
-            <div class="text-[34px] md:text-[42px] font-semibold tracking-tight mb-1">100<span
-                    class="text-white/40 text-[18px]">%</span></div>
-            <div class="text-[12px] text-white/35">Data Sovereignty</div>
+            <div class="text-[34px] md:text-[42px] font-semibold tracking-tight mb-1 text-white">100%</div>
+            <div class="text-[12px] text-white/40 uppercase tracking-wider font-mono">Data Sovereignty</div>
         </div>
         <div>
-            <div class="text-[34px] md:text-[42px] font-semibold tracking-tight mb-1">1024</div>
-            <div class="text-[12px] text-white/35">EEG Channels</div>
+            <div class="text-[34px] md:text-[42px] font-semibold tracking-tight mb-1 text-white">1024</div>
+            <div class="text-[12px] text-white/40 uppercase tracking-wider font-mono">EEG Channels</div>
         </div>
         <div>
-            <div class="text-[34px] md:text-[42px] font-semibold tracking-tight mb-1">95.4<span
-                    class="text-white/40 text-[18px]">%</span></div>
-            <div class="text-[12px] text-white/35">Geospatial Index Precision</div>
+            <div class="text-[34px] md:text-[42px] font-semibold tracking-tight mb-1 text-white">95.4%</div>
+            <div class="text-[12px] text-white/40 uppercase tracking-wider font-mono">Index Precision</div>
         </div>
         <div>
-            <div class="text-[34px] md:text-[42px] font-semibold tracking-tight mb-1">4</div>
-            <div class="text-[12px] text-white/35">Ecosystem Pathways</div>
+            <div class="text-[34px] md:text-[42px] font-semibold tracking-tight mb-1 text-white">4</div>
+            <div class="text-[12px] text-white/40 uppercase tracking-wider font-mono">Core Pathways</div>
         </div>
     </div>
 </section>
 
-<!-- 6. FINAL CTA & ONBOARDING -->
-<section class="py-24 px-6 max-w-[900px] mx-auto my-14 rounded-[28px] relative overflow-hidden text-center"
-    style="border:1px solid var(--hair-soft); background:#050505;">
-    <p class="text-[13px] text-white/40 mb-5 font-mono uppercase tracking-wider">Ethics-First Neurotech</p>
-    <h2 class="text-[34px] sm:text-[42px] font-semibold tracking-tight mb-5">Welcome to your NeuralSpace.</h2>
-    <p class="text-[15px] text-white/55 max-w-md mx-auto mb-9">Complete the 5-step onboarding questionnaire to
-        personalize your neurological baseline, choose your pathway, and access clinical care.</p>
+<section class="py-24 px-6 max-w-[900px] mx-auto my-14 rounded-2xl text-center minimal-card">
+    <p class="text-[12px] text-white/40 mb-4 font-mono uppercase tracking-wider">Get Started</p>
+    <h2 class="text-[32px] sm:text-[40px] font-semibold tracking-tight mb-4 text-white">Access NeuralSpace.</h2>
+    <p class="text-[15px] text-white/60 max-w-md mx-auto mb-8 font-light">
+        Complete the onboarding process to establish your baseline and access professional clinical care.
+    </p>
     {% if not request.user.is_authenticated %}
-    <div class="flex flex-wrap justify-center gap-x-8 gap-y-3 text-[15px]">
-        <a href="{% url 'signup' %}" class="hover:opacity-70 transition-opacity font-medium"
-            style="color:var(--accent);">Start onboarding questionnaire &rsaquo;</a>
-        <a href="{% url 'login' %}" class="text-white/70 hover:text-white transition-colors">Sign in &rsaquo;</a>
+    <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="{% url 'signup' %}" class="px-8 py-3 rounded-full text-[14px] font-medium bg-white text-black hover:bg-white/90 transition-all">
+            Start Onboarding
+        </a>
+        <a href="{% url 'login' %}" class="px-8 py-3 rounded-full text-[14px] font-medium border border-white/20 text-white hover:bg-white/10 transition-all">
+            Sign In
+        </a>
     </div>
     {% else %}
-    <a href="{% url 'dashboard' %}" class="text-[15px] hover:opacity-70 transition-opacity font-medium"
-        style="color:var(--accent);">Open dashboard &rsaquo;</a>
+    <a href="{% url 'dashboard' %}" class="inline-block px-8 py-3 rounded-full text-[14px] font-medium bg-white text-black hover:bg-white/90 transition-all">
+        Open Dashboard &rsaquo;
+    </a>
     {% endif %}
 </section>
 
-<!-- FOOTER -->
-<footer class="border-t pt-14 pb-10 text-[12px] text-white/35 transition-colors duration-500"
-    style="border-color:var(--hair-soft); background: linear-gradient(180deg, #050505 0%, var(--ink-950) 100%);">
-    <div class="max-w-[1000px] mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-10 mb-10">
+<footer class="border-t border-white/10 pt-16 pb-10 text-[13px] text-white/40 bg-[#000000]">
+    <div class="max-w-[1000px] mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
         <div class="col-span-2">
-            <div class="text-[16px] font-semibold text-white/85 mb-3">NeuralSpace</div>
-            <p class="text-white/40 text-[13px] leading-relaxed max-w-xs">An ethics-first neurotech ecosystem uniting
-                Patients, Clinicians, Researchers, and Advocates.</p>
+            <div class="text-[16px] font-semibold text-white mb-3">NeuralSpace</div>
+            <p class="text-white/50 leading-relaxed max-w-xs font-light">
+                An ethics-first neurotech ecosystem uniting Patients, Clinicians, Researchers, and Advocates.
+            </p>
         </div>
         <div>
-            <div class="text-white/60 font-medium mb-3 text-[12px]">Ecosystem</div>
+            <div class="text-white font-medium mb-4">Ecosystem</div>
             <ul class="space-y-2">
-                <li><a href="#pathways" class="hover:text-white/60 transition-colors">4 Pathways</a></li>
-                <li><a href="#clinical" class="hover:text-white/60 transition-colors">Clinical Care</a></li>
-                <li><a href="#nbhdi" class="hover:text-white/60 transition-colors">Geospatial Index</a></li>
+                <li><a href="#pathways" class="hover:text-white transition-colors">Pathways</a></li>
+                <li><a href="#clinical" class="hover:text-white transition-colors">Clinical Care</a></li>
+                <li><a href="#nbhdi" class="hover:text-white transition-colors">Geospatial Index</a></li>
             </ul>
         </div>
         <div>
-            <div class="text-white/60 font-medium mb-3 text-[12px]">Platform</div>
+            <div class="text-white font-medium mb-4">Platform</div>
             <ul class="space-y-2">
-                <li><a href="{% url 'dashboard' %}" class="hover:text-white/60 transition-colors">Dashboard</a></li>
-                <li><a href="#NeuralWallet" class="hover:text-white/60 transition-colors">NeuralWallet Wallet</a></li>
-                <li><a href="#specs" class="hover:text-white/60 transition-colors">SDK</a></li>
+                <li><a href="{% url 'dashboard' %}" class="hover:text-white transition-colors">Dashboard</a></li>
+                <li><a href="#specs" class="hover:text-white transition-colors">Developer SDK</a></li>
             </ul>
         </div>
     </div>
-    <div class="max-w-[1000px] mx-auto px-6 border-t pt-7 flex flex-col md:flex-row justify-between items-center gap-4"
-        style="border-color:var(--hair-soft);">
-        <div>&copy; 2026 NeuralSpace. All rights reserved. NeuralVillage Neuro-Ethics Charter.</div>
+    <div class="max-w-[1000px] mx-auto px-6 border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>&copy; 2026 NeuralSpace. System Operational.</div>
         <div class="flex gap-6">
-            <a href="#" class="hover:text-white/60">Privacy</a>
-            <a href="#" class="hover:text-white/60">Terms</a>
+            <a href="#" class="hover:text-white">Privacy</a>
+            <a href="#" class="hover:text-white">Terms</a>
         </div>
     </div>
 </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const menuToggle = document.getElementById('landing-menu-toggle');
+        const mobileMenu = document.getElementById('landing-mobile-menu');
+        const iconOpen = document.getElementById('menu-icon-open');
+        const iconClose = document.getElementById('menu-icon-close');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMenuOpen = false;
 
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            
+            if (isMenuOpen) {
+                // Slide menu down
+                mobileMenu.classList.remove('-translate-y-full', 'opacity-0');
+                mobileMenu.classList.add('translate-y-0', 'opacity-100');
+                // Swap icons to 'X'
+                iconOpen.classList.replace('block', 'hidden');
+                iconClose.classList.replace('hidden', 'block');
+            } else {
+                // Slide menu up
+                mobileMenu.classList.add('-translate-y-full', 'opacity-0');
+                mobileMenu.classList.remove('translate-y-0', 'opacity-100');
+                // Swap icons to 'Hamburger'
+                iconOpen.classList.replace('hidden', 'block');
+                iconClose.classList.replace('block', 'hidden');
+            }
+        }
 
-<!-- ============ SCRIPT: PRELOADER, CANVAS ENGINE, GSAP TIMELINE ============ -->
+        // Attach click listener to the hamburger button
+        if (menuToggle) {
+            menuToggle.addEventListener('click', toggleMenu);
+        }
+
+        // Automatically close the menu when a link is clicked
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (isMenuOpen) toggleMenu();
+            });
+        });
+    });
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const TOTAL_FRAMES = 240;
@@ -624,9 +512,7 @@ async for frame in client.stream_eeg_baseline():
         const ctx = canvas ? canvas.getContext('2d', { alpha: true }) : null;
 
         const preloader = document.getElementById('bci-preloader');
-        const preloaderRing = document.getElementById('preloader-ring');
         const preloaderPercent = document.getElementById('preloader-percent');
-        const RING_CIRCUMFERENCE = 264;
 
         const nav = document.getElementById('site-nav');
         const traceFill = document.getElementById('trace-fill');
@@ -729,9 +615,7 @@ async for frame in client.stream_eeg_baseline():
 
                     if (!criticalDone) {
                         const progress = Math.round((loadedCount / CRITICAL_FRAMES) * 100);
-                        const offset = RING_CIRCUMFERENCE - (Math.min(progress, 100) / 100) * RING_CIRCUMFERENCE;
-                        if (preloaderRing) preloaderRing.style.strokeDashoffset = offset;
-                        if (preloaderPercent) preloaderPercent.innerText = `${Math.min(progress, 100)}%`;
+                        if (preloaderPercent) preloaderPercent.innerText = `Loading ${Math.min(progress, 100)}%`;
                     }
 
                     if (!criticalDone && loadedCount >= CRITICAL_FRAMES) {
@@ -765,7 +649,10 @@ async for frame in client.stream_eeg_baseline():
         }
 
         function initGSAPAnimations() {
-            if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+            if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+                console.warn("GSAP or ScrollTrigger not loaded. Animations disabled.");
+                return;
+            }
             gsap.registerPlugin(ScrollTrigger);
 
             const masterTl = gsap.timeline({
@@ -785,13 +672,13 @@ async for frame in client.stream_eeg_baseline():
                 }
             });
 
-            masterTl.to("#hero-stage-1", { opacity: 0, y: -60, duration: 0.15, ease: "power1.inOut" }, 0.08)
+            masterTl.to("#hero-stage-1", { opacity: 0, y: -40, duration: 0.15, ease: "power1.inOut" }, 0.08)
                 .to("#hero-stage-2", { opacity: 1, duration: 0.15, ease: "power2.out" }, 0.18)
-                .to("#hero-stage-2", { opacity: 0, x: -30, duration: 0.12, ease: "power1.in" }, 0.32)
+                .to("#hero-stage-2", { opacity: 0, x: -20, duration: 0.12, ease: "power1.in" }, 0.32)
                 .to("#hero-stage-3", { opacity: 1, duration: 0.15, ease: "power2.out" }, 0.38)
                 .to("#hero-stage-3", { opacity: 0, duration: 0.12, ease: "power1.in" }, 0.58)
                 .to("#hero-stage-4", { opacity: 1, duration: 0.15, ease: "power2.out" }, 0.62)
-                .to("#hero-stage-4", { opacity: 0, x: 30, duration: 0.12, ease: "power1.in" }, 0.78)
+                .to("#hero-stage-4", { opacity: 0, x: 20, duration: 0.12, ease: "power1.in" }, 0.78)
                 .to("#hero-stage-5", { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" }, 0.82);
 
             ScrollTrigger.create({
@@ -800,24 +687,17 @@ async for frame in client.stream_eeg_baseline():
                 onEnter: () => {
                     if (nav) {
                         nav.style.background = 'rgba(0,0,0,0.85)';
-                        nav.style.backdropFilter = 'blur(16px)';
-                        nav.style.borderBottom = '1px solid rgba(255,255,255,0.08)';
+                        nav.style.backdropFilter = 'blur(12px)';
+                        nav.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
                     }
                 },
                 onLeaveBack: () => {
                     if (nav) {
-                        nav.style.background = 'rgba(0,0,0,0)';
-                        nav.style.backdropFilter = 'blur(0px)';
-                        nav.style.borderBottom = 'none';
+                        nav.style.background = 'transparent';
+                        nav.style.backdropFilter = 'none';
+                        nav.style.borderBottom = '1px solid transparent';
                     }
                 }
-            });
-
-            gsap.utils.toArray('.card').forEach((card) => {
-                gsap.from(card, {
-                    scrollTrigger: { trigger: card, start: "top 85%" },
-                    opacity: 0, y: 24, duration: 0.6, ease: "power2.out"
-                });
             });
         }
 

@@ -3,80 +3,34 @@
 {% block page_subtitle %}The Geospatial Brain Health Data Index (NBHDI) & Digital Benchwork{% endblock %}
 
 {% block content %}
-<style>
-    /* Inherited and refined styles from Dashboard architecture */
-    .dash-card {
-        background-color: var(--ink-800);
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        padding: 1.5rem;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .dash-card:hover {
-        border-color: rgba(41, 151, 255, 0.35);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 20px rgba(41, 151, 255, 0.1);
-    }
-    .icon-chip {
-        width: 2.5rem; height: 2.5rem;
-        border-radius: 12px;
-        display: flex; align-items: center; justify-content: center;
-        background-color: var(--ink-700);
-        border: 1px solid var(--line);
-        flex-shrink: 0;
-        transition: all 0.2s ease;
-    }
-    .dash-card:hover .icon-chip { background-color: var(--ink-600); }
-    .stat-label { color: var(--fog-500); font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
-    .stat-value { font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.85rem; color: var(--fog-100); line-height: 1; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
-    .stat-foot { display: flex; align-items: center; font-size: 11px; color: var(--fog-500); }
-    .stat-dot { width: 6px; height: 6px; border-radius: 999px; margin-right: 8px; flex-shrink: 0; }
-    
-    .panel { background-color: var(--ink-800); border: 1px solid var(--line); border-radius: 16px; }
-    .quiet-btn {
-        display: inline-flex; align-items: center; font-size: 11px; font-weight: 600;
-        color: var(--fog-300); background-color: var(--ink-700); border: 1px solid var(--line);
-        padding: 0.5rem 0.9rem; border-radius: 10px; transition: all 0.2s ease; cursor: pointer;
-    }
-    .quiet-btn:hover, .quiet-btn.active { color: #ffffff; border-color: rgba(41, 151, 255, 0.4); background-color: var(--ink-600); }
-    
-    .record-row {
-        display: flex; align-items: flex-start; gap: 1rem; padding: 0.85rem;
-        background-color: var(--ink-900); border: 1px solid var(--line-soft); border-radius: 12px;
-        transition: all 0.2s ease;
-    }
-    .record-row:hover { border-color: rgba(255, 255, 255, 0.2); transform: translateX(2px); }
 
-    /* Map Specific Overrides */
-    #map-container { border: 1px solid var(--line-soft); border-radius: 12px; overflow: hidden; background: #0a0f1c; }
-    .leaflet-popup-content-wrapper { 
-        background-color: var(--ink-900) !important; 
-        border: 1px solid var(--line) !important; 
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
-        border-radius: 12px !important;
-    }
-    .leaflet-popup-tip { background-color: var(--ink-900) !important; }
-    .leaflet-popup-close-button { color: var(--fog-500) !important; }
-    .leaflet-popup-close-button:hover { color: var(--fog-100) !important; }
-    .leaflet-container { font-family: 'Plus Jakarta Sans', sans-serif !important; }
-    
-    .pulse-dot {
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-    @keyframes pulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.5; transform: scale(1.2); }
-    }
-</style>
+{% if feature_hints %}
+<div class="feature-tip-layer" aria-live="polite">
+    {% for hint in feature_hints %}
+    <div class="feature-tip-bubble hidden" data-feature-key="{{ hint.key }}" data-anchor="{{ hint.anchor }}">
+        <div class="feature-tip-header">
+            <span class="feature-tip-tag">Quick tip</span>
+            <button type="button" class="dismiss-feature-tip" data-feature-key="{{ hint.key }}" aria-label="Dismiss tip">×</button>
+        </div>
+        <h4>{{ hint.title }}</h4>
+        <p>{{ hint.body }}</p>
+        <div class="feature-tip-actions">
+            <button type="button" class="feature-tip-btn feature-tip-skip" data-feature-key="{{ hint.key }}">Skip</button>
+            <button type="button" class="feature-tip-btn feature-tip-next" data-feature-key="{{ hint.key }}">Next</button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 
 <!-- Top Metrics Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
     <!-- Card 1 -->
-    <div class="dash-card cursor-pointer">
+    <div id="myspace-overview-card" class="dash-card cursor-pointer">
         <div class="flex justify-between items-start">
             <div>
                 <h3 class="stat-label">Neurohealth Coverage</h3>
-                <p class="stat-value">{{ coverage_pct|default:"94.2%" }}</p>
+                <p class="stat-value">{{ coverage_pct|default_if_none:"0.0%" }}</p>
             </div>
             <div class="icon-chip" style="color: var(--accent-text);">
                 <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
@@ -92,7 +46,7 @@
         <div class="flex justify-between items-start">
             <div>
                 <h3 class="stat-label">e-MR Repository</h3>
-                <p class="stat-value">{{ records_count|default:"12.4k" }}</p>
+                <p class="stat-value">{{ records_count|default_if_none:"0" }}</p>
             </div>
             <div class="icon-chip" style="color: #10b981;">
                 <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -108,7 +62,7 @@
         <div class="flex justify-between items-start">
             <div>
                 <h3 class="stat-label">Neurolab Benchwork</h3>
-                <p class="stat-value">{{ bench_active|default:"3 Active" }}</p>
+                <p class="stat-value">{{ bench_active|default_if_none:"0" }}{% if bench_active %} Active{% else %}{% endif %}</p>
             </div>
             <div class="icon-chip" style="color: #a855f7;">
                 <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
@@ -124,7 +78,7 @@
         <div class="flex justify-between items-start">
             <div>
                 <h3 class="stat-label">BrainHealthFund</h3>
-                <p class="stat-value">{{ fund_total|default:"$42.8k" }}</p>
+                <p class="stat-value">{{ fund_total|default_if_none:"$0.00" }}</p>
             </div>
             <div class="icon-chip" style="color: #f59e0b;">
                 <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -137,7 +91,7 @@
 </div>
 
 <!-- Map Interface Section -->
-<div class="panel p-7 flex flex-col">
+<div id="myspace-map-panel" class="panel p-7 flex flex-col">
     <!-- Header -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div>
@@ -162,7 +116,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         
         <!-- Map Container -->
-        <div class="lg:col-span-3 relative h-[500px]" id="map-container">
+        <div class="lg:col-span-3 relative map-panel" id="map-container">
             <div id="map" class="absolute inset-0 z-0"></div>
             
             <!-- Legend Overlay -->
@@ -177,7 +131,7 @@
         </div>
 
         <!-- Telemetry / Live Feed Sidebar -->
-        <div class="flex flex-col h-[500px]">
+        <div id="myspace-telemetry-panel" class="flex flex-col h-[500px]">
             <h4 class="font-display text-sm font-medium mb-4 flex items-center" style="color: var(--fog-100);">
                 <span class="stat-dot pulse-dot" style="background-color: var(--signal);"></span> Node Telemetry
             </h4>
@@ -216,11 +170,126 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const map = L.map('map', { zoomControl: false }).setView([20, 10], 2);
-        L.control.zoom({ position: 'topleft' }).addTo(map);
+        const bubbles = Array.from(document.querySelectorAll('.feature-tip-bubble'));
+        let activeIndex = -1;
+
+        function markSeen(key) {
+            if (!key) return Promise.resolve();
+            return fetch('{% url "feature_hint_mark_seen" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: 'key=' + encodeURIComponent(key)
+            }).catch(() => {});
+        }
+
+        function positionFeatureTip(bubble) {
+            const anchorSelector = bubble.dataset.anchor;
+            const target = anchorSelector ? document.querySelector(anchorSelector) : null;
+
+            if (!target) {
+                bubble.style.left = 'auto';
+                bubble.style.right = '1.25rem';
+                bubble.style.top = '5rem';
+                return;
+            }
+
+            const rect = target.getBoundingClientRect();
+            const bubbleWidth = bubble.offsetWidth || 300;
+            const gap = 18;
+            let left = rect.right + gap;
+            let top = rect.top + (rect.height / 2) - 42;
+
+            if (left + bubbleWidth > window.innerWidth - 20) {
+                left = rect.left - bubbleWidth - gap;
+            }
+
+            if (left < 16) {
+                left = window.innerWidth - bubbleWidth - 20;
+            }
+
+            if (top < 20) {
+                top = 20;
+            }
+
+            bubble.style.left = `${left}px`;
+            bubble.style.top = `${top}px`;
+            bubble.style.right = 'auto';
+        }
+
+        function showTooltip(index) {
+            if (index < 0 || index >= bubbles.length) {
+                bubbles.forEach((bubble) => bubble.classList.add('hidden'));
+                activeIndex = -1;
+                return;
+            }
+
+            activeIndex = index;
+            const targetBubble = bubbles[index];
+            const anchorSelector = targetBubble.dataset.anchor;
+            const target = anchorSelector ? document.querySelector(anchorSelector) : null;
+
+            if (target) {
+                const rect = target.getBoundingClientRect();
+                if (rect.top < 80 || rect.bottom > window.innerHeight - 80) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+            bubbles.forEach((bubble, i) => {
+                const isActive = i === index;
+                bubble.classList.toggle('hidden', !isActive);
+                if (isActive) positionFeatureTip(bubble);
+            });
+        }
+
+        document.querySelectorAll('.dismiss-feature-tip').forEach((button) => {
+            button.addEventListener('click', function() {
+                const key = this.dataset.featureKey;
+                const current = bubbles[activeIndex];
+                if (!key || !current) return;
+                markSeen(key).finally(() => {
+                    showTooltip(activeIndex + 1);
+                });
+            });
+        });
+
+        document.querySelectorAll('.feature-tip-next').forEach((button) => {
+            button.addEventListener('click', function() {
+                const key = this.dataset.featureKey;
+                const current = bubbles[activeIndex];
+                if (!key || !current) return;
+                markSeen(key).finally(() => {
+                    showTooltip(activeIndex + 1);
+                });
+            });
+        });
+
+        document.querySelectorAll('.feature-tip-skip').forEach((button) => {
+            button.addEventListener('click', function() {
+                const key = this.dataset.featureKey;
+                const current = bubbles[activeIndex];
+                if (!key || !current) return;
+                markSeen(key).finally(() => {
+                    showTooltip(activeIndex + 1);
+                });
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            if (activeIndex >= 0) positionFeatureTip(bubbles[activeIndex]);
+        });
+
+        showTooltip(0);
+
+        const Leaflet = window.Leaflet || window.L;
+        const map = Leaflet.map('map', { zoomControl: false }).setView([20, 10], 2);
+        Leaflet.control.zoom({ position: 'topleft' }).addTo(map);
         
         // Premium ultra-dark map tiles
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        Leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://carto.com/attributions" style="color: var(--fog-500);">CARTO</a>',
             subdomains: 'abcd',
             maxZoom: 20
@@ -248,7 +317,7 @@
             if(item.overall > 85) color = '#10b981'; // Emerald
             else if (item.overall < 70) color = '#ef4444'; // Red
             
-            const marker = L.circleMarker([item.lat, item.lng], {
+            const marker = Leaflet.circleMarker([item.lat, item.lng], {
                 color: color,
                 fillColor: color,
                 fillOpacity: 0.2,

@@ -6,8 +6,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-neuralspace-key-mvp-production-ready')
 DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
+GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
+GOOGLE_API_KEY = config('GOOGLE_API_KEY', default='')
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,7 +49,14 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = 'neuralspace.asgi.application'
 WSGI_APPLICATION = 'neuralspace.wsgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 if config('DATABASE_URL', default=None):
     import dj_database_url

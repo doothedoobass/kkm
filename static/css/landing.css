@@ -1,0 +1,546 @@
+/* ==========================================================================
+   NEURALSPACE — ULTRA-PREMIUM EDITORIAL LANDING PAGE
+   Architecture: 12-Column, Linear/Apple-inspired Editorial Design
+   Typography: Clash Display (Headings), Satoshi (Body), Geist Mono
+   ========================================================================== */
+
+/* ---------- FONTS ---------- */
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@500,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* ==========================================================================
+   02 - DESIGN TOKENS
+   ========================================================================== */
+:root {
+    /* ── Grounds — Layered Cinematic Depth ── */
+    --bg-deep:      #060A10;
+    --bg-surface:   #0B1220;
+    --bg-elevated:  #111A2B;
+    
+    /* ── Primary Accent — Soft Ice Teal ── */
+    --primary:           #8BCFD6;
+    --primary-dim:       rgba(139, 207, 214, 0.10);
+    --primary-glow:      rgba(139, 207, 214, 0.15);
+    --primary-rgb:       139, 207, 214;
+
+    /* ── Text ── */
+    --text-primary:  #F3F6FA;
+    --text-secondary:#A3AFBF;
+    --text-tertiary: #6b768a;
+    --text-ghost:    #3a4354;
+
+    /* ── Borders & Lines — Ultra-Subtle ── */
+    --border:        rgba(255, 255, 255, 0.045);
+    --border-hover:  rgba(255, 255, 255, 0.08);
+    --border-primary:rgba(139, 207, 214, 0.20);
+    --highlight-inset: inset 0 1px rgba(255, 255, 255, 0.04);
+
+    /* ── Typography ── */
+    --font-heading: 'Clash Display', -apple-system, sans-serif;
+    --font-body:    'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono:    'Geist Mono', 'Fira Code', 'Consolas', monospace;
+
+    /* ── Layout & Spacing ── */
+    --container-max: 1200px;
+    --section-pad: 240px; /* Massive whitespace */
+    --section-pad-sm: 120px;
+    --card-pad: 56px; /* Spacious cards */
+
+    /* ── Radii ── */
+    --r-xs: 6px;
+    --r-sm: 12px;
+    --r-md: 24px;
+    --r-lg: 32px;
+    --r-xl: 48px;
+    --r-pill: 999px;
+
+    /* ── Shadows ── */
+    --shadow-card:     0 30px 80px rgba(0, 0, 0, 0.28);
+    --shadow-glow:     0 0 60px rgba(139, 207, 214, 0.06);
+    --shadow-stage:    0 40px 100px rgba(0, 0, 0, 0.50);
+}
+
+/* ==========================================================================
+   01 - RESET & BASE
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.ns-landing {
+    font-family: var(--font-body) !important;
+    color: var(--text-primary);
+    /* Layered Background */
+    background: 
+        radial-gradient(800px circle at 85% 10%, rgba(255, 255, 255, 0.08), transparent 45%),
+        radial-gradient(700px circle at 15% 90%, rgba(139, 207, 214, 0.06), transparent 45%),
+        linear-gradient(180deg, #090F18 0%, #070B11 55%, #05080D 100%) !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+.ns-landing *, .ns-landing *::before, .ns-landing *::after { font-family: inherit; }
+
+/* Scrollbar */
+.ns-landing::-webkit-scrollbar { width: 4px; }
+.ns-landing::-webkit-scrollbar-track { background: transparent; }
+.ns-landing::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+/* Selection */
+.ns-landing ::selection { background: rgba(139, 207, 214, 0.2); color: var(--text-primary); }
+
+/* ==========================================================================
+   LAYOUT
+   ========================================================================== */
+.ns-container {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: 32px;
+}
+@media (min-width: 768px) { .ns-container { padding-inline: 56px; } }
+
+/* ==========================================================================
+   NAVIGATION
+   ========================================================================== */
+.ns-nav {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    width: calc(100% - 48px);
+    max-width: 960px;
+    background: rgba(6, 10, 16, 0.4);
+    backdrop-filter: blur(60px);
+    -webkit-backdrop-filter: blur(60px);
+    border: var(--border);
+    box-shadow: var(--highlight-inset), 0 10px 40px rgba(0,0,0,0.15);
+    border-radius: var(--r-pill);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ns-nav.scrolled {
+    background: rgba(6, 10, 16, 0.7);
+    border-color: var(--border-hover);
+    box-shadow: var(--highlight-inset), 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.ns-nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 56px;
+}
+
+.ns-nav-brand {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none; flex-shrink: 0;
+}
+
+.ns-nav-logo {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-heading); font-weight: 700; font-size: 11px;
+    color: var(--primary);
+    background: rgba(255,255,255,0.03); 
+    border: var(--border);
+    box-shadow: var(--highlight-inset);
+}
+
+.ns-nav-name {
+    font-family: var(--font-heading); font-weight: 600; font-size: 16px; 
+    color: var(--text-primary); letter-spacing: 0.02em;
+}
+
+.ns-nav-links { display: none; align-items: center; gap: 32px; }
+@media (min-width: 900px) { .ns-nav-links { display: flex; } }
+
+.ns-nav-link {
+    font-family: var(--font-body); font-size: 14px; font-weight: 500; 
+    color: var(--text-secondary); text-decoration: none; transition: color 0.3s;
+}
+.ns-nav-link:hover { color: var(--text-primary); }
+
+.ns-nav-actions { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+
+.ns-nav-signin {
+    font-family: var(--font-body); font-size: 14px; font-weight: 500; 
+    color: var(--text-secondary); text-decoration: none; transition: color 0.3s;
+    display: none;
+}
+.ns-nav-signin:hover { color: var(--text-primary); }
+@media (min-width: 900px) { .ns-nav-signin { display: inline-block; } }
+
+.ns-nav-cta {
+    font-family: var(--font-body); font-size: 13px; font-weight: 600;
+    color: var(--bg-deep); background: var(--text-primary);
+    border: none; border-radius: var(--r-pill);
+    padding: 8px 20px; text-decoration: none; cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 14px rgba(255,255,255,0.1);
+}
+.ns-nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,255,255,0.15); }
+
+/* Mobile Menu */
+.ns-mobile-menu {
+    display: none; position: fixed; top: 96px;
+    left: 50%; transform: translateX(-50%);
+    width: calc(100% - 48px); max-width: 960px;
+    background: rgba(6, 10, 16, 0.85); backdrop-filter: blur(60px);
+    border: var(--border); border-radius: var(--r-lg);
+    box-shadow: var(--highlight-inset), var(--shadow-card);
+    padding: 24px; z-index: 49; flex-direction: column; gap: 8px;
+}
+.ns-mobile-menu.open { display: flex; animation: ns-fadeUp 0.3s ease forwards; }
+.ns-mobile-menu a {
+    font-family: var(--font-body); font-size: 16px; font-weight: 500; 
+    color: var(--text-secondary); text-decoration: none; padding: 12px 0; 
+    transition: color 0.3s; border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.ns-mobile-menu a:last-child { border-bottom: none; }
+.ns-mobile-menu a:hover { color: var(--text-primary); }
+.ns-nav-toggle {
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; background: transparent; border: none;
+    color: var(--text-secondary); cursor: pointer;
+}
+@media (min-width: 900px) { .ns-nav-toggle { display: none; } }
+
+/* ==========================================================================
+   03 - TYPOGRAPHY
+   ========================================================================== */
+.ns-heading-hero {
+    font-family: var(--font-heading) !important;
+    font-weight: 600;
+    font-size: clamp(64px, 12vw, 140px);
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+}
+
+.ns-heading-xl {
+    font-family: var(--font-heading) !important;
+    font-weight: 500;
+    font-size: clamp(40px, 6vw, 64px);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+}
+
+.ns-heading-lg {
+    font-family: var(--font-heading) !important;
+    font-weight: 500;
+    font-size: clamp(28px, 4vw, 42px);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--text-primary);
+}
+
+.ns-heading-md {
+    font-family: var(--font-heading) !important;
+    font-weight: 500;
+    font-size: clamp(24px, 3vw, 32px);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    color: var(--text-primary);
+}
+
+.ns-body-hero {
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: 500;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.ns-body-lg { font-size: clamp(16px, 1.7vw, 18px); color: var(--text-secondary); line-height: 1.7; font-weight: 500; }
+.ns-body-md { font-size: clamp(14px, 1.5vw, 16px); color: var(--text-secondary); line-height: 1.7; font-weight: 500; }
+.ns-body-sm { font-size: 13px; color: var(--text-secondary); line-height: 1.6; font-weight: 500; }
+
+.ns-label {
+    font-family: var(--font-mono) !important;
+    font-size: 12px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--primary);
+    display: inline-block; margin-bottom: 24px;
+}
+
+.ns-mono { font-family: var(--font-mono) !important; font-weight: 500; }
+
+/* ==========================================================================
+   07 - HERO (Editorial Layout)
+   ========================================================================== */
+.ns-hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 240px 24px 160px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.ns-hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: var(--r-pill);
+    border: var(--border); background: rgba(255,255,255,0.02);
+    box-shadow: var(--highlight-inset);
+    font-family: var(--font-body); font-size: 13px; font-weight: 600;
+    color: var(--text-secondary); margin-bottom: 56px;
+}
+
+.ns-hero-badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 12px var(--primary);
+}
+
+.ns-hero-ctas {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 16px; margin-top: 64px;
+}
+
+/* 3D Visual / Canvas Area */
+.ns-hero-visual {
+    position: relative;
+    width: 100%; max-width: 1000px;
+    height: 500px; margin: 120px auto 0;
+    border-radius: var(--r-xl);
+    background: var(--bg-surface);
+    border: var(--border);
+    box-shadow: var(--highlight-inset), var(--shadow-card);
+    overflow: hidden;
+}
+
+/* Cinematic 3-point lighting */
+.ns-ambient-light {
+    position: absolute; border-radius: 50%;
+    filter: blur(180px); pointer-events: none; z-index: 0;
+}
+.ns-ambient-primary {
+    top: -10%; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 600px;
+    background: rgba(139, 207, 214, 0.12);
+}
+
+/* ==========================================================================
+   08 - BUTTONS
+   ========================================================================== */
+.ns-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--font-body); font-weight: 600; font-size: 15px;
+    border-radius: var(--r-pill); padding: 16px 36px;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ns-btn-primary {
+    background: var(--text-primary); color: var(--bg-deep);
+    box-shadow: 0 8px 24px rgba(255,255,255,0.1);
+}
+.ns-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(255,255,255,0.15);
+}
+
+.ns-btn-secondary {
+    background: rgba(255,255,255,0.03); color: var(--text-primary);
+    border: var(--border); box-shadow: var(--highlight-inset);
+}
+.ns-btn-secondary:hover {
+    background: rgba(255,255,255,0.06); transform: translateY(-2px);
+}
+
+.ns-btn-sm { padding: 10px 24px; font-size: 14px; }
+
+/* ==========================================================================
+   09 - CARDS
+   ========================================================================== */
+.ns-card {
+    background: var(--bg-elevated);
+    border: var(--border);
+    border-radius: var(--r-lg);
+    padding: var(--card-pad);
+    position: relative;
+    box-shadow: var(--highlight-inset), 0 10px 30px rgba(0,0,0,0.15);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s;
+}
+
+.ns-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--highlight-inset), var(--shadow-card);
+}
+
+.ns-card-num {
+    font-family: var(--font-mono); font-size: 14px; font-weight: 500;
+    color: var(--primary); margin-bottom: 32px; display: block;
+}
+
+.ns-card-title {
+    font-family: var(--font-heading); font-weight: 500; font-size: 24px; 
+    color: var(--text-primary); margin-bottom: 16px;
+}
+
+.ns-card-desc {
+    font-size: 16px; color: var(--text-secondary); line-height: 1.7;
+    margin-bottom: 32px;
+}
+
+.ns-card-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-body); font-size: 14px; font-weight: 600;
+    color: var(--text-primary); text-decoration: none; transition: gap 0.3s;
+}
+.ns-card-link:hover { gap: 10px; color: var(--primary); }
+
+/* ==========================================================================
+   11 - SECTIONS
+   ========================================================================== */
+.ns-section {
+    padding-top: var(--section-pad);
+    padding-bottom: var(--section-pad);
+    position: relative;
+    z-index: 10;
+}
+@media (max-width: 767px) {
+    .ns-section { padding-top: var(--section-pad-sm); padding-bottom: var(--section-pad-sm); }
+}
+
+.ns-section-header { margin-bottom: 80px; }
+.ns-section-header-centered { text-align: center; max-width: 800px; margin: 0 auto 80px; }
+
+/* Grid systems */
+.ns-grid-2 { display: grid; grid-template-columns: 1fr; gap: 24px; }
+@media (min-width: 768px) { .ns-grid-2 { grid-template-columns: repeat(2, 1fr); } }
+
+.ns-grid-4 { display: grid; grid-template-columns: 1fr; gap: 24px; }
+@media (min-width: 640px)  { .ns-grid-4 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .ns-grid-4 { grid-template-columns: repeat(4, 1fr); } }
+
+.ns-grid-split { display: grid; grid-template-columns: 1fr; gap: 64px; align-items: center; }
+@media (min-width: 1024px) { .ns-grid-split { grid-template-columns: 1fr 1fr; gap: 120px; } }
+
+/* ==========================================================================
+   10 - SHOWCASE DOCK
+   ========================================================================== */
+.ns-dock-tabs {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 12px; margin-bottom: 64px;
+}
+
+.ns-dock-tab {
+    font-family: var(--font-body); font-weight: 600; font-size: 15px;
+    color: var(--text-secondary); background: rgba(255,255,255,0.02);
+    border: var(--border); box-shadow: var(--highlight-inset);
+    border-radius: var(--r-pill); padding: 12px 28px; cursor: pointer; 
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ns-dock-tab:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
+.ns-dock-tab.active { color: var(--bg-deep); background: var(--text-primary); }
+
+.ns-dock-panel { display: none; width: 100%; }
+.ns-dock-panel.active { display: grid; animation: ns-fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+.ns-dock-container {
+    background: var(--bg-elevated); border: var(--border);
+    box-shadow: var(--highlight-inset), var(--shadow-card);
+    border-radius: var(--r-xl); padding: var(--card-pad); 
+    min-height: 480px; display: flex; align-items: center;
+}
+
+/* ==========================================================================
+   UTILITIES & COMPONENTS
+   ========================================================================== */
+.ns-stat {
+    text-align: center; padding: 48px 24px;
+    background: var(--bg-elevated); border: var(--border);
+    border-radius: var(--r-lg); box-shadow: var(--highlight-inset);
+}
+.ns-stat-number {
+    font-family: var(--font-heading); font-weight: 600;
+    font-size: clamp(48px, 6vw, 72px); line-height: 1; color: var(--text-primary);
+}
+.ns-stat-unit { font-size: 0.5em; color: var(--text-secondary); }
+.ns-stat-label {
+    font-family: var(--font-mono); font-size: 13px; color: var(--primary); margin-top: 16px;
+}
+
+.ns-cta-section {
+    position: relative; border-radius: var(--r-xl);
+    border: var(--border); background: var(--bg-elevated);
+    box-shadow: var(--highlight-inset), var(--shadow-card);
+    padding: 120px 48px; text-align: center; overflow: hidden;
+}
+
+/* Code block */
+.ns-code-block {
+    background: #04070B; border: var(--border); border-radius: var(--r-md);
+    box-shadow: var(--highlight-inset); overflow: hidden;
+}
+.ns-code-header {
+    display: flex; justify-content: space-between; padding: 16px 24px;
+    background: rgba(255,255,255,0.02); border-bottom: var(--border);
+    font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);
+}
+.ns-code-body { padding: 32px; color: #a7f3d0; font-family: var(--font-mono); font-size: 13px; line-height: 1.9; }
+
+.ns-info-card {
+    padding: 32px; border-radius: var(--r-md);
+    border: var(--border); background: rgba(0,0,0,0.2);
+    box-shadow: var(--highlight-inset);
+}
+
+.ns-feature-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 0; border-bottom: var(--border); font-size: 15px;
+}
+.ns-feature-row:last-child { border-bottom: none; }
+.ns-feature-status { font-family: var(--font-mono); font-size: 13px; color: var(--primary); }
+
+.ns-tag {
+    display: inline-block; padding: 6px 16px; border-radius: var(--r-pill);
+    font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+    color: var(--primary); background: var(--primary-dim); border: var(--border-primary);
+}
+
+/* Animations */
+@keyframes ns-fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.ns-reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ns-reveal.visible { opacity: 1; transform: translateY(0); }
+.ns-reveal-d1 { transition-delay: 0.1s; }
+.ns-reveal-d2 { transition-delay: 0.2s; }
+.ns-reveal-d3 { transition-delay: 0.3s; }
+.ns-reveal-d4 { transition-delay: 0.4s; }
+
+/* ==========================================================================
+   12 - FOOTER
+   ========================================================================== */
+.ns-footer {
+    padding: 120px 0 64px; border-top: var(--border);
+    color: var(--text-secondary); font-size: 15px;
+}
+.ns-footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    gap: 64px; margin-bottom: 80px;
+}
+@media (max-width: 767px) { .ns-footer-grid { grid-template-columns: 1fr; gap: 48px; } }
+.ns-footer-brand {
+    font-family: var(--font-heading); font-weight: 600; font-size: 24px; 
+    color: var(--text-primary); margin-bottom: 24px;
+}
+.ns-footer-heading { font-family: var(--font-body); font-weight: 600; color: var(--text-primary); margin-bottom: 24px; }
+.ns-footer-links { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+.ns-footer-links a { color: var(--text-secondary); text-decoration: none; transition: color 0.3s; }
+.ns-footer-links a:hover { color: var(--text-primary); }
+.ns-footer-bottom {
+    display: flex; flex-direction: column; gap: 16px; padding-top: 40px; border-top: var(--border);
+    font-size: 14px; color: var(--text-ghost);
+}
+@media (min-width: 768px) { .ns-footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }

@@ -1,201 +1,95 @@
 {% extends 'base.html' %}
 
 {% block page_title %}Welcome back{% endblock %}
-{% block page_subtitle %}
-Sign in to continue to NeuralSpace.
-{% endblock %}
+{% block page_subtitle %}Sign in to continue to NeuralSpace.{% endblock %}
 
 {% block content %}
 
-<div class="max-w-md mx-auto py-8 md:py-14 px-4">
+<div class="w-full max-w-[440px] mx-auto pt-8 pb-20 px-5 sm:px-0 sm:pt-24">
 
-    <div class="overflow-hidden rounded-3xl border border-white/10 bg-[#0B0E14]/90 backdrop-blur-xl shadow-2xl">
+    <div class="sm:rounded-[2rem] sm:border sm:border-white/10 sm:bg-[#050505] sm:p-10 sm:shadow-2xl">
 
-        <!-- Header -->
-
-        <div class="border-b border-white/10 px-6 sm:px-8 py-8 text-center sm:text-left">
-
-            <span class="text-[11px] font-mono uppercase tracking-[0.22em] text-[#60A5FA]">
-                NeuralSpace Sovereign Access
-            </span>
-
-            <h2 class="mt-2 font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                Log in to your account
+        <div class="mb-8 text-left">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/60 text-[10px] font-mono uppercase tracking-widest mb-6">
+                Sovereign Access
+            </div>
+            <h2 class="text-3xl font-semibold text-white tracking-tight mb-3">
+                Welcome back.
             </h2>
-
-            <p class="mt-2 text-xs sm:text-sm leading-relaxed text-slate-400">
-                Access your health records, secure telemetry messages, appointments, and the rest of your NeuralSpace workspace.
+            <p class="text-[15px] leading-relaxed text-white/50 font-light">
+                Log in securely to access your neural telemetry, appointments, and dashboard.
             </p>
-
         </div>
 
-        <!-- Alerts -->
-
         {% if messages %}
-        <div class="px-6 sm:px-8 pt-6">
+        <div class="mb-6 space-y-2">
             {% for m in messages %}
-            <div class="mb-3 rounded-2xl border px-4 py-3
-                {% if m.tags == 'success' %}border-emerald-500/40 bg-emerald-950/30 text-emerald-300
-                {% elif m.tags == 'error' %}border-red-500/40 bg-red-950/30 text-red-300
-                {% else %}border-blue-500/40 bg-blue-950/30 text-blue-300{% endif %}">
-                <p class="text-sm">
-                    {{ m }}
-                </p>
+            <div class="rounded-xl border px-4 py-3.5
+                {% if m.tags == 'success' %}border-green-500/20 bg-green-500/10 text-green-400
+                {% elif m.tags == 'error' %}border-red-500/20 bg-red-500/10 text-red-400
+                {% else %}border-white/20 bg-white/5 text-white{% endif %}">
+                <p class="text-[14px] font-medium">{{ m }}</p>
             </div>
             {% endfor %}
         </div>
         {% endif %}
 
-        <!-- Form -->
-
-        <form method="post" class="space-y-5 px-6 sm:px-8 py-7">
-
+        <form method="post" class="space-y-5">
             {% csrf_token %}
 
-            <!-- Username -->
-
             <div>
-
-                <label class="mb-2 block text-xs font-mono font-medium uppercase tracking-wider text-slate-300">
-                    Username
-                </label>
-
+                <label class="block text-[13px] font-medium text-white/70 mb-2">Username</label>
                 <input
                     type="text"
                     name="username"
                     placeholder="Enter your username"
                     autocomplete="username"
-                    class="
-                        w-full
-                        rounded-xl
-                        border
-                        border-white/10
-                        bg-[#07090E]
-                        px-4
-                        py-3
-                        text-sm
-                        text-white
-                        placeholder:text-slate-500
-                        outline-none
-                        transition-all
-                        focus:border-[#2997FF]
-                        focus:ring-2
-                        focus:ring-[#2997FF]/20
-                    "
+                    class="w-full py-3.5 sm:py-3 rounded-xl border border-white/10 bg-[#0a0a0a] px-4 text-[16px] sm:text-[14px] text-white placeholder:text-white/30 outline-none transition-all focus:border-white/40 focus:bg-[#111]"
                 />
-
             </div>
 
-            <!-- Password -->
-
             <div>
-
-                <div class="mb-2 flex items-center justify-between">
-
-                    <label class="text-xs font-mono font-medium uppercase tracking-wider text-slate-300">
-                        Password
-                    </label>
-
-                    <a
-                        href="#"
-                        class="text-xs text-slate-500 transition hover:text-[#60A5FA]"
-                    >
-                        Forgot password?
-                    </a>
-
+                <div class="flex items-center justify-between mb-2">
+                    <label class="block text-[13px] font-medium text-white/70">Password</label>
+                    <a href="#" class="text-[13px] sm:text-[12px] text-white/40 hover:text-white transition-colors">Forgot password?</a>
                 </div>
-
                 <input
                     type="password"
                     name="password"
                     placeholder="Enter your password"
                     autocomplete="current-password"
-                    class="
-                        w-full
-                        rounded-xl
-                        border
-                        border-white/10
-                        bg-[#07090E]
-                        px-4
-                        py-3
-                        text-sm
-                        text-white
-                        placeholder:text-slate-500
-                        outline-none
-                        transition-all
-                        focus:border-[#2997FF]
-                        focus:ring-2
-                        focus:ring-[#2997FF]/20
-                    "
+                    class="w-full py-3.5 sm:py-3 rounded-xl border border-white/10 bg-[#0a0a0a] px-4 text-[16px] sm:text-[14px] text-white placeholder:text-white/30 outline-none transition-all focus:border-white/40 focus:bg-[#111]"
                 />
-
             </div>
 
-            <!-- Remember me -->
-
-            <label class="flex items-center gap-3 text-xs text-slate-400 cursor-pointer">
-
-                <input
-                    type="checkbox"
-                    class="
-                        h-4
-                        w-4
-                        rounded
-                        border-white/20
-                        bg-[#07090E]
-                        accent-[#2997FF]
-                    "
-                />
-
-                Keep me signed in
-            </label>
-
-            <!-- Submit -->
+            <div class="pt-2 pb-2">
+                <label class="flex items-center gap-3 text-[14px] sm:text-[13px] text-white/60 cursor-pointer hover:text-white transition-colors w-max">
+                    <input
+                        type="checkbox"
+                        class="h-5 w-5 sm:h-4 sm:w-4 rounded-[4px] border-white/20 bg-black accent-white cursor-pointer"
+                    />
+                    Keep me signed in
+                </label>
+            </div>
 
             <button
                 type="submit"
-                class="
-                    w-full
-                    rounded-xl
-                    bg-[#2997FF]
-                    py-3.5
-                    text-sm
-                    font-semibold
-                    text-white
-                    shadow-lg
-                    shadow-[#2997FF]/25
-                    transition-all
-                    hover:bg-[#38BDF8]
-                    hover:shadow-[#2997FF]/40
-                    active:scale-[0.99]
-                "
+                class="w-full h-12 rounded-full bg-white text-[15px] sm:text-[14px] font-medium text-black transition-all hover:bg-white/90 active:scale-[0.98] flex items-center justify-center gap-2 mt-2"
             >
-                Log in &rsaquo;
+                Log In <span class="text-[16px] leading-none">&rarr;</span>
             </button>
-
         </form>
 
-        <!-- Footer -->
-
-        <div class="border-t border-white/10 px-6 sm:px-8 py-5 text-center">
-
-            <p class="text-xs text-slate-400">
-
+        <div class="mt-8 pt-8 border-t border-white/10 text-center sm:text-left">
+            <p class="text-[14px] sm:text-[13px] text-white/50">
                 Don't have an account?
-
-                <a
-                    href="{% url 'signup' %}"
-                    class="ml-1 text-[#60A5FA] font-medium transition hover:underline"
-                >
+                <a href="{% url 'signup' %}" class="ml-1 text-white font-medium transition hover:underline">
                     Create one
                 </a>
-
             </p>
-
         </div>
 
     </div>
-
 </div>
 
 {% endblock %}

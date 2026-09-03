@@ -1,194 +1,253 @@
 {% extends 'base.html' %}
+
 {% block page_title %}NeuralSpace Onboarding{% endblock %}
 {% block page_subtitle %}Calibrate your neuro-profile to personalize your ecosystem experience.{% endblock %}
+
 {% block content %}
-<div class="max-w-3xl mx-auto rounded-3xl border border-slate-800 bg-[#131922] overflow-hidden">
 
-    <!-- Header -->
+<div class="w-full max-w-[720px] mx-auto pt-8 pb-20 px-5 sm:px-0 sm:pt-16">
 
-    <div class="px-8 py-8 border-b border-slate-800">
+    <div class="sm:rounded-[2rem] sm:border sm:border-white/10 sm:bg-[#050505] sm:p-12 sm:shadow-2xl">
 
-        <span class="text-xs uppercase tracking-[0.2em] text-slate-500">
-            Secure Setup
-        </span>
+        <div class="mb-10 text-left">
+            <h2 class="text-3xl sm:text-4xl font-semibold text-white tracking-tight mb-3">
+                Profile Setup
+            </h2>
+            <p class="text-[15px] leading-relaxed text-white/50 font-light max-w-xl">
+                Complete your baseline profile to establish your secure cryptographic identity and personalize your ecosystem experience.
+            </p>
+        </div>
 
-        <h2 class="text-2xl font-medium text-white mt-3">
-            Welcome to NeuralSpace
-        </h2>
+        <form id="onboarding-form" method="POST" action="{% url 'onboarding' %}">
+            {% csrf_token %}
+            
+            <input type="hidden" name="web3_wallet" id="wallet-address-input" value="">
 
-        <p class="text-sm text-slate-400 mt-2 max-w-xl leading-relaxed">
-            Complete your profile so we can personalize your healthcare,
-            learning, and wellness experience.
-        </p>
+            <div class="space-y-10">
 
-    </div>
-
-    <form method="POST" action="{% url 'onboarding' %}">
-
-        {% csrf_token %}
-
-        <div class="p-8 space-y-10">
-
-            <!-- Personal -->
-
-            <section>
-
-                <h3 class="text-white font-medium mb-5">
-                    Personal Information
-                </h3>
-
-                <div>
-
-                    <label class="block text-sm text-slate-400 mb-2">
-                        Full name
-                    </label>
-
-                    <input
-                        type="text"
-                        name="full_name"
-                        class="w-full bg-[#0f141c] border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-slate-500"
-                    >
-
-                </div>
-
-            </section>
-
-            <!-- Usage -->
-
-            <section>
-
-                <h3 class="text-white font-medium mb-5">
-                    How will you use NeuralSpace?
-                </h3>
-
-                <select
-                    name="pathway"
-                    class="w-full bg-[#0f141c] border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-slate-500"
-                >
-
-                    <option>Personal Health</option>
-
-                    <option>Clinical Care</option>
-
-                    <option>Research & Innovation</option>
-
-                    <option>Learning & Training</option>
-
-                </select>
-
-            </section>
-
-            <!-- Preferences -->
-
-            <section>
-
-                <h3 class="text-white font-medium mb-5">
-                    Health & Wellness Preferences
-                </h3>
-
-                <div class="grid md:grid-cols-2 gap-5">
-
+                <section>
+                    <h3 class="text-[12px] font-medium text-white mb-5 pb-2 border-b border-white/10">
+                        1. Personal Identity
+                    </h3>
+                    
                     <div>
-
-                        <label class="block text-sm text-slate-400 mb-2">
-                            Primary goal
-                        </label>
-
-                        <select
-                            name="cognitive_goal"
-                            class="w-full bg-[#0f141c] border border-slate-700 rounded-xl px-4 py-3 text-slate-200"
-                        >
-
-                            <option>Improve focus</option>
-
-                            <option>Reduce stress</option>
-
-                            <option>Recovery support</option>
-
-                            <option>General wellness</option>
-
-                        </select>
-
-                    </div>
-
-                    <div>
-
-                        <label class="block text-sm text-slate-400 mb-2">
-                            Familiarity level
-                        </label>
-
-                        <select
-                            name="bci_familiarity"
-                            class="w-full bg-[#0f141c] border border-slate-700 rounded-xl px-4 py-3 text-slate-200"
-                        >
-
-                            <option>Beginner</option>
-
-                            <option>Intermediate</option>
-
-                            <option>Advanced</option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-            <!-- Privacy -->
-
-            <section class="rounded-2xl border border-slate-800 bg-slate-900/40 p-5">
-
-                <label class="flex gap-3">
-
-                    <input
-                        type="checkbox"
-                        name="consent"
-                        required
-                        class="mt-1"
-                    >
-
-                    <div>
-
-                        <p class="text-sm text-slate-200">
-                            I agree to secure data processing.
-                        </p>
-
-                        <p class="text-xs text-slate-500 mt-1">
-                            Your information remains encrypted and protected.
-                        </p>
-
-                    </div>
-                    <div>
-                        <label class="block text-sm text-slate-400 mb-2 mt-4">
-                            Wallet Address
-                        </label>
+                        <label class="block text-[13px] font-medium text-white/70 mb-2">Full Legal Name</label>
                         <input
                             type="text"
-                            name="web3_wallet"
-                            class="w-full bg-[#0f141c] border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-slate-500"
+                            name="full_name"
+                            placeholder="Jane Doe"
+                            class="w-full py-3.5 sm:py-3 rounded-xl border border-white/10 bg-[#0a0a0a] px-4 text-[16px] sm:text-[14px] text-white placeholder:text-white/30 outline-none transition-all focus:border-white/40 focus:bg-[#111]"
                         >
-                    </div>                </label>
+                    </div>
+                </section>
 
-            </section>
+                <section>
+                    <div class="flex items-center justify-between mb-5 pb-2 border-b border-white/10">
+                        <h3 class="text-[12px] font-medium text-white">
+                            2. Cryptographic Sovereignty
+                        </h3>
+                        <span class="text-[10px] uppercase tracking-wider text-white/40 font-mono">Web3 Secured</span>
+                    </div>
+                    
+                    <div class="rounded-xl border border-white/10 bg-[#0a0a0a] p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 transition-all" id="wallet-ui-container">
+                        
+                        <div>
+                            <p class="text-[14px] font-medium text-white mb-1">Connect your Wallet</p>
+                            <p class="text-[13px] text-white/50 font-light max-w-sm">
+                                Link your sovereign wallet via WalletConnect to securely manage your neural telemetry and medical records.
+                            </p>
+                        </div>
 
-        </div>
+                        <button 
+                            type="button" 
+                            id="wallet-connect-btn"
+                            class="shrink-0 h-11 px-6 rounded-full bg-white text-[13px] font-medium text-black transition-all hover:bg-white/90 active:scale-[0.98] flex items-center justify-center gap-2 w-full sm:w-auto"
+                        >
+                            <svg class="w-4 h-4 text-[#3396FF]" viewBox="0 0 40 40" fill="currentColor">
+                                <path d="M12.27 12.067C16.543 7.915 23.457 7.915 27.73 12.067L28.324 12.645C28.715 13.025 28.715 13.642 28.324 14.022L25.998 16.282C25.803 16.471 25.485 16.471 25.29 16.282L24.896 15.899C22.203 13.283 17.797 13.283 15.104 15.899L14.71 16.282C14.515 16.471 14.197 16.471 14.002 16.282L11.676 14.022C11.285 13.642 11.285 13.025 11.676 12.645L12.27 12.067ZM37.387 21.059L38.932 22.56C39.323 22.94 39.323 23.557 38.932 23.937L28.324 34.246C27.933 34.626 27.299 34.626 26.908 34.246L20 27.534L13.092 34.246C12.701 34.626 12.067 34.626 11.676 34.246L1.068 23.937C0.677 23.557 0.677 22.94 1.068 22.56L2.613 21.059C3.004 20.679 3.638 20.679 4.029 21.059L11.676 28.489C12.067 28.869 12.701 28.869 13.092 28.489L20 21.777L26.908 28.489C27.299 28.869 27.933 28.869 28.324 28.489L35.971 21.059C36.362 20.679 36.996 20.679 37.387 21.059Z"/>
+                            </svg>
+                            Connect Wallet
+                        </button>
+                        
+                        <div id="wallet-connected-state" class="hidden shrink-0 flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
+                            <div class="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+                                <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                <span id="wallet-address-display" class="text-[13px] font-mono text-white/80">0x...</span>
+                            </div>
+                            <button type="button" id="wallet-disconnect-btn" class="text-[13px] text-white/40 hover:text-white transition-colors">
+                                Disconnect
+                            </button>
+                        </div>
 
-        <div class="border-t border-slate-800 p-8">
+                    </div>
+                </section>
 
-            <button
-                type="submit"
-                class="w-full rounded-xl bg-slate-100 text-slate-900 py-4 font-medium hover:opacity-90 transition"
-            >
+                <section>
+                    <h3 class="text-[12px] font-medium text-white mb-5 pb-2 border-b border-white/10">
+                        3. Ecosystem Focus
+                    </h3>
+                    
+                    <div>
+                        <label class="block text-[13px] font-medium text-white/70 mb-2">Primary Pathway</label>
+                        <div class="relative">
+                            <select
+                                name="pathway"
+                                required
+                                class="w-full py-3.5 sm:py-3 rounded-xl border border-white/10 bg-[#0a0a0a] px-4 text-[16px] sm:text-[14px] text-white outline-none transition-all focus:border-white/40 focus:bg-[#111] appearance-none cursor-pointer"
+                            >
+                                <option value="" disabled selected class="text-white/30">Select your intended use...</option>
+                                <option value="Personal Health">Personal Health & Diagnostics</option>
+                                <option value="Clinical Care">Clinical Care Provider</option>
+                                <option value="Research & Innovation">Research & Innovation (Project Alpha)</option>
+                                <option value="Learning & Training">Neurolearn Academy</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-white/40">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-                Complete Setup
+                <section>
+                    <h3 class="text-[12px] font-medium text-white mb-5 pb-2 border-b border-white/10">
+                        4. Cognitive Baseline
+                    </h3>
+                    
+                    <div class="grid sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-[13px] font-medium text-white/70 mb-2">Primary Goal</label>
+                            <div class="relative">
+                                <select
+                                    name="cognitive_goal"
+                                    class="w-full py-3.5 sm:py-3 rounded-xl border border-white/10 bg-[#0a0a0a] px-4 text-[16px] sm:text-[14px] text-white outline-none transition-all focus:border-white/40 focus:bg-[#111] appearance-none cursor-pointer"
+                                >
+                                    <option>Improve cognitive focus</option>
+                                    <option>Reduce clinical stress</option>
+                                    <option>Neuro-recovery support</option>
+                                    <option>General brain wellness</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-white/40">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                </div>
+                            </div>
+                        </div>
 
-            </button>
+                        <div>
+                            <label class="block text-[13px] font-medium text-white/70 mb-2">BCI Familiarity</label>
+                            <div class="relative">
+                                <select
+                                    name="bci_familiarity"
+                                    class="w-full py-3.5 sm:py-3 rounded-xl border border-white/10 bg-[#0a0a0a] px-4 text-[16px] sm:text-[14px] text-white outline-none transition-all focus:border-white/40 focus:bg-[#111] appearance-none cursor-pointer"
+                                >
+                                    <option>Beginner (No prior experience)</option>
+                                    <option>Intermediate (Consumer devices)</option>
+                                    <option>Advanced (Clinical/Developer)</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-white/40">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-        </div>
+                <section class="rounded-xl border border-white/10 bg-[#0a0a0a] p-6 sm:p-7 mt-8">
+                    <label class="flex items-start gap-4 cursor-pointer group">
+                        <div class="pt-1">
+                            <input
+                                type="checkbox"
+                                name="consent"
+                                required
+                                class="h-5 w-5 sm:h-4 sm:w-4 rounded-[4px] border-white/20 bg-black accent-white cursor-pointer"
+                            >
+                        </div>
+                        <div>
+                            <p class="text-[14px] sm:text-[13px] font-medium text-white group-hover:text-white/80 transition-colors">
+                                I consent to sovereign data encryption.
+                            </p>
+                            <p class="text-[13px] sm:text-[12px] text-white/40 mt-1.5 font-light leading-relaxed">
+                                By checking this box, you agree that your telemetry and health data will be encrypted locally and routed securely.
+                            </p>
+                        </div>
+                    </label>
+                </section>
 
-    </form>
+            </div>
 
+            <div class="mt-12 pt-8 border-t border-white/10">
+                <button
+                    type="submit"
+                    class="w-full h-14 sm:h-12 rounded-full bg-white text-[15px] sm:text-[14px] font-medium text-black transition-all hover:bg-white/90 active:scale-[0.99] flex items-center justify-center gap-2"
+                >
+                    Finalize Setup
+                </button>
+            </div>
+
+        </form>
+    </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const connectBtn = document.getElementById('wallet-connect-btn');
+        const disconnectBtn = document.getElementById('wallet-disconnect-btn');
+        const connectedState = document.getElementById('wallet-connected-state');
+        const addressDisplay = document.getElementById('wallet-address-display');
+        const hiddenInput = document.getElementById('wallet-address-input');
+        const container = document.getElementById('wallet-ui-container');
+
+        // Helper function to format address (e.g., 0x1234...5678)
+        function formatAddress(address) {
+            return `${address.slice(0, 6)}...${address.slice(-4)}`;
+        }
+
+        // Update the UI based on connection state
+        function updateWalletUI(address) {
+            if (address) {
+                // Connected
+                connectBtn.classList.add('hidden');
+                connectedState.classList.remove('hidden');
+                connectedState.classList.add('flex');
+                container.classList.add('border-green-500/30', 'bg-green-500/5');
+                addressDisplay.textContent = formatAddress(address);
+                hiddenInput.value = address;
+            } else {
+                // Disconnected
+                connectBtn.classList.remove('hidden');
+                connectedState.classList.add('hidden');
+                connectedState.classList.remove('flex');
+                container.classList.remove('border-green-500/30', 'bg-green-500/5');
+                hiddenInput.value = '';
+            }
+        }
+
+        /* NOTE FOR DEVELOPER:
+           Replace the mock code below with the actual WalletConnect Web3Modal / Wagmi SDK logic.
+           Example using standard window.ethereum for illustration purposes:
+        */
+
+        // MOCK CONNECT - Hook this to Web3Modal open()
+        connectBtn.addEventListener('click', async () => {
+            // Simulated SDK Call
+            try {
+                // Example integration point:
+                // const { address } = await web3Modal.openModal();
+                
+                // MOCK ADDRESS for visual testing
+                const mockAddress = "0x71C7656EC7ab88b098defB751B7401B5f6d8976F";
+                updateWalletUI(mockAddress);
+            } catch (error) {
+                console.error("Wallet connection failed:", error);
+            }
+        });
+
+        // MOCK DISCONNECT - Hook this to SDK disconnect()
+        disconnectBtn.addEventListener('click', () => {
+            // Example integration point:
+            // await disconnect();
+            updateWalletUI(null);
+        });
+    });
+</script>
+
 {% endblock %}

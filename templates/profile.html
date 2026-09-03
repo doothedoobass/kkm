@@ -1,76 +1,181 @@
 {% extends 'base.html' %}
-{% block page_title %}User Profile{% endblock %}
-{% block page_subtitle %}Sovereign Identity and Account Settings{% endblock %}
+
+{% block page_title %}Settings | NeuralSpace{% endblock %}
+{% block page_subtitle %}Manage your account and ecosystem preferences.{% endblock %}
+
 {% block content %}
-<div class="max-w-3xl mx-auto">
+
+<!-- Custom style to hide scrollbar on mobile tabs but allow scrolling -->
+<style>
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+<div class="w-full max-w-[1000px] mx-auto pt-6 pb-24 px-4 sm:px-6 sm:pt-12">
+
     {% if profile %}
-    <div class="bg-slate-800 rounded-2xl border border-slate-700 shadow-xl overflow-hidden">
-        <div class="h-32 bg-gradient-to-r from-blue-900 to-indigo-900 relative">
-            <div class="absolute -bottom-10 left-8">
-                <div class="w-20 h-20 rounded-xl bg-slate-800 border-4 border-slate-900 flex items-center justify-center text-3xl font-black text-white shadow-lg">{{ profile.full_name|make_list|first }}</div>
+    
+    <!-- Page Header & Tabs -->
+    <div class="mb-8 sm:mb-10">
+        <h1 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-5 sm:mb-6">Settings</h1>
+        
+        <!-- Scrollable Tabs for Mobile -->
+        <div class="flex gap-6 sm:gap-8 border-b border-white/10 overflow-x-auto hide-scrollbar w-full">
+            <a href="#" class="shrink-0 pb-3 border-b-2 border-white text-[13px] sm:text-[14px] font-medium text-white">
+                General Profile
+            </a>
+            <a href="#" class="shrink-0 pb-3 border-b-2 border-transparent text-[13px] sm:text-[14px] font-medium text-white/40 hover:text-white/70 transition-colors cursor-not-allowed">
+                Data Sovereignty
+            </a>
+            <a href="#" class="shrink-0 pb-3 border-b-2 border-transparent text-[13px] sm:text-[14px] font-medium text-white/40 hover:text-white/70 transition-colors cursor-not-allowed">
+                Billing
+            </a>
+        </div>
+    </div>
+
+    <div class="space-y-8 sm:space-y-12">
+        
+        <!-- Section 1: Personal Identity -->
+        <!-- Fixed: Changed gap-8 to gap-4 md:gap-8 to tighten mobile layout -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 pb-8 sm:pb-10 border-b border-white/10">
+            <div class="md:col-span-1">
+                <h2 class="text-[14px] font-medium text-white">Personal Identity</h2>
+                <p class="text-[13px] text-white/50 mt-1 sm:mt-1.5 leading-relaxed">
+                    Your core identity within the NeuralSpace ecosystem. This information is tied to your clinical records.
+                </p>
             </div>
-            <div class="absolute top-4 right-4">
-                <span class="bg-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full border border-emerald-500/50">Verified</span>
+            
+            <!-- Fixed: Changed p-6 to p-5 on mobile for more breathing room -->
+            <div class="md:col-span-2 bg-[#0A0A0A] border border-white/10 rounded-xl p-5 sm:p-8 shadow-sm">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6">
+                    <!-- Avatar -->
+                    <div class="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-lg sm:text-xl text-white font-medium shadow-inner">
+                        {{ profile.full_name|make_list|first }}
+                    </div>
+                    
+                    <div class="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                        <div>
+                            <label class="block text-[12px] font-medium text-white/50 mb-1.5 sm:mb-2">Full Legal Name</label>
+                            <div class="w-full bg-[#111] border border-white/5 rounded-lg px-4 py-2.5 text-[13px] sm:text-[14px] text-white flex justify-between items-center">
+                                <span class="truncate pr-2">{{ profile.full_name }}</span>
+                                <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[12px] font-medium text-white/50 mb-1.5 sm:mb-2">Ecosystem Role</label>
+                            <div class="w-full bg-[#111] border border-white/5 rounded-lg px-4 py-2.5 text-[13px] sm:text-[14px] text-white truncate">
+                                {{ profile.pathway }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <div class="pt-14 px-8 pb-8">
-            <h2 class="text-2xl font-bold text-white">{{ profile.full_name }}</h2>
-            <p class="text-blue-400 text-sm font-semibold mt-1">{{ profile.pathway }}</p>
-            <p class="text-slate-400 text-xs font-mono mt-2 bg-slate-900 inline-block px-2 py-1 rounded">{{ profile.web3_wallet }}</p>
+
+        <!-- Section 2: Cryptographic Wallet -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 pb-8 sm:pb-10 border-b border-white/10">
+            <div class="md:col-span-1">
+                <h2 class="text-[14px] font-medium text-white">Connected Wallet</h2>
+                <p class="text-[13px] text-white/50 mt-1 sm:mt-1.5 leading-relaxed">
+                    Your Web3 wallet handles the sovereign encryption of your neural telemetry and secures your rewards.
+                </p>
+            </div>
             
-            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-4">
-                    <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-2 border-b border-slate-700 pb-2">Neuro-Profile Data</h3>
-                    <div>
-                        <p class="text-[10px] text-slate-500 uppercase font-semibold">Primary Cognitive Goal</p>
-                        <p class="text-sm text-white">{{ profile.cognitive_goal }}</p>
-                    </div>
-                    <div>
-                        <p class="text-[10px] text-slate-500 uppercase font-semibold">BCI Experience Level</p>
-                        <p class="text-sm text-white">{{ profile.bci_familiarity }}</p>
-                    </div>
-                    <div>
-                        <p class="text-[10px] text-slate-500 uppercase font-semibold">Environmental Context</p>
-                        <p class="text-sm text-white">{{ profile.environment }}</p>
-                    </div>
+            <div class="md:col-span-2 bg-[#0A0A0A] border border-white/10 rounded-xl p-5 sm:p-8">
+                <label class="block text-[12px] font-medium text-white/50 mb-1.5 sm:mb-2">Primary Address</label>
+                <div class="w-full bg-[#111] border border-white/5 rounded-lg px-4 py-3 text-[12px] sm:text-[13px] font-mono text-white/80 flex items-center gap-3 overflow-hidden">
+                    <span class="w-2 h-2 rounded-full bg-green-500 shrink-0"></span>
+                    <span class="truncate">{{ profile.web3_wallet }}</span>
                 </div>
-                
-                <div class="space-y-4">
-                    <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-2 border-b border-slate-700 pb-2">Subscription & Settings</h3>
+                <p class="text-[12px] text-white/40 mt-3">Connected via WalletConnect protocol.</p>
+            </div>
+        </div>
+
+        <!-- Section 3: Neuro-Diagnostic Baseline -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 pb-8 sm:pb-10 border-b border-white/10">
+            <div class="md:col-span-1">
+                <h2 class="text-[14px] font-medium text-white">Diagnostic Baseline</h2>
+                <p class="text-[13px] text-white/50 mt-1 sm:mt-1.5 leading-relaxed">
+                    Parameters established during onboarding to calibrate your BCI hardware and healthcare dashboard.
+                </p>
+            </div>
+            
+            <div class="md:col-span-2 bg-[#0A0A0A] border border-white/10 rounded-xl p-5 sm:p-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
-                        <p class="text-[10px] text-slate-500 uppercase font-semibold">Active Plan</p>
-                        <p class="text-sm text-amber-400 font-bold">{{ profile.subscription_tier }}</p>
+                        <label class="block text-[12px] font-medium text-white/50 mb-1.5 sm:mb-2">Primary Cognitive Goal</label>
+                        <div class="w-full bg-[#111] border border-white/5 rounded-lg px-4 py-2.5 text-[13px] sm:text-[14px] text-white truncate">
+                            {{ profile.cognitive_goal }}
+                        </div>
                     </div>
                     <div>
-                        <p class="text-[10px] text-slate-500 uppercase font-semibold">Data Sovereignity</p>
-                        <p class="text-sm text-emerald-400 flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg> Fully Encrypted & Consented</p>
+                        <label class="block text-[12px] font-medium text-white/50 mb-1.5 sm:mb-2">BCI Experience Level</label>
+                        <div class="w-full bg-[#111] border border-white/5 rounded-lg px-4 py-2.5 text-[13px] sm:text-[14px] text-white truncate">
+                            {{ profile.bci_familiarity }}
+                        </div>
                     </div>
                     <div>
-                        <p class="text-[10px] text-slate-500 uppercase font-semibold">Account Creation</p>
-                        <p class="text-sm text-white">{{ profile.created_at|date:"F j, Y" }}</p>
+                        <label class="block text-[12px] font-medium text-white/50 mb-1.5 sm:mb-2">Environmental Context</label>
+                        <div class="w-full bg-[#111] border border-white/5 rounded-lg px-4 py-2.5 text-[13px] sm:text-[14px] text-white truncate">
+                            {{ profile.environment|default:"Standard Calibration" }}
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[12px] font-medium text-white/50 mb-1.5 sm:mb-2">Active Plan</label>
+                        <div class="w-full bg-[#111] border border-white/5 rounded-lg px-4 py-2.5 text-[13px] sm:text-[14px] text-white truncate">
+                            {{ profile.subscription_tier }}
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Section 4: Security (Danger Zone) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 pb-4">
+            <div class="md:col-span-1">
+                <h2 class="text-[14px] font-medium text-white">Danger Zone</h2>
+                <p class="text-[13px] text-white/50 mt-1 sm:mt-1.5 leading-relaxed">
+                    Critical security actions. These actions will affect your ability to access clinical data.
+                </p>
+            </div>
             
-            <div class="mt-8 pt-6 border-t border-slate-700 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <a href="{% url 'onboarding' %}" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 px-6 rounded-lg transition text-sm">Recalibrate Profile</a>
-                <form method="post" action="{% url 'profile_lock' %}">
+            <div class="md:col-span-2 rounded-xl border border-red-900/30 p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-[14px] font-medium text-white">Lock Account</h3>
+                    <p class="text-[13px] text-white/50 mt-1 max-w-sm">
+                        Instantly suspend all data streams and revoke external access to your telemetry.
+                    </p>
+                </div>
+                
+                <form method="post" action="{% url 'profile_lock' %}" class="m-0 w-full sm:w-auto shrink-0">
                     {% csrf_token %}
-                    <button type="submit" class="bg-red-900/30 border border-red-800 text-red-400 hover:bg-red-900/50 font-semibold py-2 px-6 rounded-lg transition text-sm">Lock Account</button>
+                    <button type="submit" class="w-full sm:w-auto h-10 px-4 rounded-lg bg-red-500 text-[13px] font-medium text-white hover:bg-red-600 transition-colors flex items-center justify-center">
+                        Lock Account
+                    </button>
                 </form>
             </div>
         </div>
+
     </div>
+
     {% else %}
-    <div class="bg-slate-800 p-12 rounded-2xl border border-slate-700 text-center shadow-xl">
-        <div class="w-16 h-16 mx-auto bg-slate-900 text-slate-500 rounded-full flex items-center justify-center mb-4">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+    
+    <!-- Empty State / Setup Required -->
+    <div class="rounded-2xl border border-white/10 bg-[#0A0A0A] p-8 sm:p-20 text-center mt-4 sm:mt-8">
+        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-white/40 mx-auto mb-5 sm:mb-6">
+            <svg class="w-7 h-7 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
         </div>
-        <h3 class="text-xl font-bold text-white mb-2">No Profile Found</h3>
-        <p class="text-sm text-slate-400 mb-6">You need to run the onboarding wizard to calibrate your NeuralSpace.</p>
-        <a href="{% url 'onboarding' %}" class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg text-sm">Start Calibration</a>
+        <h3 class="text-xl sm:text-2xl font-semibold text-white tracking-tight mb-2">Configuration Required</h3>
+        <p class="text-[13px] sm:text-[14px] text-white/50 max-w-md mx-auto mb-6 sm:mb-8 font-light leading-relaxed">
+            Your NeuralSpace profile is currently incomplete. You must run the onboarding wizard to establish your baseline parameters and unlock ecosystem access.
+        </p>
+        <a href="{% url 'onboarding' %}" class="inline-flex items-center justify-center h-10 sm:h-11 px-6 rounded-lg bg-white text-[13px] sm:text-[14px] font-medium text-black transition-colors hover:bg-white/90">
+            Begin Configuration
+        </a>
     </div>
+    
     {% endif %}
+
 </div>
+
 {% endblock %}
